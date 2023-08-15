@@ -173,7 +173,7 @@ export class EnrolmentComponent implements OnInit {
 
               //Compile Male (Index --> 2)
               else if (dataInstance.Gender == "Male") {
-                this.enrollmentByAgeGenderSeries[2].push(dataInstance.EnrolledNumber * -1);
+                this.enrollmentByAgeGenderSeries[2].push(dataInstance.EnrolledNumber);
                 male_found = true;
               }
             }
@@ -390,7 +390,7 @@ export class EnrolmentComponent implements OnInit {
           name: "Enrolled",
           data: this.enrollmentOverTimeSeries[2],
           color: "red",
-          type: "line"
+          type: "spline"
         }
       ],
       plotOptions: {

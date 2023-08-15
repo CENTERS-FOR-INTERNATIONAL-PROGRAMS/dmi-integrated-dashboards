@@ -16,6 +16,11 @@ export class ReviewService {
     public BASE_URL_O4 = 'http://localhost:8080/api/sari_ili/overview/findOverallSARSCOV2Positivity';
     public BASE_URL_O5 = 'http://localhost:8080/api/sari_ili/overview/findSARSCOV2PositivityOvertime';
     public BASE_URL_O6 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaStrainsOvertime';
+    public BASE_URL_O7 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaStrainsOvertime';
+    public BASE_URL_O8 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaPatientOutcome';
+    public BASE_URL_O9 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaPositivityByType';
+    public BASE_URL_10 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaPositivityBySubtype';
+    public BASE_URL_11 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaHospitalizationOvertime';
     //#endregion
 
     constructor(private http: HttpClient) { }
@@ -58,6 +63,34 @@ export class ReviewService {
 
     findInfluenzaStrainsOvertime(): Observable<SARIProperties[]> {
         return this.http.get<SARIProperties[]>(`${this.BASE_URL_O6}`).pipe(
+            retry(1),
+            catchError(this.handleError)
+        );
+    }
+
+    findInfluenzaPatientOutcome(): Observable<SARIProperties[]> {
+        return this.http.get<SARIProperties[]>(`${this.BASE_URL_O8}`).pipe(
+            retry(1),
+            catchError(this.handleError)
+        );
+    }
+
+    findInfluenzaPositivityByType(): Observable<SARIProperties[]> {
+        return this.http.get<SARIProperties[]>(`${this.BASE_URL_O9}`).pipe(
+            retry(1),
+            catchError(this.handleError)
+        );
+    }
+
+    findInfluenzaPositivityBySubtype(): Observable<SARIProperties[]> {
+        return this.http.get<SARIProperties[]>(`${this.BASE_URL_10}`).pipe(
+            retry(1),
+            catchError(this.handleError)
+        );
+    }
+    
+    findInfluenzaHospitalizationOvertime(): Observable<SARIProperties[]> {
+        return this.http.get<SARIProperties[]>(`${this.BASE_URL_11}`).pipe(
             retry(1),
             catchError(this.handleError)
         );

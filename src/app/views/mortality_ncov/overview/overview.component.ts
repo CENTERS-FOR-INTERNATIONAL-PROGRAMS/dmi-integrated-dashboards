@@ -225,7 +225,7 @@ export class OverviewComponent implements OnInit {
           enabled: false,
         },
         yAxis: {
-          stops: [[1, 'blue']],
+          stops: [[1, '#234FEA']],
           lineWidth: 0,
           tickWidth: 0,
           minorTickInterval: null,
@@ -234,6 +234,7 @@ export class OverviewComponent implements OnInit {
             y: -70,
           },
           labels: {
+            enabled: false,
             y: 16,
           },
           min: 0,
@@ -242,23 +243,25 @@ export class OverviewComponent implements OnInit {
         plotOptions: {
           solidgauge: {
             dataLabels: {
-              y: 5,
+              y: -15,
               borderWidth: 0,
               useHTML: true,
+              format: "<span style='color: #234FEA'>{y}%</span>"
             },
           },
         },
         series: [
           {
-            name: 'Speed',
+            name: 'Cascade',
             type: 'solidgauge',
             data: [groupInstance[0][1]],
-            dataLabels: {
-              format:
-                '<div style="text-align:center">' +
-                '<span style="font-size:25px">{y}%</span><br/>' +
-                '</div>',
-            },
+            // plotOptions: {
+            //   solidgauge: {
+            //     dataLabels: {
+            //       enabled: false
+            //     }
+            //   }
+            // },
             tooltip: {
               valueSuffix: '',
             },

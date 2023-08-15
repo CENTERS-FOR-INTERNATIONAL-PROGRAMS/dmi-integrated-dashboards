@@ -2,7 +2,7 @@ export interface SARIProperties {
     Covid19TestedNumber: number;
     Covid19PositiveNumber: number;
     Covid19PositivePercent: number;
-    EPIWeek: number;
+    EPIWeek: string;
     Month: number;
     Year: number;
 
@@ -60,7 +60,7 @@ export interface SARIProperties {
     // ------------------------------
     
     InfluenzaNeg: number;
-    EpiWeek: number;
+    EpiWeek: string;
     
     // ------------------------------
 }

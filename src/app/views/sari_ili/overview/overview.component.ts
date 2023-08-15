@@ -537,6 +537,8 @@ export class SIOverviewComponent implements OnInit {
         }
       }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 
@@ -544,6 +546,10 @@ export class SIOverviewComponent implements OnInit {
   influenzaStrainsOvertimeData() {
     for (let index = 0; index < 9; index++) {
       this.influenzaStrainsOvertimeSeries.push([]);
+
+      for (let j = 0; j < 53; j++) {
+        this.influenzaStrainsOvertimeSeries[index].push(0);
+      }
     }
 
     this.reviewService.findInfluenzaStrainsOvertime().subscribe(
@@ -553,31 +559,32 @@ export class SIOverviewComponent implements OnInit {
         //#region Push series data into array at specific indexes
         this.influenzaStrainsOvertime.forEach((dataInstance, index) => {
           // Epi Week (Index --> 0)
-          this.influenzaStrainsOvertimeSeries[0].push(dataInstance.EpiWeek);
-
+          this.influenzaStrainsOvertimeSeries[0][index] = "Week " + dataInstance.EpiWeek;
+          
           // Flu A non-subtypable 2 (Index --> 1)
-          this.influenzaStrainsOvertimeSeries[1].push(dataInstance.NonSubTypableNumber);
+          this.influenzaStrainsOvertimeSeries[1][index] = dataInstance.NonSubTypableNumber;
 
-          // Influenza Neg (Index --> 2)
-          this.influenzaStrainsOvertimeSeries[2].push(dataInstance.InfluenzaNeg);
+          // // Influenza Neg (Index --> 2)
+          // this.influenzaStrainsOvertimeSeries[2][index] = 5;
+          // this.influenzaStrainsOvertimeSeries[2].push(dataInstance.InfluenzaNeg);
 
-          // A/H1N1 (Index --> 3)
-          this.influenzaStrainsOvertimeSeries[3].push(dataInstance.AH1N1Number);
+          // // A/H1N1 (Index --> 3)
+          // this.influenzaStrainsOvertimeSeries[3].push(dataInstance.AH1N1Number);
 
-          // A/H3N2 (Index --> 4)
-          this.influenzaStrainsOvertimeSeries[4].push(dataInstance.AH3N2Number);
+          // // A/H3N2 (Index --> 4)
+          // this.influenzaStrainsOvertimeSeries[4].push(dataInstance.AH3N2Number);
 
-          // B/Victoria (Index --> 5)
-          this.influenzaStrainsOvertimeSeries[5].push(dataInstance.VictoriaNumber);
+          // // B/Victoria (Index --> 5)
+          // this.influenzaStrainsOvertimeSeries[5].push(dataInstance.VictoriaNumber);
 
-          // B/Yamagata (Index --> 6)
-          this.influenzaStrainsOvertimeSeries[6].push(dataInstance.YamagataNumber);
+          // // B/Yamagata (Index --> 6)
+          // this.influenzaStrainsOvertimeSeries[6].push(dataInstance.YamagataNumber);
 
-          // Influenza B Not-determined (Index --> 7)
-          this.influenzaStrainsOvertimeSeries[7].push(dataInstance.NotdeterminedNumber);
+          // // Influenza B Not-determined (Index --> 7)
+          // this.influenzaStrainsOvertimeSeries[7].push(dataInstance.NotdeterminedNumber);
 
-          //  Influenza Positive (Index --> 8)
-          this.influenzaStrainsOvertimeSeries[8].push(0);
+          // //  Influenza Positive (Index --> 8)
+          // this.influenzaStrainsOvertimeSeries[8].push(0);
         });
         //#endregion
 
@@ -585,7 +592,7 @@ export class SIOverviewComponent implements OnInit {
       });
   }
 
-  influenzaStrainsOvertimeChart() {
+  influenzaStrainsOvertimeChart() {    
     this.influenzaStrainsOvertimeOptions = {
       title: {
         text: 'Circulating Strains of Influenza Virus over time',
@@ -607,56 +614,56 @@ export class SIOverviewComponent implements OnInit {
         {
           showInLegend: true,
           name: "Flu A non-subtypable 2",
-          data: [this.influenzaStrainsOvertimeSeries[1]],
+          data: this.influenzaStrainsOvertimeSeries[1],
           type: 'column',
           color: "#234FEA",
         },
         {
           showInLegend: true,
           name: "Influenza Neg",
-          data: [this.influenzaStrainsOvertimeSeries[2]],
+          data: this.influenzaStrainsOvertimeSeries[2],
           type: 'column',
           color: "#008000",
         },
         {
           showInLegend: true,
           name: "A/H1N1",
-          data: [this.influenzaStrainsOvertimeSeries[3]],
+          data: this.influenzaStrainsOvertimeSeries[3],
           type: 'column',
           color: "#FF0000",
         },
         {
           showInLegend: true,
           name: "A/H3N2",
-          data: [this.influenzaStrainsOvertimeSeries[4]],
+          data: this.influenzaStrainsOvertimeSeries[4],
           type: 'column',
           color: "#66B3FF",
         },
         {
           showInLegend: true,
           name: "B/Victoria",
-          data: [this.influenzaStrainsOvertimeSeries[5]],
+          data: this.influenzaStrainsOvertimeSeries[5],
           type: 'column',
           color: "#FFB3E6",
         },
         {
           showInLegend: true,
           name: "B/Yamagata",
-          data: [this.influenzaStrainsOvertimeSeries[6]],
+          data: this.influenzaStrainsOvertimeSeries[6],
           type: 'column',
           color: "#CCB3FF",
         },
         {
           showInLegend: true,
           name: "Influenza B Not-determined",
-          data: [this.influenzaStrainsOvertimeSeries[7]],
+          data: this.influenzaStrainsOvertimeSeries[7],
           type: 'column',
           color: "#B3FFB3",
         },
         {
           showInLegend: true,
           name: " Influenza Positive",
-          data: [this.influenzaStrainsOvertimeSeries[8]],
+          data: this.influenzaStrainsOvertimeSeries[8],
           type: 'column',
           color: "#FC7500",
         }
@@ -670,6 +677,8 @@ export class SIOverviewComponent implements OnInit {
         }
       }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 

@@ -378,7 +378,7 @@ export class OverviewComponent implements OnInit {
 
                 //Compile Male (Index --> 2)
                 else if (dataInstance.Gender == 'Male') {
-                  this.covid19PositivityByAgeGenderSeries[2].push(dataInstance.PositiveNumber * -1);
+                  this.covid19PositivityByAgeGenderSeries[2].push(dataInstance.PositiveNumber);
                   male_found = true;
                 }
               }
@@ -652,7 +652,7 @@ export class OverviewComponent implements OnInit {
         },
         {
           name: 'Positivity (%)',
-          type: 'line',
+          type: 'spline',
           color: 'red',
           accessibility: { point: { valueSuffix: '%' } },
           data: this.covid19PositivityOvertimeSeries[2],

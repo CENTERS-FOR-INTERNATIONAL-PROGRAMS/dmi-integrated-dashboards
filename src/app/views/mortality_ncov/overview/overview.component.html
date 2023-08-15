@@ -1,0 +1,121 @@
+<c-card class="mb-4">
+  <c-card-header>COVID-19 Overview</c-card-header>
+  <c-card-body>
+    <p>
+      This dashboard aims to monitor the evolution of SARS-CoV-2, identify more
+      lethal strains, and track the extent of undiagnosed COVID deaths. It
+      provides critical insights to inform public health policies and enhance
+      prevention and control measures.
+    </p>
+  </c-card-body>
+</c-card>
+
+<c-row>
+  <c-col [sm]="2">
+    <c-card class="mb-4">
+      <c-card-header>Total Screened</c-card-header>
+
+      <c-card-body>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <h3>{{this.covid19SummaryGroup[0][0][0]}}</h3>
+      </c-card-body>
+
+      <c-card-footer>
+        <span>{{this.covid19SummaryGroup[0][2]}} last month</span>
+      </c-card-footer>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="2">
+    <c-card class="mb-4">
+      <c-card-header>Eligible</c-card-header>
+      <c-card-body>
+        <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[1][1]"
+          style="max-width:100%; height: 150px; display: block;"></highcharts-chart>
+        <h3>{{this.covid19SummaryGroup[1][0][0]}}</h3>
+      </c-card-body>
+      <c-card-footer>
+        <span>{{this.covid19SummaryGroup[1][2]}} last month</span>
+      </c-card-footer>
+    </c-card>
+  </c-col>
+  
+  <c-col [sm]="2">
+    <c-card class="mb-4">
+      <c-card-header>Enrolled</c-card-header>
+      <c-card-body>
+        <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[2][1]"
+          style="max-width:100%; height: 150px; display: block"></highcharts-chart>
+        <h3>{{this.covid19SummaryGroup[2][0][0]}}</h3>
+      </c-card-body>
+      <c-card-footer>
+        <span>{{this.covid19SummaryGroup[2][2]}} last month</span>
+      </c-card-footer>
+    </c-card>
+  </c-col>
+  
+  <c-col [sm]="2">
+    <c-card class="mb-4">
+      <c-card-header>Tested</c-card-header>
+      <c-card-body>
+        <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[3][1]"
+          style="max-width:100%; height: 150px; display: block"></highcharts-chart>
+        <h3>{{this.covid19SummaryGroup[3][0][0]}}</h3>
+      </c-card-body>
+      <c-card-footer>
+        <span>{{this.covid19SummaryGroup[3][2]}} last month</span>
+      </c-card-footer>
+    </c-card>
+  </c-col>
+  
+  <c-col [sm]="2">
+    <c-card class="mb-4">
+      <c-card-header>Positive</c-card-header>
+      <c-card-body>
+        <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[4][1]"
+          style="max-width:100%; height: 150px; display: block"></highcharts-chart>
+        <h3>{{this.covid19SummaryGroup[4][0][0]}}</h3>
+      </c-card-body>
+      <c-card-footer>
+        <span>{{this.covid19SummaryGroup[4][2]}} last month</span>
+      </c-card-footer>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
+
+<c-row>
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="covid19CascadeChartOptions"
+        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="covid19PositivityByAgeGenderOptions"
+        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="covid19OverallPositivityByFacilityChartOptions"
+        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="covid19PositivityOvertimeOptions"
+        style="width: 100%; height: 400px; display: block;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>

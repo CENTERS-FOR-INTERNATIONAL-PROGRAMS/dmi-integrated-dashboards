@@ -98,8 +98,10 @@ export class SIOverviewComponent implements OnInit {
     this.influenzaStrainsOvertimeChart();
 
     this.influenzaHospitalizationOvertimeData();
+    this.influenzaHospitalizationOvertimeChart();
 
     this.influenzaPatientOutcomeData();
+    this.influenzaPatientOutcomeChart();
   }
 
   //#region Load Chart --> Influenza Types Distribution
@@ -560,7 +562,7 @@ export class SIOverviewComponent implements OnInit {
         this.influenzaStrainsOvertime.forEach((dataInstance, index) => {
           // Epi Week (Index --> 0)
           this.influenzaStrainsOvertimeSeries[0][index] = "Week " + dataInstance.EpiWeek;
-          
+
           // Flu A non-subtypable 2 (Index --> 1)
           this.influenzaStrainsOvertimeSeries[1][index] = dataInstance.NonSubTypableNumber;
 
@@ -592,7 +594,7 @@ export class SIOverviewComponent implements OnInit {
       });
   }
 
-  influenzaStrainsOvertimeChart() {    
+  influenzaStrainsOvertimeChart() {
     this.influenzaStrainsOvertimeOptions = {
       title: {
         text: 'Circulating Strains of Influenza Virus over time',
@@ -684,40 +686,48 @@ export class SIOverviewComponent implements OnInit {
 
   //#region Load Chart --> Influenza hospitalization overtime
   influenzaHospitalizationOvertimeData() {
-    // this.reviewService.findInfluenzaBDistribution().subscribe(
-    //   response => {
-    //     this.influenzaBLineageDistribution = response;
+    this.reviewService.findInfluenzaHospitalizationOvertime().subscribe(
+      response => {
+        this.influenzaHospitalizationOvertime = response;
 
-    //     //#region Push series data into array at specific indexes
-    //     this.influenzaBLineageDistribution.forEach((dataInstance, index) => {
-    //       this.influenzaBLineageDistributionSeries.push([]);
+        this.influenzaHospitalizationOvertimeSeries.push([]);
+        this.influenzaHospitalizationOvertimeSeries.push([]);
+        this.influenzaHospitalizationOvertimeSeries.push([]);
+        this.influenzaHospitalizationOvertimeSeries.push([]);
 
-    //       //Compile Subtype (Index --> 0)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Subtype);
+        //#region Push series data into array at specific indexes
+        this.influenzaHospitalizationOvertime.forEach((dataInstance, index) => {
+          this.influenzaHospitalizationOvertimeSeries.push([]);
 
-    //       //Compile Percentage (Index --> 1)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Percentage);
+          //Compile Epi Week (Index --> 0)
+          this.influenzaHospitalizationOvertimeSeries[0].push(dataInstance.EpiWeek);
+          
+          //Compile Samples Tested (Index --> 1)
+          this.influenzaHospitalizationOvertimeSeries[1].push(dataInstance.Tested);
 
-    //       //Compile Count (Index --> 2)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Count);
-    //     });
-    //     //#endregion
-    //   });
+          //Compile Influenza Positive Percent (Index --> 2)
+          this.influenzaHospitalizationOvertimeSeries[2].push(dataInstance.InfluenzaPositivePercent);
 
-    this.influenzaHospitalizationOvertimeChart();
+          //Compile SARS-COV-2 Positive Percent (Index --> 3)
+          this.influenzaHospitalizationOvertimeSeries[3].push(dataInstance.SARSCOV2PositivePercent);
+        });
+        //#endregion
+
+        this.influenzaHospitalizationOvertimeChart();
+      });
   }
 
   influenzaHospitalizationOvertimeChart() {
     this.influenzaHospitalizationOvertimeOptions = {
       title: {
-        text: 'Weekly number of hospitalized SARI patients, and percentt of SARI specimens testng positive for influenza',
+        text: 'Weekly number of hospitalized ILI & SARI patients and percent ILI & SARI specimens testing positive for influenza and SARS-COV-2',
         align: 'left'
       },
       chart: {
         type: "column",
       },
       xAxis: {
-        categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Period
+        categories: this.influenzaHospitalizationOvertimeSeries[0],
         title: false
       },
       yAxis: {
@@ -728,23 +738,23 @@ export class SIOverviewComponent implements OnInit {
       series: [
         {
           showInLegend: true,
-          name: "Tested",
-          data: [19, 3, 34, 33, 45, 44, 33, 42, 42, 55, 33, 42],
+          name: "Total Samples Tested",
+          data: this.influenzaHospitalizationOvertimeSeries[1],
           type: 'column',
           color: "#234FEA",
         },
         {
           showInLegend: true,
-          name: "Percentage Influenza SARI/ILI Samples",
-          data: [10, 5, 30, 30, 40, 47, 32, 46, 47, 58, 30, 23],
-          type: 'line',
+          name: "Percent Influenza Positive",
+          data: this.influenzaHospitalizationOvertimeSeries[2],
+          type: 'spline',
           color: "#FC7500",
         },
         {
           showInLegend: true,
-          name: "Percentage SARS-COV-2 Pos",
-          data: [19, 3, 34, 33, 45, 44, 33, 42, 42, 55, 33, 42],
-          type: 'line',
+          name: "Percent SARS-COV-2 Positive",
+          data: this.influenzaHospitalizationOvertimeSeries[3],
+          type: 'spline',
           color: "#FF0000",
         },
       ],
@@ -762,27 +772,43 @@ export class SIOverviewComponent implements OnInit {
 
   //#region Load Chart --> Influenza patient outcome
   influenzaPatientOutcomeData() {
-    // this.reviewService.findInfluenzaBDistribution().subscribe(
-    //   response => {
-    //     this.influenzaBLineageDistribution = response;
+    for (let index = 0; index < 6; index++) {
+      this.influenzaPatientOutcomeSeries.push([]);
 
-    //     //#region Push series data into array at specific indexes
-    //     this.influenzaBLineageDistribution.forEach((dataInstance, index) => {
-    //       this.influenzaBLineageDistributionSeries.push([]);
+      for (let j = 0; j < 2; j++) {
+        this.influenzaPatientOutcomeSeries[index].push(0);
+      }
+    }
 
-    //       //Compile Subtype (Index --> 0)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Subtype);
+    this.reviewService.findInfluenzaPatientOutcome().subscribe(
+      response => {
+        this.influenzaPatientOutcome = response;
 
-    //       //Compile Percentage (Index --> 1)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Percentage);
+        //Absconded (Index --> 0)
+        this.influenzaPatientOutcomeSeries[0][0] = this.influenzaPatientOutcome[0].AbscondedNumber;
+        this.influenzaPatientOutcomeSeries[0][1] = this.influenzaPatientOutcome[0].AbscondedPercentage;
 
-    //       //Compile Count (Index --> 2)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Count);
-    //     });
-    //     //#endregion
-    //   });
+        //Death (Index --> 1)
+        this.influenzaPatientOutcomeSeries[1][0] = this.influenzaPatientOutcome[0].DeathNumber;
+        this.influenzaPatientOutcomeSeries[1][1] = this.influenzaPatientOutcome[0].DeathPercentage;
 
-    this.influenzaPatientOutcomeChart();
+        //Discharged from hospital alive (Index --> 2)
+        this.influenzaPatientOutcomeSeries[2][0] = this.influenzaPatientOutcome[0].DischargedFromHospital;
+        this.influenzaPatientOutcomeSeries[2][1] = this.influenzaPatientOutcome[0].DischargedFromHospitalPercentage;
+
+        //Reffered to another facility (Index --> 3)
+        this.influenzaPatientOutcomeSeries[3][0] = this.influenzaPatientOutcome[0].RefferedToAnotherFacilityNumber;
+        this.influenzaPatientOutcomeSeries[3][1] = this.influenzaPatientOutcome[0].RefferedToAnotherFacilityPercentage;
+
+        //Refused hospital treatment (Index --> 4)
+        this.influenzaPatientOutcomeSeries[4][0] = this.influenzaPatientOutcome[0].RefusedHospitalTreatment;
+        this.influenzaPatientOutcomeSeries[4][1] = this.influenzaPatientOutcome[0].RefusedHospitalTreatmentPercentage;
+
+        //Total (Index --> 5)
+        this.influenzaPatientOutcomeSeries[5][0] = this.influenzaPatientOutcome[0].TotalOutcome;
+
+        this.influenzaPatientOutcomeChart();
+      });
   }
 
   influenzaPatientOutcomeChart() {
@@ -806,11 +832,11 @@ export class SIOverviewComponent implements OnInit {
           name: "Data",
           type: 'pie',
           data: [
-            ["Death", 13],
-            ["Absconded", 3],
-            ["Death", 4],
-            ["Discharged from Hospital Alive", 51],
-            ["Referred to another facility", 20]
+            ["Death (" + this.influenzaPatientOutcomeSeries[0][1] + "%)", this.influenzaPatientOutcomeSeries[0][0]],
+            ["Absconded (" + this.influenzaPatientOutcomeSeries[1][1] + "%)", this.influenzaPatientOutcomeSeries[1][0]],
+            ["Discharged from Hospital Alive (" + this.influenzaPatientOutcomeSeries[2][1] + "%)", this.influenzaPatientOutcomeSeries[2][0]],
+            ["Referred to another facility (" + this.influenzaPatientOutcomeSeries[3][1] + "%)", this.influenzaPatientOutcomeSeries[3][0]],
+            ["Refused hospital treatment (" + this.influenzaPatientOutcomeSeries[4][1] + "%)", this.influenzaPatientOutcomeSeries[4][0]]
           ]
         }
       ],

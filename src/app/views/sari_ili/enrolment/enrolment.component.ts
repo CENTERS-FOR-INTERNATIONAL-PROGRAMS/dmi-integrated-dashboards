@@ -36,59 +36,69 @@ export class EnrolmentComponent implements OnInit {
   constructor(private reviewService: ReviewService) { }
   ngOnInit(): void {
     this.influenzaPositivityByTypeData();
+    this.influenzaPositivityByTypeChart();
 
     this.influenzaPositivityBySubtypeData();
+    this.influenzaPositivityBySubtypeChart();
   }
 
   //#region Load Chart --> Influenza positivity by type
   influenzaPositivityByTypeData() {
-    // this.reviewService.findInfluenzaBDistribution().subscribe(
-    //   response => {
-    //     this.influenzaBLineageDistribution = response;
+    for (let index = 0; index < 4; index++) {
+      this.influenzaPositivityByTypeSeries.push([]);
 
-    //     //#region Push series data into array at specific indexes
-    //     this.influenzaBLineageDistribution.forEach((dataInstance, index) => {
-    //       this.influenzaBLineageDistributionSeries.push([]);
+      for (let j = 0; j < 2; j++) {
+        this.influenzaPositivityByTypeSeries[index].push(0);
+      }
+    }
 
-    //       //Compile Subtype (Index --> 0)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Subtype);
+    this.reviewService.findInfluenzaPositivityByType().subscribe(
+      response => {
+        this.influenzaPositivityByType = response;
 
-    //       //Compile Percentage (Index --> 1)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Percentage);
+        //Influenza A Positive (Index --> 0)
+        this.influenzaPositivityByTypeSeries[0][0] = this.influenzaPositivityByType[0].InfluenzaAPositiveNumber;
+        this.influenzaPositivityByTypeSeries[0][1] = this.influenzaPositivityByType[0].InfluenzaAPositivePercentage;
 
-    //       //Compile Count (Index --> 2)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Count);
-    //     });
-    //     //#endregion
-    //   });
+        //Influenza B Positive (Index --> 1)
+        this.influenzaPositivityByTypeSeries[1][0] = this.influenzaPositivityByType[0].InfluenzaBPositiveNumber;
+        this.influenzaPositivityByTypeSeries[1][1] = this.influenzaPositivityByType[0].InfluenzaBPositivePercentage;
 
-    this.influenzaPositivityByTypeChart();
+        //Influenza AB Positive (Index --> 2)
+        this.influenzaPositivityByTypeSeries[2][0] = this.influenzaPositivityByType[0].InfluenzaABPositiveNumber;
+        this.influenzaPositivityByTypeSeries[2][1] = this.influenzaPositivityByType[0].InfluenzaABPositivePercentage;
+
+        //Negative (Index --> 3)
+        this.influenzaPositivityByTypeSeries[3][0] = this.influenzaPositivityByType[0].TestedNegativeFluNumber;
+
+        this.influenzaPositivityByTypeChart();
+      });
   }
 
   influenzaPositivityByTypeChart() {
     this.influenzaPositivityByTypeOptions = {
       title: {
-        text: 'Influenza Types',
+        text: 'Influenza Positivity by Types',
         align: 'left'
       },
       chart: {
         type: "pie",
       },
       colors: [
-        "#008000",
-        "#FC7500",
         "#FF0000",
-        "#234FEA"
+        "#234FEA",
+        "#FC7500",
+        "#008000"
       ],
       series: [
         {
           name: "Data",
           type: 'pie',
           data: [
-            ["Negative", 9892],
-            ["Flu A/B Pos", 0],
-            ["Flu A Pos", 835],
-            ["Flu B Pos", 364]
+            ["Flu A Pos (" + this.influenzaPositivityByTypeSeries[0][1] + "%)", this.influenzaPositivityByTypeSeries[0][0]],
+            ["Flu B Pos (" + this.influenzaPositivityByTypeSeries[1][1] + "%)", this.influenzaPositivityByTypeSeries[1][0]],
+            ["Flu A/B Pos (" + this.influenzaPositivityByTypeSeries[2][1] + "%)", this.influenzaPositivityByTypeSeries[2][0]],
+            ["Negative", this.influenzaPositivityByTypeSeries[3][0]]
           ]
         }
       ],
@@ -105,33 +115,50 @@ export class EnrolmentComponent implements OnInit {
 
   //#region Load Chart --> Influenza positivity by subtype
   influenzaPositivityBySubtypeData() {
-    // this.reviewService.findInfluenzaBDistribution().subscribe(
-    //   response => {
-    //     this.influenzaBLineageDistribution = response;
+    for (let index = 0; index < 6; index++) {
+      this.influenzaPositivityBySubtypeSeries.push([]);
 
-    //     //#region Push series data into array at specific indexes
-    //     this.influenzaBLineageDistribution.forEach((dataInstance, index) => {
-    //       this.influenzaBLineageDistributionSeries.push([]);
+      for (let j = 0; j < 2; j++) {
+        this.influenzaPositivityBySubtypeSeries[index].push(0);
+      }
+    }
 
-    //       //Compile Subtype (Index --> 0)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Subtype);
+    this.reviewService.findInfluenzaPositivityBySubtype().subscribe(
+      response => {
+        this.influenzaPositivityBySubtype = response;
 
-    //       //Compile Percentage (Index --> 1)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Percentage);
+        //Flu A Non-subtypable (Index --> 0)
+        this.influenzaPositivityBySubtypeSeries[0][0] = this.influenzaPositivityBySubtype[0].FluANonSubTypableNumber;
+        this.influenzaPositivityBySubtypeSeries[0][1] = this.influenzaPositivityBySubtype[0].FluANonSubTypablePercentage;
 
-    //       //Compile Count (Index --> 2)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Count);
-    //     });
-    //     //#endregion
-    //   });
+        //H1N1 (Index --> 1)
+        this.influenzaPositivityBySubtypeSeries[1][0] = this.influenzaPositivityBySubtype[0].H1N1Number;
+        this.influenzaPositivityBySubtypeSeries[1][1] = this.influenzaPositivityBySubtype[0].H1N1Percentage;
 
-    this.influenzaPositivityBySubtypeChart();
+        //H3N2 (Index --> 2)
+        this.influenzaPositivityBySubtypeSeries[2][0] = this.influenzaPositivityBySubtype[0].H3N2Number;
+        this.influenzaPositivityBySubtypeSeries[2][1] = this.influenzaPositivityBySubtype[0].H3N2Percentage;
+
+        //Victoria (Index --> 3)
+        this.influenzaPositivityBySubtypeSeries[3][0] = this.influenzaPositivityBySubtype[0].VictoriaNumber;
+        this.influenzaPositivityBySubtypeSeries[3][1] = this.influenzaPositivityBySubtype[0].VictoriaPercentage;
+
+        //Flu A Not Yet Subtyped (Index --> 4)
+        this.influenzaPositivityBySubtypeSeries[4][0] = this.influenzaPositivityBySubtype[0].FluANotYetSubTypedNumber;
+        this.influenzaPositivityBySubtypeSeries[4][1] = this.influenzaPositivityBySubtype[0].FluANotYetSubTypedPercentage;
+
+        //Flu b Not Yet Determined (Index --> 5)
+        this.influenzaPositivityBySubtypeSeries[5][0] = this.influenzaPositivityBySubtype[0].FlueBNotYetDeterminedNumber;
+        this.influenzaPositivityBySubtypeSeries[5][1] = this.influenzaPositivityBySubtype[0].FlueBNotYetDeterminedPercentage;
+
+        this.influenzaPositivityBySubtypeChart();
+      });
   }
 
   influenzaPositivityBySubtypeChart() {
     this.influenzaPositivityBySubtypeOptions = {
       title: {
-        text: 'Influenza Positivity by Subypes',
+        text: 'Influenza Positivity by Subtypes',
         align: 'left'
       },
       chart: {
@@ -151,12 +178,12 @@ export class EnrolmentComponent implements OnInit {
           name: "Data",
           type: 'pie',
           data: [
-            ["Flu A non-subtypable", 384],
-            ["H1N1", 508],
-            ["H3N2", 0],
-            ["Victoria", 0],
-            ["Flu A Not yet Subtyped", 835],
-            ["Flu B Not-determined", 835],
+            ["Flu A non-subtypable (" + this.influenzaPositivityBySubtypeSeries[0][1] + "%)", this.influenzaPositivityBySubtypeSeries[0][0]],
+            ["H1N1 (" + this.influenzaPositivityBySubtypeSeries[1][1] + "%)", this.influenzaPositivityBySubtypeSeries[1][0]],
+            ["H3N2 (" + this.influenzaPositivityBySubtypeSeries[2][1] + "%)", this.influenzaPositivityBySubtypeSeries[2][0]],
+            ["Victoria (" + this.influenzaPositivityBySubtypeSeries[3][1] + "%)", this.influenzaPositivityBySubtypeSeries[3][0]],
+            ["Flu A Not yet Subtyped (" + this.influenzaPositivityBySubtypeSeries[4][1] + "%)", this.influenzaPositivityBySubtypeSeries[4][0]],
+            ["Flu B Not-determined (" + this.influenzaPositivityBySubtypeSeries[5][1] + "%)", this.influenzaPositivityBySubtypeSeries[5][0]],
           ]
         }
       ],

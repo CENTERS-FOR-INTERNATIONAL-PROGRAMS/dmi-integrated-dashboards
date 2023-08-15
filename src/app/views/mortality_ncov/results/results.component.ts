@@ -386,7 +386,7 @@ export class ResultsComponent implements OnInit {
           name: "Percent Positive",
           data: this.resultsByPositivityOverTimeSeries[2],
           color: "#FF0000",
-          type: "line"
+          type: "spline"
         }
       ],
       plotOptions: {

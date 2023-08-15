@@ -329,7 +329,7 @@ export class ScreeningComponent implements OnInit {
         align: 'left'
       },
       chart: {
-        type: "line"
+        type: "spline"
       },
       xAxis: {
         categories: this.ScreeningByOverTimeSeries[0],

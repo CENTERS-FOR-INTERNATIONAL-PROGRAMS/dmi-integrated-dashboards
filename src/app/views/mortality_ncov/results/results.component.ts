@@ -247,7 +247,7 @@ export class ResultsComponent implements OnInit {
 
               //Compile Male Positivity
               else if (dataInstance.Gender == "Male") {
-                this.resultsByAgeGenderSeries[2].push(dataInstance.Covid19Positive * -1);
+                this.resultsByAgeGenderSeries[2].push(dataInstance.Covid19Positive);
                 male_found = true;
               }
             }

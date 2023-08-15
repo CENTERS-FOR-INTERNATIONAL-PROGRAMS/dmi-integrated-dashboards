@@ -1,2 +1,2 @@
 ## Integrated Dashboards
-A Dashboard for integrated surveillance systems
+Integrated dashboards for all linked surveillance systems

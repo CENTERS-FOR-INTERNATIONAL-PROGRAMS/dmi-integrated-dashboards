@@ -1,0 +1,39 @@
+<c-card class="mb-4">
+  <c-card-header>
+    <h5>COVID-19 Enrolment</h5>
+  </c-card-header>
+</c-card>
+
+<c-row>
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="enrollmentByGenderOptions"
+        style="width: 100%; height: 400px; display: block"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="enrollmentByAgeGenderOptions"
+        style="width: 100%; height: 400px; display: block"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
+
+<c-row>
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="enrollmentByFacilityOptions"
+        style="width: 100%; height: 400px; display: block"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="enrollmentOverTimeOptions"
+        style="width: 100%; height: 400px; display: block"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>

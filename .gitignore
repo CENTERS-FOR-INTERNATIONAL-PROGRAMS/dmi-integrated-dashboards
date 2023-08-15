@@ -44,7 +44,6 @@ testem.log
 Thumbs.db
 
 # Morlig
-node_modules
 .cheats
 .package-lock.json
-.angular
+.angular/cache

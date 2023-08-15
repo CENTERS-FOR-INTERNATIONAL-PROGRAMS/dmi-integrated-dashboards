@@ -1,0 +1,37 @@
+<c-card class="mb-4">
+  <c-card-header>
+    <h5>COVID-19 Results</h5>
+  </c-card-header>
+</c-card>
+
+<c-row>
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="covid19ResultsByStatusOptions"
+        style="width: 100%; height: 400px; display: block"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="covid19ResultsByFacilityOptions"
+        style="width: 100%; height: 400px; display: block"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<c-row>
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]="resultsByAgeGenderOptions"
+        style="width: 100%; height: 400px; display: block"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts" [options]=" resultsByPositivityOverTimeOptions"
+        style="width: 100%; height: 400px; display: block"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>

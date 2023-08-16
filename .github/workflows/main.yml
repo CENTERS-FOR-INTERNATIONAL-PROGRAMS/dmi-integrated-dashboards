@@ -11,10 +11,10 @@ jobs:
     - name: executing remote connection
       uses: Sithi5/remote-ssh-commands-action@main
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.CICD_KEY }}
-        port: ${{ secrets.PORT }}
+        SSH_USER: ${{ secrets.USERNAME }}
+        SSH_PRIVATE_KEY: ${{ secrets.CICD_KEY }}
+        SSH_HOST: ${{ secrets.HOST }}
+        SSH_PORT: ${{ secrets.PORT }} 
     - name: Check Success status
       run: echo "Success"
             

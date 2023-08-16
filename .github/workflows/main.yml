@@ -11,7 +11,7 @@ jobs:
     - name: executing remote connection
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
+        host: root
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.CICD_KEY }}
         port: ${{ secrets.PORT }}

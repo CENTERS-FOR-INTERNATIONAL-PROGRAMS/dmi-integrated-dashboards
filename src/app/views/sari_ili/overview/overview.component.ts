@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SARIProperties } from '../../../models/sari_ili/SARIProperties.model';
 
-import * as Highcharts from 'highcharts';
+import * as Highcharts from 'highcharts/highstock';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
@@ -51,10 +51,10 @@ export class SIOverviewComponent implements OnInit {
   SARSCOV2PositivityOvertimeOptions: {} = {};
   //#endregion
 
-  //#region Prerequisites --> Influenza Positivity over time
-  influenzaPositivityOvertime: SARIProperties[] = [];
-  influenzaPositivityOvertimeSeries: any[][] = [];
-  influenzaPositivityOvertimeOptions: {} = {};
+  //#region Prerequisites --> Influenza Positivity byt type over time
+  influenzaPositivityByTypeOvertime: SARIProperties[] = [];
+  influenzaPositivityByTypeOvertimeSeries: any[][] = [];
+  influenzaPositivityByTypeOvertimeOptions: {} = {};
   //#endregion
 
   //#region Prerequisites --> Influenza Strains over time
@@ -92,7 +92,8 @@ export class SIOverviewComponent implements OnInit {
     this.overallSARCOV2PositivityData();
     this.overallSARCOV2PositivityChart();
 
-    this.influenzaPositivityOvertimeData();
+    this.influenzaPositivityByTypeOvertimeData();
+    this.influenzaPositivityByTypeOvertimeChart();
 
     this.influenzaStrainsOvertimeData();
     this.influenzaStrainsOvertimeChart();
@@ -457,77 +458,102 @@ export class SIOverviewComponent implements OnInit {
 
   //#endregion
 
-  //#region Load Chart --> Influenza positiivity overtime
-  influenzaPositivityOvertimeData() {
-    // this.reviewService.findInfluenzaBDistribution().subscribe(
-    //   response => {
-    //     this.influenzaBLineageDistribution = response;
+  //#region Load Chart --> Influenza positivity by type overtime
+  influenzaPositivityByTypeOvertimeData() {
+    this.reviewService.findInfluenzaPositivityByTypeOvertime().subscribe(
+      // this.reviewService.findInfluenzaHospitalizationOvertime().subscribe(
+      response => {
+        this.influenzaPositivityByTypeOvertime = response;
 
-    //     //#region Push series data into array at specific indexes
-    //     this.influenzaBLineageDistribution.forEach((dataInstance, index) => {
-    //       this.influenzaBLineageDistributionSeries.push([]);
+        this.influenzaPositivityByTypeOvertimeSeries.push([]);
+        this.influenzaPositivityByTypeOvertimeSeries.push([]);
+        this.influenzaPositivityByTypeOvertimeSeries.push([]);
+        this.influenzaPositivityByTypeOvertimeSeries.push([]);
+        this.influenzaPositivityByTypeOvertimeSeries.push([]);
 
-    //       //Compile Subtype (Index --> 0)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Subtype);
+        //#region Push series data into array at specific indexes
+        this.influenzaPositivityByTypeOvertime.forEach((dataInstance, index) => {
+          // this.influenzaPositivityByTypeOvertimeSeries.push([]);
 
-    //       //Compile Percentage (Index --> 1)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Percentage);
+          //Compile Epi Week (Index --> 0)
+          this.influenzaPositivityByTypeOvertimeSeries[0].push(dataInstance.EpiWeek);
 
-    //       //Compile Count (Index --> 2)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Count);
-    //     });
-    //     //#endregion
-    //   });
+          //Compile Influenza A Positive (Index --> 1)
+          this.influenzaPositivityByTypeOvertimeSeries[1].push(dataInstance.InfluenzaAPositiveNumber);
 
-    this.influenzaPositivityOvertimeChart();
+          //Compile Influenza B Positive (Index --> 2)
+          this.influenzaPositivityByTypeOvertimeSeries[2].push(dataInstance.InfluenzaBPositiveNumber);
+
+          //Compile Influenza Positive Percentage (Index --> 3)
+          this.influenzaPositivityByTypeOvertimeSeries[3].push(dataInstance.InfluenzaPositivePercentage);
+
+          //Compile Influenza Negative (Index --> 4)
+          this.influenzaPositivityByTypeOvertimeSeries[4].push(dataInstance.InfluenzaNegativeNumber);
+        });
+        //#endregion
+
+        this.influenzaPositivityByTypeOvertimeChart();
+      });
   }
 
-  influenzaPositivityOvertimeChart() {
-    this.influenzaPositivityOvertimeOptions = {
+  influenzaPositivityByTypeOvertimeChart() {
+    this.influenzaPositivityByTypeOvertimeOptions = {
       title: {
-        text: 'Number Positive for Influenza by Type, Epiweek and Year',
+        text: 'Number positive for influenza by type and epiweek',
         align: 'left'
       },
       chart: {
         type: "column",
       },
       xAxis: {
-        categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Period
-        title: false
+        categories: this.influenzaPositivityByTypeOvertimeSeries[0],
+        title: false,
+        min: 0,
+        max: 22,
+        scrollbar: {
+          enabled: true
+        }
       },
-      yAxis: {
+      yAxis: [{
         title: {
           text: "Number tested or virus detected",
         }
       },
+      {
+        title: {
+          text: "Influenza Positive (%)",
+        },
+        opposite: true
+      }],
       series: [
         {
           showInLegend: true,
-          name: "Influenza B",
-          data: [19, 3, 34, 33, 45, 44, 33, 42, 42, 55, 33, 42],
+          name: "Influenza A Positive",
+          data: this.influenzaPositivityByTypeOvertimeSeries[1],
+          type: 'column',
+          color: "#FC7500",
+        },
+        {
+          showInLegend: true,
+          name: "Influenza B Positive",
+          data: this.influenzaPositivityByTypeOvertimeSeries[2],
           type: 'column',
           color: "#234FEA",
         },
         {
           showInLegend: true,
-          name: "(%) Influenza Positive",
-          data: [19, 3, 34, 33, 45, 44, 33, 42, 42, 55, 33, 42],
-          type: 'column',
+          name: "Influenza Positive (%)",
+          data: this.influenzaPositivityByTypeOvertimeSeries[3],
+          type: 'spline',
+          yAxis: 1,
           color: "#FF0000",
         },
         {
           showInLegend: true,
           name: "Influenza Negative",
-          data: [19, 3, 34, 33, 45, 44, 33, 42, 42, 55, 33, 42],
-          type: 'line',
+          data: this.influenzaPositivityByTypeOvertimeSeries[4],
+          type: 'column',
           color: "#008000",
-        },
-        {
-          showInLegend: true,
-          name: "Influenza A",
-          data: [19, 3, 34, 33, 45, 44, 33, 42, 42, 55, 33, 42],
-          type: 'line',
-          color: "#FC7500",
         }
       ],
       plotOptions: {
@@ -537,56 +563,57 @@ export class SIOverviewComponent implements OnInit {
             enabled: true
           }
         }
-      }
+      },
+      useHighStocks: true
     };
-
-    HC_exporting(Highcharts);
   }
   //#endregion
 
   //#region Load Chart --> Influenza strains overtime
   influenzaStrainsOvertimeData() {
-    for (let index = 0; index < 9; index++) {
-      this.influenzaStrainsOvertimeSeries.push([]);
-
-      for (let j = 0; j < 53; j++) {
-        this.influenzaStrainsOvertimeSeries[index].push(0);
-      }
-    }
-
     this.reviewService.findInfluenzaStrainsOvertime().subscribe(
       response => {
         this.influenzaStrainsOvertime = response;
 
+        this.influenzaStrainsOvertimeSeries.push([]);
+        this.influenzaStrainsOvertimeSeries.push([]);
+        this.influenzaStrainsOvertimeSeries.push([]);
+        this.influenzaStrainsOvertimeSeries.push([]);
+        this.influenzaStrainsOvertimeSeries.push([]);
+        this.influenzaStrainsOvertimeSeries.push([]);
+        this.influenzaStrainsOvertimeSeries.push([]);
+        this.influenzaStrainsOvertimeSeries.push([]);
+        this.influenzaStrainsOvertimeSeries.push([]);
+        this.influenzaStrainsOvertimeSeries.push([]);
+
         //#region Push series data into array at specific indexes
         this.influenzaStrainsOvertime.forEach((dataInstance, index) => {
           // Epi Week (Index --> 0)
-          this.influenzaStrainsOvertimeSeries[0][index] = "Week " + dataInstance.EpiWeek;
+          this.influenzaStrainsOvertimeSeries[0][index] = dataInstance.EpiWeek;
 
           // Flu A non-subtypable 2 (Index --> 1)
           this.influenzaStrainsOvertimeSeries[1][index] = dataInstance.NonSubTypableNumber;
 
-          // // Influenza Neg (Index --> 2)
-          // this.influenzaStrainsOvertimeSeries[2][index] = 5;
-          // this.influenzaStrainsOvertimeSeries[2].push(dataInstance.InfluenzaNeg);
+          // Influenza Neg (Index --> 2)
+          this.influenzaStrainsOvertimeSeries[2].push(dataInstance.InfluenzaNeg);
 
-          // // A/H1N1 (Index --> 3)
-          // this.influenzaStrainsOvertimeSeries[3].push(dataInstance.AH1N1Number);
+          // A/H1N1 (Index --> 3)
+          this.influenzaStrainsOvertimeSeries[3].push(dataInstance.AH1N1Number);
 
-          // // A/H3N2 (Index --> 4)
-          // this.influenzaStrainsOvertimeSeries[4].push(dataInstance.AH3N2Number);
+          // A/H3N2 (Index --> 4)
+          this.influenzaStrainsOvertimeSeries[4].push(dataInstance.AH3N2Number);
 
-          // // B/Victoria (Index --> 5)
-          // this.influenzaStrainsOvertimeSeries[5].push(dataInstance.VictoriaNumber);
+          // B/Victoria (Index --> 5)
+          this.influenzaStrainsOvertimeSeries[5].push(dataInstance.VictoriaNumber);
 
-          // // B/Yamagata (Index --> 6)
-          // this.influenzaStrainsOvertimeSeries[6].push(dataInstance.YamagataNumber);
+          // B/Yamagata (Index --> 6)
+          this.influenzaStrainsOvertimeSeries[6].push(dataInstance.YamagataNumber);
 
-          // // Influenza B Not-determined (Index --> 7)
-          // this.influenzaStrainsOvertimeSeries[7].push(dataInstance.NotdeterminedNumber);
+          // Influenza B Not-determined (Index --> 7)
+          this.influenzaStrainsOvertimeSeries[7].push(dataInstance.NotdeterminedNumber);
 
-          // //  Influenza Positive (Index --> 8)
-          // this.influenzaStrainsOvertimeSeries[8].push(0);
+          //  Influenza Positive (Index --> 8)
+          this.influenzaStrainsOvertimeSeries[8].push(0);
         });
         //#endregion
 
@@ -605,13 +632,27 @@ export class SIOverviewComponent implements OnInit {
       },
       xAxis: {
         categories: this.influenzaStrainsOvertimeSeries[0],
-        title: false
+        title: {
+          text: "Epi Week"
+        },
+        min: 0,
+        max: 22,
+        scrollbar: {
+          enabled: true
+        }
       },
-      yAxis: {
+      yAxis: [{
         title: {
           text: "Number tested or virus detected",
         }
       },
+      {
+        title: {
+          text: "Influenza Positive (%)",
+        },
+        opposite: true,
+        inverted: true
+      }],
       series: [
         {
           showInLegend: true,
@@ -666,7 +707,8 @@ export class SIOverviewComponent implements OnInit {
           showInLegend: true,
           name: " Influenza Positive",
           data: this.influenzaStrainsOvertimeSeries[8],
-          type: 'column',
+          type: 'spline',
+          yAxis: 1,
           color: "#FC7500",
         }
       ],
@@ -677,7 +719,8 @@ export class SIOverviewComponent implements OnInit {
             enabled: true
           }
         }
-      }
+      },
+      useHighStocks: true
     };
 
     HC_exporting(Highcharts);
@@ -701,7 +744,7 @@ export class SIOverviewComponent implements OnInit {
 
           //Compile Epi Week (Index --> 0)
           this.influenzaHospitalizationOvertimeSeries[0].push(dataInstance.EpiWeek);
-          
+
           //Compile Samples Tested (Index --> 1)
           this.influenzaHospitalizationOvertimeSeries[1].push(dataInstance.Tested);
 
@@ -728,13 +771,25 @@ export class SIOverviewComponent implements OnInit {
       },
       xAxis: {
         categories: this.influenzaHospitalizationOvertimeSeries[0],
-        title: false
+        title: false,
+        min: 0,
+        max: 22,
+        scrollbar: {
+          enabled: true
+        }
       },
-      yAxis: {
+      yAxis: [{
         title: {
           text: "Number tested or virus detected",
         }
       },
+      {
+        title: {
+          text: "SARS-COV-2 Positive (%)",
+        },
+        opposite: true,
+        inverted: true
+      }],
       series: [
         {
           showInLegend: true,
@@ -748,6 +803,7 @@ export class SIOverviewComponent implements OnInit {
           name: "Percent Influenza Positive",
           data: this.influenzaHospitalizationOvertimeSeries[2],
           type: 'spline',
+          yAxis: 1,
           color: "#FC7500",
         },
         {
@@ -755,6 +811,7 @@ export class SIOverviewComponent implements OnInit {
           name: "Percent SARS-COV-2 Positive",
           data: this.influenzaHospitalizationOvertimeSeries[3],
           type: 'spline',
+          yAxis: 1,
           color: "#FF0000",
         },
       ],
@@ -765,7 +822,8 @@ export class SIOverviewComponent implements OnInit {
             enabled: true
           }
         }
-      }
+      },
+      useHighStocks: true
     };
   }
   //#endregion

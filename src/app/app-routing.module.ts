@@ -21,6 +21,11 @@ const routes: Routes = [
     },
     children: [
       {
+        path: 'mortality_ncov/about',
+        loadChildren: () =>
+          import('./views/mortality_ncov/about/about.module').then((m) => m.AboutModule)
+      },
+      {
         path: 'mortality_ncov/overview',
         loadChildren: () =>
           import('./views/mortality_ncov/overview/overview.module').then((m) => m.OverviewModule)
@@ -41,6 +46,11 @@ const routes: Routes = [
           import('./views/mortality_ncov/results/results.module').then((m) => m.ResultsModule)
       },
       {
+        path: 'afi/about',
+        loadChildren: () =>
+          import('./views/afi/about/about.module').then((m) => m.AboutModule)
+      },
+      {
         path: 'afi/overview',
         loadChildren: () =>
           import('./views/afi/overview/overview.module').then((m) => m.AOverviewModule)
@@ -59,6 +69,11 @@ const routes: Routes = [
         path: 'afi/outcome',
         loadChildren: () =>
           import('./views/afi/outcome/outcome.module').then((m) => m.AOutcomeModule)
+      },
+      {
+        path: 'sari_ili/about',
+        loadChildren: () =>
+          import('./views/sari_ili/about/about.module').then((m) => m.AboutModule)
       },
       {
         path: 'sari_ili/overview',

@@ -1,4 +1,4 @@
-name: Deploy angular app
+name: Deploy Angular app
 on:
   push:
     branches: [ main ]

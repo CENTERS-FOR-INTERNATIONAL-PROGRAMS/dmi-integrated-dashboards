@@ -1,4 +1,4 @@
-name: Deploy Angular App
+name: Deploy Angular-App
 on:
   push:
     branches: [ main ]
@@ -15,4 +15,6 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.CICD_KEY }}
         port: ${{ secrets.PORT }}
-        run: echo "success"
+    - name: Check Success status
+      run: echo "Success"
+            

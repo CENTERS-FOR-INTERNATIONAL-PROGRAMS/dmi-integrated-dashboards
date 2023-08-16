@@ -11,8 +11,8 @@ jobs:
     - name: executing remote connection
       uses: Sithi5/remote-ssh-commands-action@main
       with:
-        SSH_USER: ${{ secrets.USERNAME }}
-        SSH_PRIVATE_KEY: ${{ secrets.CICD_KEY }}
-        SSH_HOST: ${{ secrets.HOST }}
-        SSH_PORT: ${{ secrets.PORT }}
+        SSH_USER: ${{ secrets.SSH_USER }}
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+        SSH_PORT: ${{ secrets.SSH_PORT }}
             

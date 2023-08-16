@@ -117,6 +117,12 @@ export interface SARIProperties {
     Tested: number;
     InfluenzaPositivePercent: number;
     SARSCOV2PositivePercent: number;
-
+    
+    // ------------------------------
+    
+    SampleTestedNumber: number;
+    InfluenzaPositivePercentage: number;
+    InfluenzaNegativeNumber: number;
+    
     // ------------------------------
 }

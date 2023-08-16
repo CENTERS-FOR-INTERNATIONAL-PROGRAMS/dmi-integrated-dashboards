@@ -15,7 +15,7 @@ export class ReviewService {
     public BASE_URL_O3 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaBLineageDistribution';
     public BASE_URL_O4 = 'http://localhost:8080/api/sari_ili/overview/findOverallSARSCOV2Positivity';
     public BASE_URL_O5 = 'http://localhost:8080/api/sari_ili/overview/findSARSCOV2PositivityOvertime';
-    public BASE_URL_O6 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaStrainsOvertime';
+    public BASE_URL_O6 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaPositivityByTypeOvertime';
     public BASE_URL_O7 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaStrainsOvertime';
     public BASE_URL_O8 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaPatientOutcome';
     public BASE_URL_O9 = 'http://localhost:8080/api/sari_ili/overview/findInfluenzaPositivityByType';
@@ -61,8 +61,15 @@ export class ReviewService {
         );
     }
 
-    findInfluenzaStrainsOvertime(): Observable<SARIProperties[]> {
+    findInfluenzaPositivityByTypeOvertime(): Observable<SARIProperties[]> {
         return this.http.get<SARIProperties[]>(`${this.BASE_URL_O6}`).pipe(
+            retry(1),
+            catchError(this.handleError)
+        );
+    }
+    
+    findInfluenzaStrainsOvertime(): Observable<SARIProperties[]> {
+        return this.http.get<SARIProperties[]>(`${this.BASE_URL_O7}`).pipe(
             retry(1),
             catchError(this.handleError)
         );

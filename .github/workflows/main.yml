@@ -1,4 +1,4 @@
-name: Deploy Angular-App
+name: deploy angular dashboard
 on:
   push:
     branches: [ main ]
@@ -14,7 +14,5 @@ jobs:
         SSH_USER: ${{ secrets.USERNAME }}
         SSH_PRIVATE_KEY: ${{ secrets.CICD_KEY }}
         SSH_HOST: ${{ secrets.HOST }}
-        SSH_PORT: ${{ secrets.PORT }} 
-    - name: Check Success status
-      run: echo "Success"
+        SSH_PORT: ${{ secrets.PORT }}
             

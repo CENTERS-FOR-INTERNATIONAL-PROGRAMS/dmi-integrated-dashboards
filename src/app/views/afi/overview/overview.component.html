@@ -1,0 +1,40 @@
+<c-card class="mb-4">
+  <c-card-header>AFI Overview</c-card-header>
+  <c-card-body>
+    <p>
+      The AFI dashboard aims to: identify causes of AFI/UF inpatients/outpatients, describe epidemiological
+      characteristics in Kenya, and detect emerging infections of public health importance.
+    </p>
+  </c-card-body>
+</c-card>
+
+<c-row>
+  <c-col [sm]="6">
+    <c-card>
+      <!-- <c-card-body> -->
+      <highcharts-chart [Highcharts]="highcharts" [options]="AFIEnrolledByGenderOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+      <!-- </c-card-body> -->
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card>
+      <!-- <c-card-body> -->
+      <highcharts-chart [Highcharts]="highcharts" [options]="AFIEnrolledByAgeGenderOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+      <!-- </c-card-body> -->
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
+
+<c-row>
+  <c-col>
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts" [options]="syndromesOvertimeOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>

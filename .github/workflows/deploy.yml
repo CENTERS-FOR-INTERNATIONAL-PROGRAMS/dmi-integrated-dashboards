@@ -21,9 +21,4 @@ jobs:
           pm2 stop 0
           rm -rf dist
           sudo git pull
-          find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +
-          ng build --configuration production
-          systemctl restart nginx
-          systemctl status nginx
-          pm2 reload integrated-dashboard-api
           echo "deployment complete"

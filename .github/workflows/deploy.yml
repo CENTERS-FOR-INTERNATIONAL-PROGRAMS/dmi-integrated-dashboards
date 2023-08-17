@@ -18,3 +18,4 @@ jobs:
     - name: executing remote connection
       run: |
           sudo ls /etc/dmi-integrated-dashboards/
+          echo "Test complete"

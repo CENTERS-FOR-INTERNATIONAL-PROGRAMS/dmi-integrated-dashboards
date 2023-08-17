@@ -17,4 +17,4 @@ jobs:
         port: ${{ secrets.PORT }}
     - name: executing remote connection
       run: |
-          whoami
+          cd /etc/dmi-integrated-dashboards

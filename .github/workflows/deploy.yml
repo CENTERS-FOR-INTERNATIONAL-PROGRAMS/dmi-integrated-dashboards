@@ -13,9 +13,10 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
             cd /etc/dmi-integrated-dashboards
-            echo ${{ secrets.PRIVATE_KEY }}
+            sudo -S ${{ secrets.SSH_PASSWORD }} systemctl restart nginx
             echo "Update Complete"

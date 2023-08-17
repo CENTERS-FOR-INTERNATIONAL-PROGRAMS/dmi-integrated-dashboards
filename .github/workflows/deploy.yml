@@ -1,4 +1,4 @@
-name: Deploy app
+name: deploy angular dashboard
 on:
   push:
     branches: [ main ]
@@ -16,5 +16,14 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-            ls /etc/dmi-integrated-dashboards
-            echo "Test complete"
+            cd /etc/dmi-integrated-dashboards
+            sudo systemctl stop nginx
+            sudo pm2 stop integrated-dashboard-api
+            sudo rm -rf dist
+            sudo git pull
+            sudo find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +
+            sudo ng build --configuration production
+            sudo systemctl restart nginx
+            sudo systemctl status nginx
+            sudo pm2 reload integrated-dashboard-api
+            echo "Update Complete"

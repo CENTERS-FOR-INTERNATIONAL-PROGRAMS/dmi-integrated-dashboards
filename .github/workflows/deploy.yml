@@ -17,5 +17,5 @@ jobs:
         port: ${{ secrets.PORT }}
     - name: executing remote connection
       run: |
-          ls /home/${{ secrets.USERNAME }}/app/dmi-integrated-dashboards/
+          pwd
           echo "Test complete"

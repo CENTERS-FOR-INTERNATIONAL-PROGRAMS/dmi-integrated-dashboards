@@ -17,4 +17,4 @@ jobs:
         port: ${{ secrets.PORT }}
     - name: executing remote connection
       run: |
-          ls /etc/dmi-integrated-dashboards/
+          sudo ls /etc/dmi-integrated-dashboards/

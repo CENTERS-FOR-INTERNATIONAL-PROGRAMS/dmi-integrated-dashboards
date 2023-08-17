@@ -61,9 +61,9 @@ const routes: Routes = [
           import('./views/afi/cases/cases.module').then((m) => m.ACasesModule)
       },
       {
-        path: 'afi/results',
+        path: 'afi/rdt_results',
         loadChildren: () =>
-          import('./views/afi/results/results.module').then((m) => m.AResultsModule)
+          import('./views/afi/results_rdt/results.module').then((m) => m.AResultsModule)
       },
       {
         path: 'afi/outcome',

@@ -18,9 +18,9 @@ jobs:
         script: |
           cd /etc/dmi-integrated-dashboards
           systemctl stop nginx
-          pm2 stop integrated-dashboard-api
+          pm2 stop 0
           rm -rf dist
-          git pull
+          sudo git pull
           find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +
           ng build --configuration production
           systemctl restart nginx

@@ -18,5 +18,4 @@ jobs:
         script: |
           cd /etc/dmi-integrated-dashboards
           systemctl restart nginx
-          pm2 stop 0
           echo "deployment complete"

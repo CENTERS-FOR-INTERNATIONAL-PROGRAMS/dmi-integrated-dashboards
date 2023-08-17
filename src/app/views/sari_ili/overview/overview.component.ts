@@ -2,11 +2,14 @@ import { ReviewService } from '../../../services/sari_ili/service';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { SARIProperties } from '../../../models/sari_ili/SARIProperties.model';
+import { SARIILIChart } from '../../../models/sari_ili/SARIILIChart.model';
+import { SCParent } from '../../../models/sari_ili/SCParent.model';
 
 import * as Highcharts from 'highcharts/highstock';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
+import { HttpClient } from '@angular/common/http';
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
@@ -21,23 +24,7 @@ export class SIOverviewComponent implements OnInit {
   highcharts = Highcharts;
   //#endregion
 
-  //#region Prerequisites --> Influenza types distribution
-  influenzaTypesDistribution: SARIProperties[] = [];
-  influenzaTypesDistributionSeries: any[][] = [];
-  influenzaTypesDistributionOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> Influenza A Subtype Distribution
-  influenzaASubtypeDistribution: SARIProperties[] = [];
-  influenzaASubtypeDistributionSeries: any[][] = [];
-  influenzaASubtypeDistributionOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> Influenza B Lineage Distribution
-  influenzaBLineageDistribution: SARIProperties[] = [];
-  influenzaBLineageDistributionSeries: any[] = [];
-  influenzaBLineageDistributionOptions: {} = {};
-  //#endregion
+  OverviewCharts: SCParent = {};
 
   //#region Prerequisites --> Overall SARS-COV-2 Positivity
   overallSARSCOV2Positivity: SARIProperties[] = [];
@@ -75,16 +62,11 @@ export class SIOverviewComponent implements OnInit {
   influenzaPatientOutcomeOptions: {} = {};
   //#endregion
 
-  constructor(private reviewService: ReviewService) { }
+  constructor(private reviewService: ReviewService, private http: HttpClient) { }
+
   ngOnInit(): void {
-    this.influenzaTypesDistributionData();
-    this.influenzaTypesDistributionChart();
 
-    this.influenzaASubtypeDistributionData();
-    this.influenzaASubtypeDistributionChart();
-
-    this.influenzaBLineageDistributionData();
-    this.influenzaBLineageDistributionChart();
+    this.loadOverviewCharts();
 
     this.SARSCOV2PositivityOvertimeData();
     this.SARSCOV2PositivityOvertimeChart();
@@ -105,224 +87,237 @@ export class SIOverviewComponent implements OnInit {
     this.influenzaPatientOutcomeChart();
   }
 
-  //#region Load Chart --> Influenza Types Distribution
-  influenzaTypesDistributionData() {
-    for (let index = 0; index < 4; index++) {
-      this.influenzaTypesDistributionSeries.push([]);
-      this.influenzaTypesDistributionSeries[index].push(0);
-      this.influenzaTypesDistributionSeries[index].push(0);
-    }
+  loadOverviewCharts() {
+    //#region Load Chart --> Influenza Types Distribution
+    this.OverviewCharts['findTypesByDistribution'] = new SARIILIChart(this.http);
+    this.OverviewCharts['findTypesByDistribution'].loadData(
+      "overview/findTypesByDistribution",
+      () => {
+        let MCTemp = this.OverviewCharts['findTypesByDistribution'];
 
-    this.reviewService.findInfluenzaTypesDistribution().subscribe(
-      response => {
-        this.influenzaTypesDistribution = response;
+        for (let index = 0; index < 5; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(0);
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.OverviewCharts['findTypesByDistribution'];
 
         // Influenza A (Index --> 0)
         //Number (Index --> [0][0])
-        this.influenzaTypesDistributionSeries[0][0] = this.influenzaTypesDistribution[0].InfluenzaAPositive;
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].InfluenzaAPositive;
+
         //Percent (Index --> [0][1])
-        this.influenzaTypesDistributionSeries[0][1] = this.influenzaTypesDistribution[0].InfluenzaAPositivePercent;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].InfluenzaAPositivePercent;
 
         // Influenza B (Index --> 1)
         //Number (Index --> [1][0])
-        this.influenzaTypesDistributionSeries[1][0] = this.influenzaTypesDistribution[0].InfluenzaBPositive;
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].InfluenzaBPositive;
+
         //Percent (Index --> [1][1])
-        this.influenzaTypesDistributionSeries[1][1] = this.influenzaTypesDistribution[0].InfluenzaBPositivePercent;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].InfluenzaBPositivePercent;
 
         // Neg Flu (Index --> 1)
         //Number (Index --> [2][0])
-        this.influenzaTypesDistributionSeries[2][0] = this.influenzaTypesDistribution[0].NegativeFluNumber;
+        MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].NegativeFluNumber;
+
         //Percent (Index --> [2][1])
-        this.influenzaTypesDistributionSeries[2][1] = this.influenzaTypesDistribution[0].NegativeFluPercent;
-
-        this.influenzaTypesDistributionChart();
-      });
-  }
-
-  influenzaTypesDistributionChart() {
-    this.influenzaTypesDistributionOptions = {
-      title: {
-        text: 'Influenza Types Distribution',
-        align: 'left'
+        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].NegativeFluPercent;
       },
-      chart: {
-        type: "pie",
-      },
-      colors: [
-        "#FF0000",
-        "#FFA500",
-        "#234FEA",
-      ],
-      series: [
-        {
-          showInLegend: true,
-          name: "Data",
-          type: 'pie',
-          data: [
-            ["Influenza A (" + this.influenzaTypesDistributionSeries[0][1] + "%)", this.influenzaTypesDistributionSeries[0][0]],
-            ["Influenza B (" + this.influenzaTypesDistributionSeries[1][1] + "%)", this.influenzaTypesDistributionSeries[1][0]],
-            ["Neg Flu (" + this.influenzaTypesDistributionSeries[2][1] + "%)", this.influenzaTypesDistributionSeries[2][0]],
-          ]
-        }
-      ],
-      plotOptions: {
-        pie: {
-          innerSize: "70%",
-          depth: 25,
-          dataLabels: {
-            enabled: false
+      () => {
+        let MCTemp = this.OverviewCharts['findTypesByDistribution'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Influenza Types Distribution',
+            align: 'left'
           },
-        },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#FF0000",
+            "#FFA500",
+            "#234FEA",
+          ],
+          series: [
+            {
+              showInLegend: true,
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Influenza A (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Influenza B (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+                ["Neg Flu (" + MCTemp.ChartSeries[2][1] + "%)", MCTemp.ChartSeries[2][0]],
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: false
+              },
+            },
+          }
+        }
       }
-    };
+    );
+    //#endregion
 
-    HC_exporting(Highcharts);
-  }
-  //#endregion
+    //#region Load Chart --> Influenza A Subtype Distribution
+    this.OverviewCharts['findInfluenzaASubtypesDistribution'] = new SARIILIChart(this.http);
+    this.OverviewCharts['findInfluenzaASubtypesDistribution'].loadData(
+      "overview/findInfluenzaASubtypesDistribution",
+      () => {
+        let MCTemp = this.OverviewCharts['findInfluenzaASubtypesDistribution'];
 
-  //#region Load Chart --> Influenza A Subtype Distribution
-  influenzaASubtypeDistributionData() {
-    for (let index = 0; index < 5; index++) {
-      this.influenzaASubtypeDistributionSeries.push([]);
-      this.influenzaASubtypeDistributionSeries[index].push(0);
-      this.influenzaASubtypeDistributionSeries[index].push(0);
-    }
-
-    this.reviewService.findInfluenzaASubtypeDistribution().subscribe(
-      response => {
-        this.influenzaASubtypeDistribution = response;
+        for (let index = 0; index < 5; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(0);
+          MCTemp.ChartSeries[index].push(0);
+        }
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.OverviewCharts['findInfluenzaASubtypesDistribution'];
 
         //A1H1 (Index --> 0)
-        this.influenzaASubtypeDistributionSeries[0][0] = this.influenzaASubtypeDistribution[0].AH1N1Number;
-        this.influenzaASubtypeDistributionSeries[0][1] = this.influenzaASubtypeDistribution[0].AH1N1NumberPercent;
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].AH1N1Number;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].AH1N1NumberPercent;
 
         //AH3N2
-        this.influenzaASubtypeDistributionSeries[1][0] = this.influenzaASubtypeDistribution[0].AH3N2Number;
-        this.influenzaASubtypeDistributionSeries[1][1] = this.influenzaASubtypeDistribution[0].AH3N2NumberPercent;
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].AH3N2Number;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].AH3N2NumberPercent;
 
         //NonSubTypable
-        this.influenzaASubtypeDistributionSeries[2][0] = this.influenzaASubtypeDistribution[0].NonSubTypableNumber;
-        this.influenzaASubtypeDistributionSeries[2][1] = this.influenzaASubtypeDistribution[0].NonSubTypableNumberPercent;
+        MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].NonSubTypableNumber;
+        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].NonSubTypableNumberPercent;
 
         //NotSubType
-        this.influenzaASubtypeDistributionSeries[3][0] = this.influenzaASubtypeDistribution[0].NotSubTypeNumber;
-        this.influenzaASubtypeDistributionSeries[3][1] = this.influenzaASubtypeDistribution[0].NotSubTypeNumberPercent;
+        MCTemp.ChartSeries[3][0] = MCTemp.ChartData[0].NotSubTypeNumber;
+        MCTemp.ChartSeries[3][1] = MCTemp.ChartData[0].NotSubTypeNumberPercent;
 
         //TotalInfluenzaSubTypeA
-        this.influenzaASubtypeDistributionSeries[4][0] = this.influenzaASubtypeDistribution[0].TotalInfluenzaSubTypeA;
-
-        this.influenzaASubtypeDistributionChart();
-      });
-  }
-
-  influenzaASubtypeDistributionChart() {
-    this.influenzaASubtypeDistributionOptions = {
-      title: {
-        text: 'Influenza A Subtype Distribution',
-        align: 'left'
+        MCTemp.ChartSeries[4][0] = MCTemp.ChartData[0].TotalInfluenzaSubTypeA;
       },
-      chart: {
-        type: "pie",
-      },
-      colors: [
-        "#234FEA", // Color for Category 1
-        "#FC7500", // Color for Category 2
-      ],
-      series: [
-        {
-          showInLegend: true,
-          name: "Data",
-          type: 'pie',
-          data: [
-            ["A/H1N1 (" + this.influenzaASubtypeDistributionSeries[0][1] + "%)", this.influenzaASubtypeDistributionSeries[0][0]],
-            ["A/H3N2 (" + this.influenzaASubtypeDistributionSeries[1][1] + "%)", this.influenzaASubtypeDistributionSeries[1][0]],
-            ["Non-subtypable (" + this.influenzaASubtypeDistributionSeries[2][1] + "%)", this.influenzaASubtypeDistributionSeries[2][0]],
-            ["Not yet subtyped (" + this.influenzaASubtypeDistributionSeries[3][1] + "%)", this.influenzaASubtypeDistributionSeries[3][0]]
-          ]
-        }
-      ],
-      plotOptions: {
-        pie: {
-          innerSize: "70%",
-          depth: 25,
-          dataLabels: {
-            enabled: false
+      () => {
+        let MCTemp = this.OverviewCharts['findInfluenzaASubtypesDistribution'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Influenza A Subtype Distribution',
+            align: 'left'
           },
-        },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#234FEA", // Color for Category 1
+            "#FC7500", // Color for Category 2
+          ],
+          series: [
+            {
+              showInLegend: true,
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["A/H1N1 (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["A/H3N2 (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+                ["Non-subtypable (" + MCTemp.ChartSeries[2][1] + "%)", MCTemp.ChartSeries[2][0]],
+                ["Not yet subtyped (" + MCTemp.ChartSeries[3][1] + "%)", MCTemp.ChartSeries[3][0]]
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: false
+              },
+            },
+          }
+        }
       }
-    };
+    );
+    //#endregion    
 
-    HC_exporting(Highcharts);
-  }
-  //#endregion
+    //#region Load Chart --> Influenza B Lineage Distribution
+    this.OverviewCharts['findInfluenzaBLineageDistribution'] = new SARIILIChart(this.http);
+    this.OverviewCharts['findInfluenzaBLineageDistribution'].loadData(
+      "overview/findInfluenzaBLineageDistribution",
+      () => {
+        let MCTemp = this.OverviewCharts['findInfluenzaBLineageDistribution'];
 
-  //#region Load Chart --> Influenza B Lineage Distribution
-  influenzaBLineageDistributionData() {
-    for (let index = 0; index < 3; index++) {
-      this.influenzaBLineageDistributionSeries.push([]);
-      this.influenzaBLineageDistributionSeries[index].push(0);
-      this.influenzaBLineageDistributionSeries[index].push(0);
-    }
-
-    this.reviewService.findInfluenzaBLineageDistribution().subscribe(
-      response => {
-        this.influenzaBLineageDistribution = response;
+        for (let index = 0; index < 3; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(0);
+          MCTemp.ChartSeries[index].push(0);
+        }
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.OverviewCharts['findInfluenzaBLineageDistribution'];
 
         //Victoria (Index --> 0)
-        this.influenzaBLineageDistributionSeries[0][0] = this.influenzaBLineageDistribution[0].VictoriaNumber;
-        this.influenzaBLineageDistributionSeries[0][1] = this.influenzaBLineageDistribution[0].VictoriaNumberPercent;
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].VictoriaNumber;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].VictoriaNumberPercent;
 
         //Yamagata (Index --> 1)
-        this.influenzaBLineageDistributionSeries[1][0] = this.influenzaBLineageDistribution[0].YamagataNumber;
-        this.influenzaBLineageDistributionSeries[1][1] = this.influenzaBLineageDistribution[0].YamagataNumberPercent;
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].YamagataNumber;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].YamagataNumberPercent;
 
         //Non-determined (Index --> 2)
-        this.influenzaBLineageDistributionSeries[2][0] = this.influenzaBLineageDistribution[0].NotdeterminedNumber;
-        this.influenzaBLineageDistributionSeries[2][1] = this.influenzaBLineageDistribution[0].NotdeterminedNumberPercent;
-
-        this.influenzaBLineageDistributionChart();
-      });
-  }
-
-  influenzaBLineageDistributionChart() {
-    this.influenzaBLineageDistributionOptions = {
-      title: {
-        text: 'Influenza B Lineage Distribution',
-        align: 'left'
+        MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].NotdeterminedNumber;
+        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].NotdeterminedNumberPercent;
       },
-      chart: {
-        type: "pie",
-      },
-      colors: [
-        "#234FEA", // Color for Category 1
-        "#FC7500", // Color for Category 2
-      ],
-      series: [
-        {
-          showInLegend: true,
-          name: "Data",
-          type: 'pie',
-          data: [
-            ["B/Victoria", this.influenzaBLineageDistributionSeries[0][0]],
-            ["B/Yamagata", 198],
-            ["Not-determined", 381]
-          ]
-        }
-      ],
-      plotOptions: {
-        pie: {
-          innerSize: "70%",
-          depth: 25,
-          dataLabels: {
-            enabled: false
+      () => {
+        let MCTemp = this.OverviewCharts['findInfluenzaBLineageDistribution'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Influenza B Lineage Distribution',
+            align: 'left'
           },
-        },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#FF0000",
+            "#008000",
+            "#234FEA"
+          ],
+          series: [
+            {
+              showInLegend: true,
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["B/Victoria (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["B/Yamagata (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+                ["Not-determined (" + MCTemp.ChartSeries[2][1] + "%)", MCTemp.ChartSeries[2][0]]
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: false
+              },
+            },
+          }
+        }
       }
-    };
-
-    HC_exporting(Highcharts);
+    );
+    //#endregion    
   }
-  //#endregion
 
   //#region Load Chart --> Overall SARS-COV-2 Positivity
   overallSARCOV2PositivityData() {
@@ -429,6 +424,11 @@ export class SIOverviewComponent implements OnInit {
         categories: this.SARSCOV2PositivityOvertimeSeries[0],
         title: {
           text: "Epi Week",
+        },
+        min: 0,
+        max: 22,
+        scrollbar: {
+          enabled: true
         }
       },
       yAxis: {
@@ -450,7 +450,8 @@ export class SIOverviewComponent implements OnInit {
             enabled: true
           }
         }
-      }
+      },
+      useHighStocks: true
     };
 
     HC_exporting(Highcharts);

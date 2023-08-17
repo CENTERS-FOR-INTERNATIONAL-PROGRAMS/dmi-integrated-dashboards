@@ -13,8 +13,17 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
+        key: ${{ secrets.CICD_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-            systemctl status nginx
-            echo "Update Complete"
+          cd /etc/dmi-integrated-dashboards
+          systemctl stop nginx
+          pm2 stop integrated-dashboard-api
+          rm -rf dist
+          git pull
+          find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +
+          ng build --configuration production
+          systemctl restart nginx
+          systemctl status nginx
+          pm2 reload integrated-dashboard-api
+          echo "deployment complete"

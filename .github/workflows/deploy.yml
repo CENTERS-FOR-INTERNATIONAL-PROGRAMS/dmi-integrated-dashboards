@@ -17,4 +17,4 @@ jobs:
         port: ${{ secrets.PORT }}
     - name: executing remote connection
       run: |
-          sudo systemctl status nginx
+          whoami

@@ -17,5 +17,5 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd /etc/dmi-integrated-dashboards
-          systemctl restart nginx
+          ll
           echo "deployment complete"

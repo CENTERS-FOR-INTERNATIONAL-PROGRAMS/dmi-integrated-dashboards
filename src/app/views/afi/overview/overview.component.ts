@@ -197,7 +197,7 @@ export class AOverviewComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'PCR Results',
+            text: 'Molecular PCR laboratory results',
             align: 'left',
           },
           chart: {
@@ -239,6 +239,7 @@ export class AOverviewComponent implements OnInit {
               name: 'Count',
               data: MCTemp.ChartSeries[0],
               color: '#008000',
+              showInLegend: false
             }
           ]
         }

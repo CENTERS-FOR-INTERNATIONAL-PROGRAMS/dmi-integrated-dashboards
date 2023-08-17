@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 import {
   AvatarModule,
@@ -37,7 +38,8 @@ import { AOutcomeComponent } from './outcome.component';
     ButtonGroupModule,
     ChartjsModule,
     AvatarModule,
-    TableModule
+    TableModule,
+    HighchartsChartModule
   ],
   declarations: [AOutcomeComponent]
 })

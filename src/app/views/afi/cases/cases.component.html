@@ -9,3 +9,28 @@
     </p>
   </c-card-body>
 </c-card>
+
+<c-row>
+  <c-col [sm]="6">
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['syndromesByGender'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['syndromesByFacility'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
+
+<c-col>
+  <c-card>
+    <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['syndromesOvertime'].ChartOptions"
+      style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+  </c-card>
+</c-col>

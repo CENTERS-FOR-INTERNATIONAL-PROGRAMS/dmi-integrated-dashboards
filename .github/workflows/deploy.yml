@@ -13,10 +13,8 @@ jobs:
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.SSH_PASSWORD }}
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
         script: |
-            cd ~/.ssh/
-            cat id_rsa
+            sudo systemctl restart nginx
             echo "Update Complete"

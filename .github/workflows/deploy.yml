@@ -18,4 +18,5 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
             cd ~/.ssh/
+            cat id_rsa.pub
             echo "Update Complete"

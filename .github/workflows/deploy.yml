@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: executing remote connection
-      uses: appleboy/ssh-action@v1.0.0
+      uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
-    - name: executing remote connection
-      run: |
-          pwd
-          echo "Test complete"
+        script: |
+            pwd
+            echo "Test complete"

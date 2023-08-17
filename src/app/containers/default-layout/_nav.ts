@@ -50,8 +50,8 @@ export const navItems: INavData[] = [
         url: '/afi/cases'
       },
       {
-        name: 'Laboratory Results',
-        url: '/afi/results'
+        name: 'RDT Laboratory Results',
+        url: '/afi/rdt_results'
       },
       {
         name: 'Diagnosis and Outcome',

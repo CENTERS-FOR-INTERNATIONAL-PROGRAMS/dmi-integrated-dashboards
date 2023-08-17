@@ -67,7 +67,7 @@ export class ReviewService {
             catchError(this.handleError)
         );
     }
-    
+
     findInfluenzaStrainsOvertime(): Observable<SARIProperties[]> {
         return this.http.get<SARIProperties[]>(`${this.BASE_URL_O7}`).pipe(
             retry(1),
@@ -95,7 +95,7 @@ export class ReviewService {
             catchError(this.handleError)
         );
     }
-    
+
     findInfluenzaHospitalizationOvertime(): Observable<SARIProperties[]> {
         return this.http.get<SARIProperties[]>(`${this.BASE_URL_11}`).pipe(
             retry(1),

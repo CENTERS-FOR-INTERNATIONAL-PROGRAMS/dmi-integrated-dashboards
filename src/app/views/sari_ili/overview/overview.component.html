@@ -15,7 +15,8 @@
   <c-col [sm]="4">
     <c-card class="mb-4">
       <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="influenzaTypesDistributionOptions"
+      <!-- <highcharts-chart [Highcharts]="highcharts" [options]="influenzaTypesDistributionOptions" -->
+      <highcharts-chart [Highcharts]="highcharts" [options]="OverviewCharts['findTypesByDistribution'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
       <!-- </c-card-body> -->
     </c-card>
@@ -24,7 +25,7 @@
   <c-col [sm]="4">
     <c-card class="mb-4">
       <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="influenzaASubtypeDistributionOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="OverviewCharts['findInfluenzaASubtypesDistribution'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
       <!-- </c-card-body> -->
     </c-card>
@@ -33,10 +34,9 @@
   <c-col [sm]="4">
     <c-card class="mb-4">
       <!-- <c-card-header> -->
-      <!-- <h5>Influenza B Lineage Distribution</h5> -->
       <!-- </c-card-header> -->
       <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="influenzaBLineageDistributionOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="OverviewCharts['findInfluenzaBLineageDistribution'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
       <!-- </c-card-body> -->
     </c-card>

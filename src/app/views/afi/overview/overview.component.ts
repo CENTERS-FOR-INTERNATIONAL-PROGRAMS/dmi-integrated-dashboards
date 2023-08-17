@@ -2,11 +2,14 @@ import { ReviewService } from '../../../services/sari_ili/service';
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { AFIProperties } from '../../../models/afi/AFIProperties.model';
+import { AFIChart } from '../../../models/afi/AFIChart.model';
+import { ACParent } from '../../../models/afi/ACParent.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
+import { HttpClient } from '@angular/common/http';
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
@@ -18,6 +21,7 @@ HighchartsSolidGauge(Highcharts);
 
 export class AOverviewComponent implements OnInit {
   //#region Prerequisites
+  CompositeCharts: ACParent = {};
   highcharts = Highcharts;
   //#endregion
 
@@ -39,13 +43,386 @@ export class AOverviewComponent implements OnInit {
   syndromesOvertimeOptions: {} = {};
   //#endregion
 
-  constructor(private reviewService: ReviewService) { }
+  constructor(private reviewService: ReviewService, private http: HttpClient) { }
+
   ngOnInit(): void {
     this.AFIEnrolledByGenderData();
 
     this.AFIEnrolledByAgeGenderData();
 
     this.syndromesOvertimeData();
+
+    this.loadCharts();
+  }
+
+  loadCharts() {
+    //#region Load Chart --> RDT Results Malaria
+    this.CompositeCharts['RTDResultsMalaria'] = new AFIChart(this.http);
+    this.CompositeCharts['RTDResultsMalaria'].loadData(
+      "overview/RTDResultsMalaria",
+      () => {
+        let MCTemp = this.CompositeCharts['RTDResultsMalaria'];
+
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['RTDResultsMalaria'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['RTDResultsMalaria'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'RDT Results (Malaria)',
+            align: 'left'
+          },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#FF0000",
+            "#FFA500"
+          ],
+          series: [
+            {
+              showInLegend: true,
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Positive (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Negative (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]]
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: false
+              },
+            }
+          }
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> RDT Results Leptospirosis
+    this.CompositeCharts['RTDResultsLeptospirosis'] = new AFIChart(this.http);
+    this.CompositeCharts['RTDResultsLeptospirosis'].loadData(
+      "overview/RTDResultsLeptospirosis",
+      () => {
+        let MCTemp = this.CompositeCharts['RTDResultsLeptospirosis'];
+
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['RTDResultsLeptospirosis'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['RTDResultsLeptospirosis'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'RDT Results (Leptospirosis)',
+            align: 'left'
+          },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#FF0000",
+            "#FFA500"
+          ],
+          series: [
+            {
+              showInLegend: true,
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Positive (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Negative (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: false
+              },
+            }
+          }
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> PCR Results
+    this.CompositeCharts['PCRResults'] = new AFIChart(this.http);
+    this.CompositeCharts['PCRResults'].loadData(
+      "overview/PCRResults",
+      () => {
+        let MCTemp = this.CompositeCharts['PCRResults'];
+
+        MCTemp.ChartSeries.push([]);
+        MCTemp.ChartSeries.push([]);
+
+        for (let index = 0; index < 15; index++) {
+          MCTemp.ChartSeries[0].push(Math.floor(Math.random() * 1000));
+          // MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['PCRResults'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['PCRResults'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'PCR Results',
+            align: 'left',
+          },
+          chart: {
+            type: 'bar',
+          },
+          accessibility: {
+            point: {
+              valueDescriptionFormat: '{index}. Age {xDescription}, {value}%.',
+            },
+          },
+          xAxis: {
+            categories: ["Negative", "Plasmodium", "HIV-1", "Salmonella", "Rickettsia", "Dengue", "Brucella", "S.pneumoniae", "Chikungunya", "Leishmania", "Bartonella", "Leptospira", "C.burnetii", "Rift Valley Fever", "B.pseudomallei"],
+            title: { text: '' },
+            reversed: false,
+          },
+          yAxis: [
+            {
+              title: {
+                text: '',
+              },
+            },
+          ],
+          plotOptions: {
+            series: {
+              stacking: 'normal',
+            },
+            bar: {
+              pointWidth: 18,
+            }
+          },
+          tooltip: {
+            format:
+              '<b>{series.name}, age {point.category}</b><br/>' +
+              'Population: {(abs point.y):.1f}%',
+          },
+          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
+          series: [
+            {
+              name: 'Count',
+              data: MCTemp.ChartSeries[0],
+              color: '#008000',
+            }
+          ]
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> Priority IDSR immediately reportable Diseases/Microbes
+    this.CompositeCharts['priorityIDSRReportableDiseases'] = new AFIChart(this.http);
+    this.CompositeCharts['priorityIDSRReportableDiseases'].loadData(
+      "overview/priorityIDSRReportableDiseases",
+      () => {
+        let MCTemp = this.CompositeCharts['priorityIDSRReportableDiseases'];
+
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['priorityIDSRReportableDiseases'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['priorityIDSRReportableDiseases'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Priority IDSR immediately reportable Diseases/Microbes',
+            align: 'left'
+          },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "blue",
+            "indigo"
+          ],
+          series: [
+            {
+              showInLegend: true,
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Dengue (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Rift Valley Fever (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: false
+              },
+            }
+          }
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> Mongthly IDSR reportable Diseases/Microbes
+    this.CompositeCharts['monthlyIDSRReportableDiseases'] = new AFIChart(this.http);
+    this.CompositeCharts['monthlyIDSRReportableDiseases'].loadData(
+      "overview/monthlyIDSRReportableDiseases",
+      () => {
+        let MCTemp = this.CompositeCharts['monthlyIDSRReportableDiseases'];
+
+        for (let index = 0; index < 4; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['monthlyIDSRReportableDiseases'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['monthlyIDSRReportableDiseases'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Mongthly IDSR reportable Diseases/Microbes',
+            align: 'left'
+          },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "indigo",
+            "gray",
+            "skyblue",
+            "green"
+          ],
+          series: [
+            {
+              showInLegend: true,
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["HIV 1 (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["S. pneumoniae (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+                ["Leishmania (" + MCTemp.ChartSeries[2][1] + "%)", MCTemp.ChartSeries[1][0]],
+                ["Plasmodium (" + MCTemp.ChartSeries[3][1] + "%)", MCTemp.ChartSeries[1][0]]
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: false
+              },
+            }
+          }
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> SARS-COV-2 Positivity
+    this.CompositeCharts['SARSCOV2Positivity'] = new AFIChart(this.http);
+    this.CompositeCharts['SARSCOV2Positivity'].loadData(
+      "overview/SARSCOV2Positivity",
+      () => {
+        let MCTemp = this.CompositeCharts['SARSCOV2Positivity'];
+
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['SARSCOV2Positivity'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['SARSCOV2Positivity'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'SARS-COV-2 Positivity',
+            align: 'left'
+          },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "red",
+            "green"
+          ],
+          series: [
+            {
+              showInLegend: true,
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Positive (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Negative (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: false
+              },
+            }
+          }
+        }
+      }
+    );
+    //#endregion
   }
 
   //#region Load Chart --> Enrolled By Gender

@@ -19,6 +19,4 @@ jobs:
           cd /etc/dmi-integrated-dashboards
           systemctl stop nginx
           pm2 stop 0
-          rm -rf dist
-          sudo git pull
           echo "deployment complete"

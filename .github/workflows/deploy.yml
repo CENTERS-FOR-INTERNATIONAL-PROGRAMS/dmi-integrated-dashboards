@@ -1,23 +1,20 @@
-name: Deploy Angular dashboard
+name: Deploy Integrated dashboards
 on:
   push:
     branches: [ main ]
 jobs:
 
   build:
-    name: Deploy
+    name: Deploy Dashboards
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote connection
+    - name: updating and deploying app
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
-    - name: Updating Angular App
-      uses: appleboy/ssh-action@master
-      with:
         script: |
           cd /etc/dmi-integrated-dashboards
           sudo systemctl stop nginx
@@ -29,3 +26,4 @@ jobs:
           sudo systemctl restart nginx
           sudo systemctl status nginx
           sudo pm2 reload 0
+          echo "Deployment successful!"

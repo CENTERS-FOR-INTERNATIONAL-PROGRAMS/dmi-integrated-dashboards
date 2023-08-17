@@ -1,4 +1,4 @@
-name: deploy angular dashboard
+name: deploy app
 on:
   push:
     branches: [ main ]
@@ -16,5 +16,5 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
     - name: executing remote connection
-      script: |
+      run: |
           cd /etc/dmi-integrated-dashboards

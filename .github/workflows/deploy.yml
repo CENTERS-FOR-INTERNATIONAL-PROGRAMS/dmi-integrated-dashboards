@@ -18,12 +18,12 @@ jobs:
         script: |
           cd /etc/dmi-integrated-dashboards
           sudo systemctl stop nginx
-          sudo pm2 stop 0
+          sudo pm2 stop integrated-dashboards-api
           sudo rm -rf dist
           sudo git pull
           sudo find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +
           sudo ng build --configuration production
           sudo systemctl restart nginx
           sudo systemctl status nginx
-          sudo pm2 reload 0
-          echo "Deployment successful!"
+          sudo pm2 reload integrated-dashboards-api
+          echo "Dashboards are upto date! Deployment successful!"

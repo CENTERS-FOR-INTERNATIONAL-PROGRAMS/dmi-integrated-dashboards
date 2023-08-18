@@ -13,11 +13,12 @@
 <c-row>
   <c-col [sm]="3">
     <c-card>
+      <c-card-header style="background-color: #fff; padding-left: 5px;">Screened</c-card-header>
+
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
-          <c-col [sm]="6" style="padding: 0 0 0 8px; text-align: left; margin-top: 30px;">
+          <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 30px;">
             <h4>14493</h4>
-            <label style="font-size: 12px;">110,000 last month</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
@@ -26,60 +27,80 @@
           </c-col>
         </c-row>
       </c-card-body>
+
+      <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
+        <label style="font-size: 12px;">110,000 last month</label>
+      </c-card-footer>
     </c-card>
   </c-col>
 
   <c-col [sm]="3">
     <c-card>
+      <c-card-header style="background-color: #fff; padding-left: 5px;">Eligible</c-card-header>
+
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
-          <c-col [sm]="6" style="padding: 0 0 0 8px; text-align: left; margin-top: 30px;">
+          <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
             <h4>21,761</h4>
-            <label style="font-size: 12px;">25,000 last month</label>
+
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts"
+            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['screenedCascade'].ChartOptions"
               style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
+            <p></p>
           </c-col>
         </c-row>
       </c-card-body>
+
+      <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
+        <label style="font-size: 12px;">25,000 last month</label>
+      </c-card-footer>
     </c-card>
   </c-col>
 
   <c-col [sm]="3">
     <c-card>
+      <c-card-header style="background-color: #fff; padding-left: 5px;">Enrolled</c-card-header>
+
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
-          <c-col [sm]="6" style="padding: 0 0 0 8px; text-align: left; margin-top: 30px;">
+          <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
             <h4>16,223</h4>
-            <label style="font-size: 12px;">20,000 last month</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts"
+            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['aligibleCascade'].ChartOptions"
               style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
           </c-col>
         </c-row>
       </c-card-body>
+
+      <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
+        <label style="font-size: 12px;">20,000 last month</label>
+      </c-card-footer>
     </c-card>
   </c-col>
 
   <c-col [sm]="3">
     <c-card>
+      <c-card-header style="background-color: #fff; padding-left: 5px;">Sampled</c-card-header>
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
-          <c-col [sm]="6" style="padding: 0 0 0 8px; text-align: left; margin-top: 30px;">
+          <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
             <h4>9,244</h4>
-            <label style="font-size: 12px;">10,000 last month</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts"
+            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['sampledCascade'].ChartOptions"
               style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
           </c-col>
         </c-row>
       </c-card-body>
+
+      <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
+        <label style="font-size: 12px;">10,000 last month</label>
+      </c-card-footer>
     </c-card>
   </c-col>
 </c-row>
@@ -89,19 +110,15 @@
 <c-row>
   <c-col [sm]="6">
     <c-card>
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="AFIEnrolledByGenderOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['enrolledByGender'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card>
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="AFIEnrolledByAgeGenderOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['enrolledByAgeGender'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
     </c-card>
   </c-col>
 </c-row>
@@ -111,7 +128,7 @@
 <c-row>
   <c-col>
     <c-card>
-      <highcharts-chart [Highcharts]="highcharts" [options]="syndromesOvertimeOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['screenedOverTime'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>
@@ -172,7 +189,7 @@
 
   <c-col [sm]="6">
     <c-card>
-      <highcharts-chart [Highcharts]="highcharts"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['geographicDistributionOfPathogen'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>

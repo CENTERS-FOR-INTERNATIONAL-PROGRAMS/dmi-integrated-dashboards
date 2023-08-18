@@ -9,10 +9,19 @@ import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
+import HighchartsMap from "highcharts/modules/map"
+import HighchartsData from "highcharts/modules/data"
 import { HttpClient } from '@angular/common/http';
+import topography from '../../../data/world.topo.json'
+import topographyData from '../../../data/world-population-density.json'
+
+import {Chart, MapChart } from 'angular-highcharts';
+const AHighcharts = {maps: {}};
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
+HighchartsMap(Highcharts);
+HighchartsData(Highcharts);
 
 @Component({
   templateUrl: 'overview.component.html',
@@ -23,39 +32,244 @@ export class AOverviewComponent implements OnInit {
   //#region Prerequisites
   CompositeCharts: ACParent = {};
   highcharts = Highcharts;
-  //#endregion
-
-  //#region Prerequisites --> Enrolled by Gender
-  AFIEnrolledByGender: AFIProperties[] = [];
-  AFIEnrolledByGenderSeries: any[] = [];
-  AFIEnrolledByGenderOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> Enrolled by AgeGroup Gender
-  AFIEnrolledByAgeGender: AFIProperties[] = [];
-  AFIEnrolledByAgeGenderSeries: any[] = [];
-  AFIEnrolledByAgeGenderOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> Syndromes over time
-  syndromesOvertime: AFIProperties[] = [];
-  syndromesOvertimeSeries: any[] = [];
-  syndromesOvertimeOptions: {} = {};
+  topology: any;
   //#endregion
 
   constructor(private reviewService: ReviewService, private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.AFIEnrolledByGenderData();
-
-    this.AFIEnrolledByAgeGenderData();
-
-    this.syndromesOvertimeData();
-
     this.loadCharts();
   }
 
   loadCharts() {
+
+    //#region Load Chart --> Enrolled by gender
+    this.CompositeCharts['enrolledByGender'] = new AFIChart(this.http);
+    this.CompositeCharts['enrolledByGender'].loadData(
+      "overview/enrolledByGender",
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledByGender'];
+
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledByGender'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledByGender'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Enrolled By Gender',
+            align: 'left'
+          },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#FC7500",
+            "#234FEA",
+          ],
+          series: [
+            {
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Female (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Male (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]]
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: true
+              },
+            },
+          }
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> Enrolled by age and gender
+    this.CompositeCharts['enrolledByAgeGender'] = new AFIChart(this.http);
+    this.CompositeCharts['enrolledByAgeGender'].loadData(
+      "overview/enrolledByAgeGender",
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledByAgeGender'];
+
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+
+          for (let j = 0; j < 6; j++) {
+            MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 50));
+          }
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledByAgeGender'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledByAgeGender'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Enrolled by Age and Gender',
+            align: 'left',
+          },
+          chart: {
+            type: 'bar',
+          },
+          accessibility: {
+            point: {
+              valueDescriptionFormat: '{index}. Age {xDescription}, {value}%.',
+            },
+          },
+          xAxis: [
+            {
+              categories: ["0-4 Yrs", "5-14 Yrs", "15-34 Yrs", "35-64 Yrs", "65-84 Yrs", "85+ Yrs"],
+              title: { text: '' },
+            }
+          ],
+          yAxis: [
+            {
+              title: {
+                text: 'Number Positive',
+              },
+              labels: {
+                format: '{value}', //TODO! Format to remove netagive values
+              },
+              accessibility: {
+                description: 'Number',
+                rangeDescription: 'Range: 0 to 5%',
+              }
+            },
+          ],
+          plotOptions: {
+            series: {
+              stacking: 'normal',
+            },
+            bar: {
+              pointWidth: 18,
+            }
+          },
+          tooltip: {
+            format:
+              '<b>{series.name}, age {point.category}</b><br/>' +
+              'Population: {(abs point.y):.1f}%',
+          },
+          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
+          series: [
+            {
+              name: 'Male',
+              data: MCTemp.ChartSeries[0],
+              color: '#234FEA',
+            },
+            {
+              name: 'Female',
+              data: MCTemp.ChartSeries[1],
+              color: '#FC7500',
+            }
+          ]
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> Screened over time
+    this.CompositeCharts['screenedOverTime'] = new AFIChart(this.http);
+    this.CompositeCharts['screenedOverTime'].loadData(
+      "overview/screenedOverTime",
+      () => {
+        let MCTemp = this.CompositeCharts['screenedOverTime'];
+
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+
+          for (let j = 0; j < 6; j++) {
+            MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 50));
+          }
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['screenedOverTime'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['screenedOverTime'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Syndromes over time',
+            align: 'left'
+          },
+          chart: {
+            type: "column",
+          },
+          xAxis: {
+            categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Period
+            title: false
+          },
+          yAxis: {
+            title: {
+              text: "Number tested or virus detected",
+            }
+          },
+          series: [
+            {
+              showInLegend: true,
+              name: "SARI",
+              data: [1, 0, 12, 3, 21, 45, 12, 45, 32, 23, 23, 72],
+              type: 'spline',
+              color: "#234FEA",
+            },
+            {
+              showInLegend: true,
+              name: "UF",
+              data: [10, 32, 32, 56, 21, 32, 27, 62, 12, 13, 23, 23],
+              type: 'spline',
+              color: "#FF0000",
+            },
+            {
+              showInLegend: true,
+              name: "DF",
+              data: [12, 34, 42, 12, 11, 15, 13, 42, 31, 42, 12, 26],
+              type: 'spline',
+              color: "#FF0000",
+            },
+            {
+              showInLegend: true,
+              name: "MERS-COV",
+              data: [19, 3, 34, 33, 45, 44, 33, 42, 42, 55, 33, 42],
+              type: 'spline',
+              color: "#FFA500",
+            }
+          ],
+          plotOptions: {
+            column: {
+              stacking: 'normal',
+              dataLabels: {
+                enabled: true
+              }
+            }
+          }
+        }
+      }
+    );
+    //#endregion
+
     //#region Load Chart --> RDT Results Malaria
     this.CompositeCharts['RTDResultsMalaria'] = new AFIChart(this.http);
     this.CompositeCharts['RTDResultsMalaria'].loadData(
@@ -424,295 +638,331 @@ export class AOverviewComponent implements OnInit {
       }
     );
     //#endregion
-  }
 
-  //#region Load Chart --> Enrolled By Gender
-  AFIEnrolledByGenderData() {
-    // this.reviewService.findInfluenzaBDistribution().subscribe(
-    //   response => {
-    //     this.influenzaBLineageDistribution = response;
+    //#region Load Chart --> Screened Cascade
+    this.CompositeCharts['screenedCascade'] = new AFIChart(this.http);
+    this.CompositeCharts['screenedCascade'].loadData(
+      "overview/screenedCascade",
+      () => {
+        let MCTemp = this.CompositeCharts['screenedCascade'];
 
-    //     //#region Push series data into array at specific indexes
-    //     this.influenzaBLineageDistribution.forEach((dataInstance, index) => {
-    //       this.influenzaBLineageDistributionSeries.push([]);
-
-    //       //Compile Subtype (Index --> 0)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Subtype);
-
-    //       //Compile Percentage (Index --> 1)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Percentage);
-
-    //       //Compile Count (Index --> 2)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Count);
-    //     });
-    //     //#endregion
-    //   });
-
-    this.AFIEnrolledByGenderChart();
-  }
-
-  AFIEnrolledByGenderChart() {
-    this.AFIEnrolledByGenderOptions = {
-      title: {
-        text: 'Enrolled By Gender',
-        align: 'left'
+        MCTemp.LoadChartOptions();
       },
-      chart: {
-        type: "pie",
+      () => {
+        let MCTemp = this.CompositeCharts['screenedCascade'];
       },
-      colors: [
-        "#FC7500",
-        "#234FEA",
-      ],
-      series: [
-        {
-          name: "Data",
-          type: 'pie',
-          data: [
-            ["Female", 7329],
-            ["Male", 8894]
-          ]
-        }
-      ],
-      plotOptions: {
-        pie: {
-          innerSize: "70%",
-          depth: 25,
-          dataLabels: {
-            enabled: true
+      () => {
+        let MCTemp = this.CompositeCharts['screenedCascade'];
+
+        MCTemp.ChartOptions = {
+          chart: {
+            type: 'solidgauge',
           },
-        },
-      }
-    };
-  }
-  //#endregion
-
-  //#region Load Chart --> Enrolled by Age Group and Gender
-  AFIEnrolledByAgeGenderData() {
-    // this.reviewService
-    //   .findCovid19PositivityByAgeGender()
-    //   .subscribe((response) => {
-    //     this.AFIEnrolledByAgeGender = response;
-
-    //     //#region Init series indexes
-    //     // Age Group(Index --> 0)
-    //     this.AFIEnrolledByAgeGenderSeries.push([]);
-    //     this.AFIEnrolledByAgeGenderSeries[0].push('0-4 Yrs');
-    //     this.AFIEnrolledByAgeGenderSeries[0].push('5-14 Yrs');
-    //     this.AFIEnrolledByAgeGenderSeries[0].push('15-34 Yrs');
-    //     this.AFIEnrolledByAgeGenderSeries[0].push('35-64 Yrs');
-    //     this.AFIEnrolledByAgeGenderSeries[0].push('65-84 Yrs');
-    //     this.AFIEnrolledByAgeGenderSeries[0].push('85+ Yrs');
-
-    //     //Positivity - Female (Index --> 1)
-    //     this.AFIEnrolledByAgeGenderSeries.push([]);
-
-    //     //Positivity - Male (Index --> 2)
-    //     this.AFIEnrolledByAgeGenderSeries.push([]);
-    //     //#endregion
-
-    //     //#region Push series data into array at specific indexes
-    //     this.AFIEnrolledByAgeGenderSeries[0].forEach(
-    //       (ageGroupInstance) => {
-    //         //Compile Female Positivity
-    //         let female_found = false;
-    //         let male_found = false;
-
-    //         this.AFIEnrolledByAgeGender.forEach((dataInstance) => {
-    //           if (dataInstance.AgeGroup == ageGroupInstance) {
-    //             //Compile Female (Index --> 1)
-    //             if (dataInstance.Gender == 'Female') {
-    //               this.AFIEnrolledByAgeGenderSeries[1].push(
-    //                 dataInstance.PositiveNumber
-    //               );
-    //               female_found = true;
-    //             }
-
-    //             //Compile Male (Index --> 2)
-    //             else if (dataInstance.Gender == 'Male') {
-    //               this.AFIEnrolledByAgeGenderSeries[2].push(dataInstance.PositiveNumber * -1);
-    //               male_found = true;
-    //             }
-    //           }
-    //         });
-
-    //         if (!female_found) {
-    //           this.AFIEnrolledByAgeGenderSeries[1].push(0);
-    //           console.log(ageGroupInstance, '!Female');
-    //         }
-
-    //         if (!male_found) {
-    //           this.AFIEnrolledByAgeGenderSeries[2].push(0);
-    //           console.log(ageGroupInstance, '!Male');
-    //         }
-    //       }
-    //     );
-    //     //#endregion
-
-    //     this.loadCovid19PositivityByAgeGenderChart();
-    //   });
-
-    this.AFIEnrolledByAgeGenderChart();
-  }
-
-  AFIEnrolledByAgeGenderChart() {
-    this.AFIEnrolledByAgeGenderOptions = {
-      title: {
-        text: 'COVID-19 Positivity by Age Group and Gender',
-        align: 'left',
-      },
-      chart: {
-        type: 'bar',
-      },
-      accessibility: {
-        point: {
-          valueDescriptionFormat: '{index}. Age {xDescription}, {value}%.',
-        },
-      },
-      xAxis: [
-        {
-          categories: ["0-4 Yrs", "5-14 Yrs", "15-34 Yrs", "35-64 Yrs", "65-84 Yrs", "85+ Yrs"],
-          // categories: this.AFIEnrolledByAgeGenderSeries[0],
-          title: { text: '' },
-          reversed: false,
-        },
-        {
-          categories: ["0-4 Yrs", "5-14 Yrs", "15-34 Yrs", "35-64 Yrs", "65-84 Yrs", "85+ Yrs"],
-          // categories: this.AFIEnrolledByAgeGenderSeries[0],
-          title: { text: '' },
-          reversed: false,
-          opposite: true,
-          linkedTo: 0,
-        }
-      ],
-      yAxis: [
-        {
           title: {
-            text: 'Number Positive',
+            text: '',
           },
-          labels: {
-            format: '{value}', //TODO! Format to remove netagive values
+          pane: {
+            center: ['50%', '85%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: [
+              {
+                backgroundColor: '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc',
+              },
+            ],
           },
-          accessibility: {
-            description: 'Number',
-            rangeDescription: 'Range: 0 to 5%',
-          }
-        },
-      ],
-      plotOptions: {
-        series: {
-          stacking: 'normal',
-        },
-        bar: {
-          pointWidth: 18,
-        }
-      },
-      tooltip: {
-        format:
-          '<b>{series.name}, age {point.category}</b><br/>' +
-          'Population: {(abs point.y):.1f}%',
-      },
-      legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
-      series: [
-        {
-          name: 'Male',
-          data: [10, 30, 39, 40, 38, 39],
-          // data: this.AFIEnrolledByAgeGenderSeries[2],
-          color: '#234FEA',
-        },
-        {
-          name: 'Female',
-          data: [10, 30, 39, 40, 38, 39],
-          // data: this.AFIEnrolledByAgeGenderSeries[1],
-          color: '#FC7500',
-        }
-      ]
-    };
-  }
-  //#endregion
-
-  //#region Load Chart --> Syndromes over time
-  syndromesOvertimeData() {
-    // this.reviewService.findInfluenzaBDistribution().subscribe(
-    //   response => {
-    //     this.influenzaBLineageDistribution = response;
-
-    //     //#region Push series data into array at specific indexes
-    //     this.influenzaBLineageDistribution.forEach((dataInstance, index) => {
-    //       this.influenzaBLineageDistributionSeries.push([]);
-
-    //       //Compile Subtype (Index --> 0)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Subtype);
-
-    //       //Compile Percentage (Index --> 1)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Percentage);
-
-    //       //Compile Count (Index --> 2)
-    //       this.influenzaBLineageDistributionSeries[index].push(dataInstance.Count);
-    //     });
-    //     //#endregion
-    //   });
-
-    this.syndromesOvertimeChart();
-  }
-
-  syndromesOvertimeChart() {
-    this.syndromesOvertimeOptions = {
-      title: {
-        text: 'Syndromes over time',
-        align: 'left'
-      },
-      chart: {
-        type: "column",
-      },
-      xAxis: {
-        categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Period
-        title: false
-      },
-      yAxis: {
-        title: {
-          text: "Number tested or virus detected",
-        }
-      },
-      series: [
-        {
-          showInLegend: true,
-          name: "SARI",
-          data: [1, 0, 12, 3, 21, 45, 12, 45, 32, 23, 23, 72],
-          type: 'spline',
-          color: "#234FEA",
-        },
-        {
-          showInLegend: true,
-          name: "UF",
-          data: [10, 32, 32, 56, 21, 32, 27, 62, 12, 13, 23, 23],
-          type: 'spline',
-          color: "#FF0000",
-        },
-        {
-          showInLegend: true,
-          name: "DF",
-          data: [12, 34, 42, 12, 11, 15, 13, 42, 31, 42, 12, 26],
-          type: 'spline',
-          color: "#FF0000",
-        },
-        {
-          showInLegend: true,
-          name: "MERS-COV",
-          data: [19, 3, 34, 33, 45, 44, 33, 42, 42, 55, 33, 42],
-          type: 'spline',
-          color: "#FFA500",
-        }
-      ],
-      plotOptions: {
-        column: {
-          stacking: 'normal',
-          dataLabels: {
-            enabled: true
+          exporting: {
+            enabled: false,
+          },
+          tooltip: {
+            enabled: false,
+          },
+          yAxis: {
+            stops: [[1, '#234FEA']],
+            lineWidth: 0,
+            tickWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            title: {
+              y: -70,
+            },
+            labels: {
+              enabled: false,
+              y: 16,
+            },
+            min: 0,
+            max: 100,
+          },
+          plotOptions: {
+            solidgauge: {
+              dataLabels: {
+                y: -15,
+                borderWidth: 0,
+                useHTML: true,
+                format: "<span style='color: #234FEA'>{y}%</span>"
+              },
+            },
+          },
+          series: [
+            {
+              name: 'Cascade',
+              type: 'solidgauge',
+              data: [18],
+              tooltip: {
+                valueSuffix: '',
+              },
+            }
+          ],
+          credits: {
+            enabled: false,
           }
         }
       }
-    };
+    );
+    //#endregion
+
+    //#region Load Chart --> Eligible Cascade
+    this.CompositeCharts['aligibleCascade'] = new AFIChart(this.http);
+    this.CompositeCharts['aligibleCascade'].loadData(
+      "overview/aligibleCascade",
+      () => {
+        let MCTemp = this.CompositeCharts['aligibleCascade'];
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['aligibleCascade'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['aligibleCascade'];
+
+        MCTemp.ChartOptions = {
+          chart: {
+            type: 'solidgauge',
+          },
+          title: {
+            text: '',
+          },
+          pane: {
+            center: ['50%', '85%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: [
+              {
+                backgroundColor: '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc',
+              },
+            ],
+          },
+          exporting: {
+            enabled: false,
+          },
+          tooltip: {
+            enabled: false,
+          },
+          yAxis: {
+            stops: [[1, '#234FEA']],
+            lineWidth: 0,
+            tickWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            title: {
+              y: -70,
+            },
+            labels: {
+              enabled: false,
+              y: 16,
+            },
+            min: 0,
+            max: 100,
+          },
+          plotOptions: {
+            solidgauge: {
+              dataLabels: {
+                y: -15,
+                borderWidth: 0,
+                useHTML: true,
+                format: "<span style='color: #234FEA'>{y}%</span>"
+              },
+            },
+          },
+          series: [
+            {
+              name: 'Cascade',
+              type: 'solidgauge',
+              data: [78],
+              tooltip: {
+                valueSuffix: '',
+              },
+            }
+          ],
+          credits: {
+            enabled: false,
+          }
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> Sampled Cascade
+    this.CompositeCharts['sampledCascade'] = new AFIChart(this.http);
+    this.CompositeCharts['sampledCascade'].loadData(
+      "overview/sampledCascade",
+      () => {
+        let MCTemp = this.CompositeCharts['sampledCascade'];
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['sampledCascade'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['sampledCascade'];
+
+        MCTemp.ChartOptions = {
+          chart: {
+            type: 'solidgauge',
+          },
+          title: {
+            text: '',
+          },
+          pane: {
+            center: ['50%', '85%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: [
+              {
+                backgroundColor: '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc',
+              },
+            ],
+          },
+          exporting: {
+            enabled: false,
+          },
+          tooltip: {
+            enabled: false,
+          },
+          yAxis: {
+            stops: [[1, '#234FEA']],
+            lineWidth: 0,
+            tickWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            title: {
+              y: -70,
+            },
+            labels: {
+              enabled: false,
+              y: 16,
+            },
+            min: 0,
+            max: 100,
+          },
+          plotOptions: {
+            solidgauge: {
+              dataLabels: {
+                y: -15,
+                borderWidth: 0,
+                useHTML: true,
+                format: "<span style='color: #234FEA'>{y}%</span>"
+              },
+            },
+          },
+          series: [
+            {
+              name: 'Cascade',
+              type: 'solidgauge',
+              data: [73],
+              tooltip: {
+                valueSuffix: '',
+              },
+            }
+          ],
+          credits: {
+            enabled: false,
+          }
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> Geographic distribution of pathogen
+    this.CompositeCharts['geographicDistributionOfPathogen'] = new AFIChart(this.http);
+    this.CompositeCharts['geographicDistributionOfPathogen'].loadData(
+      "overview/geographicDistributionOfPathogen",
+      () => {
+        let MCTemp = this.CompositeCharts['geographicDistributionOfPathogen'];
+
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['geographicDistributionOfPathogen'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['geographicDistributionOfPathogen'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Pathogens'
+          },
+
+          mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+              verticalAlign: 'bottom'
+            }
+          },
+
+          mapView: {
+            projection: {
+              name: 'WebMercator'
+            },
+            center: [10, 58],
+            zoom: 2.8
+          },
+
+          colorAxis: {
+            min: 1,
+            max: 1000,
+            type: 'logarithmic'
+          },
+
+          legend: {
+            title: {
+              text: 'Population density per km²'
+            }
+          },
+
+          series: [{
+            topographyData,
+            topography,
+            joinBy: ['iso-a2', 'code'],
+            name: 'Population density',
+            tooltip: {
+              valueSuffix: '/km²'
+            }
+          }]
+        }
+      }
+    );
+    //#endregion
+
   }
-  //#endregion
 }

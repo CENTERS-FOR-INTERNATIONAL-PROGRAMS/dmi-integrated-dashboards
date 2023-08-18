@@ -21,6 +21,7 @@ jobs:
           sudo pm2 stop integrated-dashboards-api
           sudo rm -rf dist
           sudo git pull
+          npm install
           sudo find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +
           sudo ng build --configuration production
           sudo systemctl restart nginx

@@ -83,6 +83,9 @@ export class AResultsComponent implements OnInit {
                 enabled: false
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -145,6 +148,9 @@ export class AResultsComponent implements OnInit {
                 enabled: false
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -203,6 +209,9 @@ export class AResultsComponent implements OnInit {
                 enabled: false
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -271,10 +280,15 @@ export class AResultsComponent implements OnInit {
               data: MCTemp.ChartSeries[1],
               color: '#FF0000',
             }
-          ]
+          ],
+          credits: {
+            enabled: false,
+          }
         }
       }
     );
     //#endregion
+
+    HC_exporting(Highcharts);
   }
 }

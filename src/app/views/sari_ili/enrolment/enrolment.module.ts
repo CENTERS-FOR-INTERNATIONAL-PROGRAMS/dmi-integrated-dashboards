@@ -43,5 +43,6 @@ import { EnrolmentComponent } from './enrolment.component';
   ],
   declarations: [EnrolmentComponent]
 })
+
 export class SIEnrolmentModule {
 }

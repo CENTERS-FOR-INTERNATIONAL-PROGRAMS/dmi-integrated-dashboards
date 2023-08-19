@@ -83,6 +83,9 @@ export class ACasesComponent implements OnInit {
                 enabled: false
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -161,12 +164,15 @@ export class ACasesComponent implements OnInit {
               data: MCTemp.ChartSeries[3],
               color: '#FFA500',
             }
-          ]
+          ],
+          credits: {
+            enabled: false,
+          }
         }
       }
     );
     //#endregion
-    
+
     //#region Load Chart --> Syndromes by over time
     this.CompositeCharts['syndromesOvertime'] = new AFIChart(this.http);
     this.CompositeCharts['syndromesOvertime'].loadData(
@@ -243,10 +249,15 @@ export class ACasesComponent implements OnInit {
               color: '#FFA500',
               type: "spline"
             }
-          ]
+          ],
+          credits: {
+            enabled: false,
+          }
         }
       }
     );
     //#endregion
+
+    HC_exporting(Highcharts);
   }
 }

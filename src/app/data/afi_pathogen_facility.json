@@ -1,0 +1,74 @@
+[
+    {
+        "x": 35.12,
+        "y": 3.00,
+        "z": 1809,
+        "facility": "Kakuma Sub-County Hospital"
+    },
+    {
+        "x": 39.67,
+        "y": -4.05,
+        "z": 964,
+        "facility": "Coast General Teaching and Referral Hospital"
+    },
+    {
+        "x": 36.81,
+        "y": -1.30,
+        "z": 777,
+        "facility": "Kenyatta National Hospital"
+    },
+    {
+        "x": 34.76,
+        "y": 0.27,
+        "z": 653,
+        "facility": "Kakamega County Referral Hospital"
+    },
+    {
+        "x": 37.99,
+        "y": 2.32,
+        "z": 514,
+        "facility": "Marsabit County Referral Hospital"
+    },
+    {
+        "x": 34.10,
+        "y": 0.46,
+        "z": 481,
+        "facility": "Busia County Referral Hospital"
+    },
+    {
+        "x": 37.63,
+        "y": -1.78,
+        "z": 297,
+        "facility": "Makueni County Referral Hospital"
+    },
+    {
+        "x": 34.77,
+        "y": -0.09,
+        "z": 184,
+        "facility": "Jaramogi Oginga Odinga Teaching and Referral Hospital"
+    },
+    {
+        "x": 35.12,
+        "y": 1.24,
+        "z": 174,
+        "facility": "Kapenguria County Referral Hospital"
+    },
+    {
+        "x": 37.50,
+        "y": -2.92,
+        "z": 168,
+        "facility": "Loitokitok Sub County Hospital"
+    },
+    {
+        "x": 36.90,
+        "y": -1.27,
+        "z": 144,
+        "facility": "Mama Lucy Kibaki Hospital"
+    },
+    {
+        "x": 36.85,
+        "y": -1.28,
+        "z": 7,
+        "facility": "Madina Nursing Home"
+    }
+]

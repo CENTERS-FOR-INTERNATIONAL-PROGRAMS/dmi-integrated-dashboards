@@ -14,110 +14,92 @@
 <c-row>
   <c-col [sm]="4">
     <c-card class="mb-4">
-      <!-- <c-card-body> -->
-      <!-- <highcharts-chart [Highcharts]="highcharts" [options]="influenzaTypesDistributionOptions" -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="OverviewCharts['findTypesByDistribution'].ChartOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['findTypesByDistribution'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
     </c-card>
   </c-col>
 
   <c-col [sm]="4">
     <c-card class="mb-4">
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="OverviewCharts['findInfluenzaASubtypesDistribution'].ChartOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
-    </c-card>
-  </c-col>
-
-  <c-col [sm]="4">
-    <c-card class="mb-4">
-      <!-- <c-card-header> -->
-      <!-- </c-card-header> -->
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="OverviewCharts['findInfluenzaBLineageDistribution'].ChartOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
-    </c-card>
-  </c-col>
-</c-row>
-
-<c-row>
-  <c-col [sm]="6">
-    <c-card>
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="overallSARSCOV2PositivityOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
-    </c-card>
-  </c-col>
-
-  <c-col [sm]="6">
-    <c-card>
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="SARSCOV2PositivityOvertimeOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
-    </c-card>
-  </c-col>
-</c-row>
-
-<br />
-<c-row>
-  <c-col [sm]="12">
-    <c-card class="mb-4">
-      <!-- <c-card-body> -->
-      <highcharts-chart id="12313" [Highcharts]="highcharts" [options]="influenzaPositivityByTypeOvertimeOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
-    </c-card>
-  </c-col>
-</c-row>
-
-<br />
-<c-row>
-  <c-col [sm]="12">
-    <c-card class="mb-4">
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="influenzaStrainsOvertimeOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
-    </c-card>
-  </c-col>
-</c-row>
-
-<br />
-<c-row>
-  <c-col [sm]="12">
-    <c-card class="mb-4">
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="influenzaHospitalizationOvertimeOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
-    </c-card>
-  </c-col>
-</c-row>
-
-<br />
-<c-row>
-  <c-col [sm]="6">
-    <c-card class="mb-4">
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="influenzaPatientOutcomeOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
-    </c-card>
-  </c-col>
-
-  <c-col [sm]="6">
-    <c-card class="mb-4">
-      <!-- <c-card-body> -->
-      <h5>Influenza Geographic Distribution by Health Facility</h5>
-
       <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findInfluenzaASubtypesDistribution'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="4">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findInfluenzaBLineageDistribution'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<c-row>
+  <c-col [sm]="6">
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findOverallSARSCOV2Positivity'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findSARSCOV2PositivityOvertime'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
+<c-row>
+  <c-col [sm]="12">
+    <c-card class="mb-4">
+      <highcharts-chart id="12313" [Highcharts]="highcharts"
+        [options]="CompositeCharts['findInfluenzaPositivityByTypeOvertime'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
+<c-row>
+  <c-col [sm]="12">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findInfluenzaStrainsOvertime'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
+<c-row>
+  <c-col [sm]="12">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findInfluenzaHospitalizationOvertime'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
+<c-row>
+  <c-col [sm]="6">
+    <c-card class="mb-4">
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findInfluenzaPatientOutcome'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card>
+      <div id="geographicDistributionByFacility"></div>
     </c-card>
   </c-col>
 </c-row>

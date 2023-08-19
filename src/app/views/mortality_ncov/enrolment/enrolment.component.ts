@@ -127,7 +127,10 @@ export class EnrolmentComponent implements OnInit {
           color: "#FC7500",
           data: this.enrollmentByGenderSeries[1]
         }
-      ]
+      ],
+      credits: {
+        enabled: false,
+      }
     };
 
     HC_exporting(Highcharts);
@@ -203,16 +206,8 @@ export class EnrolmentComponent implements OnInit {
       xAxis: [
         {
           categories: this.enrollmentByAgeGenderSeries[0],
-          title: { text: "" },
-          reversed: false
-        },
-        {
-          categories: this.enrollmentByAgeGenderSeries[0],
-          title: { text: "" },
-          reversed: false,
-          linkedTo: 0,
-          opposite: true,
-        },
+          title: { text: "" }
+        }
       ],
       yAxis: [
         {
@@ -238,8 +233,13 @@ export class EnrolmentComponent implements OnInit {
           color: "#FC7500",
           type: 'bar'
         }
-      ]
+      ],
+      credits: {
+        enabled: false,
+      }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 
@@ -318,8 +318,13 @@ export class EnrolmentComponent implements OnInit {
             enabled: true
           }
         }
+      },
+      credits: {
+        enabled: false,
       }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 
@@ -374,11 +379,17 @@ export class EnrolmentComponent implements OnInit {
           text: "Epiweek",
         }
       },
-      yAxis: {
+      yAxis: [{
         title: {
           text: "Number Eligible",
         }
       },
+      {
+        title: {
+          text: 'Percent Enrolled',
+        },
+        opposite: true,
+      }],
       series: [
         {
           name: "Elligible",
@@ -390,6 +401,7 @@ export class EnrolmentComponent implements OnInit {
           name: "Enrolled",
           data: this.enrollmentOverTimeSeries[2],
           color: "red",
+          yAxis: 1,
           type: "spline"
         }
       ],
@@ -400,14 +412,21 @@ export class EnrolmentComponent implements OnInit {
             enabled: true
           }
         },
-        line: {
+        spline: {
           stacking: 'normal',
           dataLabels: {
-            enabled: true
+            enabled: true,
+            useHTML: true,
+            format: "{y}%"
           }
         }
+      },
+      credits: {
+        enabled: false,
       }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 

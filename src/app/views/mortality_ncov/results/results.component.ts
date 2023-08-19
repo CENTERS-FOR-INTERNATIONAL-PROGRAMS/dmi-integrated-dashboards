@@ -111,6 +111,9 @@ export class ResultsComponent implements OnInit {
             enabled: true
           },
         },
+      },
+      credits: {
+        enabled: false,
       }
     };
 
@@ -202,7 +205,10 @@ export class ResultsComponent implements OnInit {
         data: this.covid19ResultsByFacilitySeries[1],
         type: 'column',
         color: '#FF0000'
-      },]
+      }],
+      credits: {
+        enabled: false,
+      }
     };
 
     HC_exporting(Highcharts);
@@ -276,20 +282,10 @@ export class ResultsComponent implements OnInit {
         align: 'left',
       },
       chart: { type: "bar" },
-      xAxis: [
-        {
-          categories: this.resultsByAgeGenderSeries[0],
-          title: { text: "" },
-          reversed: false
-        },
-        {
-          categories: this.resultsByAgeGenderSeries[0],
-          title: { text: "" },
-          reversed: false,
-          linkedTo: 0,
-          opposite: true,
-        }
-      ],
+      xAxis: {
+        categories: this.resultsByAgeGenderSeries[0],
+        title: { text: "" },
+      },
       yAxis: [
         {
           title: {
@@ -314,8 +310,13 @@ export class ResultsComponent implements OnInit {
           color: "#FC7500",
           type: 'bar'
         }
-      ]
+      ],
+      credits: {
+        enabled: false,
+      }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 
@@ -370,11 +371,17 @@ export class ResultsComponent implements OnInit {
           text: "Epiweek",
         }
       },
-      yAxis: {
+      yAxis: [{
         title: {
           text: "Number Tested",
         }
       },
+      {
+        title: {
+          text: 'Percent Positive',
+        },
+        opposite: true,
+      }],
       series: [
         {
           name: "Sample Tested",
@@ -386,7 +393,8 @@ export class ResultsComponent implements OnInit {
           name: "Percent Positive",
           data: this.resultsByPositivityOverTimeSeries[2],
           color: "#FF0000",
-          type: "spline"
+          type: "spline",
+          yAxis: 1
         }
       ],
       plotOptions: {
@@ -396,14 +404,20 @@ export class ResultsComponent implements OnInit {
             enabled: true
           }
         },
-        line: {
-          stacking: 'normal',
+        spline: {
           dataLabels: {
-            enabled: true
+            enabled: true,
+            useHTML: true,
+            format: "{y}%"
           }
         }
       },
+      credits: {
+        enabled: false,
+      }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 

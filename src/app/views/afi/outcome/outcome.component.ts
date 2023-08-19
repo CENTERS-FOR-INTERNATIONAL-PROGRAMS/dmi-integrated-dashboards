@@ -33,6 +33,178 @@ export class AOutcomeComponent implements OnInit {
   }
 
   loadCharts() {
+    //#region Load Chart --> Enrolled with diagnosis
+    this.CompositeCharts['enrolledWithDiagnosis'] = new AFIChart(this.http);
+    this.CompositeCharts['enrolledWithDiagnosis'].loadData(
+      "overview/enrolledWithDiagnosis",
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledWithDiagnosis'];
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledWithDiagnosis'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledWithDiagnosis'];
+
+        MCTemp.ChartOptions = {
+          chart: {
+            type: 'solidgauge',
+          },
+          title: {
+            text: '',
+          },
+          pane: {
+            center: ['50%', '85%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: [
+              {
+                backgroundColor: '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc',
+              },
+            ],
+          },
+          exporting: {
+            enabled: false,
+          },
+          tooltip: {
+            enabled: false,
+          },
+          yAxis: {
+            stops: [[1, '#234FEA']],
+            lineWidth: 0,
+            tickWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            title: {
+              y: -80,
+            },
+            labels: {
+              enabled: false,
+              y: 16,
+            },
+            min: 0,
+            max: 100,
+          },
+          plotOptions: {
+            solidgauge: {
+              dataLabels: {
+                y: -15,
+                borderWidth: 0,
+                useHTML: true,
+                format: "<span style='color: #234FEA; font-size: 22px'>{y}%</span>"
+              },
+            },
+          },
+          series: [
+            {
+              name: '',
+              type: 'solidgauge',
+              data: [89],
+              tooltip: {
+                valueSuffix: '',
+              },
+            }
+          ],
+          credits: {
+            enabled: false,
+          }
+        }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> Enrolled with outcome
+    this.CompositeCharts['enrolledWithOutcome'] = new AFIChart(this.http);
+    this.CompositeCharts['enrolledWithOutcome'].loadData(
+      "overview/enrolledWithOutcome",
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledWithOutcome'];
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledWithOutcome'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['enrolledWithOutcome'];
+
+        MCTemp.ChartOptions = {
+          chart: {
+            type: 'solidgauge',
+          },
+          title: {
+            text: '',
+          },
+          pane: {
+            center: ['50%', '85%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: [
+              {
+                backgroundColor: '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc',
+              },
+            ],
+          },
+          exporting: {
+            enabled: false,
+          },
+          tooltip: {
+            enabled: false,
+          },
+          yAxis: {
+            stops: [[1, '#234FEA']],
+            lineWidth: 0,
+            tickWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 2,
+            title: {
+              y: -80,
+            },
+            labels: {
+              enabled: false,
+              y: 16,
+            },
+            min: 0,
+            max: 100,
+          },
+          plotOptions: {
+            solidgauge: {
+              dataLabels: {
+                y: -15,
+                borderWidth: 0,
+                useHTML: true,
+                format: "<span style='color: #234FEA; font-size: 22px'>{y}%</span>"
+              },
+            },
+          },
+          series: [
+            {
+              name: '',
+              type: 'solidgauge',
+              data: [78],
+              tooltip: {
+                valueSuffix: '',
+              }
+            }
+          ],
+          credits: {
+            enabled: false,
+          }
+        }
+      }
+    );
+    //#endregion
+
     //#region Load Chart --> AFI Diagnosis
     this.CompositeCharts['AFIDiagnosis'] = new AFIChart(this.http);
     this.CompositeCharts['AFIDiagnosis'].loadData(
@@ -93,6 +265,9 @@ export class AOutcomeComponent implements OnInit {
                 enabled: true
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -157,6 +332,9 @@ export class AOutcomeComponent implements OnInit {
                 enabled: true
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -225,10 +403,15 @@ export class AOutcomeComponent implements OnInit {
                 enabled: true
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
     );
     //#endregion
+
+    HC_exporting(Highcharts);
   }
 }

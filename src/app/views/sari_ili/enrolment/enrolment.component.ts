@@ -110,6 +110,8 @@ export class EnrolmentComponent implements OnInit {
         },
       }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 
@@ -195,6 +197,8 @@ export class EnrolmentComponent implements OnInit {
         },
       }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 

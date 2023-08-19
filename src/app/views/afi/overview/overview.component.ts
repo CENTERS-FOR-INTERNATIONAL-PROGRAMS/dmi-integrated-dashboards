@@ -10,18 +10,13 @@ import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import HighchartsMap from "highcharts/modules/map"
-import HighchartsData from "highcharts/modules/data"
 import { HttpClient } from '@angular/common/http';
-import topography from '../../../data/world.topo.json'
-import topographyData from '../../../data/world-population-density.json'
-
-import {Chart, MapChart } from 'angular-highcharts';
-const AHighcharts = {maps: {}};
+import topography from '../../../data/world.geojson.json'
+import topographyData from '../../../data/afi_pathogen_facility.json'
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
 HighchartsMap(Highcharts);
-HighchartsData(Highcharts);
 
 @Component({
   templateUrl: 'overview.component.html',
@@ -32,7 +27,6 @@ export class AOverviewComponent implements OnInit {
   //#region Prerequisites
   CompositeCharts: ACParent = {};
   highcharts = Highcharts;
-  topology: any;
   //#endregion
 
   constructor(private reviewService: ReviewService, private http: HttpClient) { }
@@ -94,6 +88,9 @@ export class AOverviewComponent implements OnInit {
                 enabled: true
               },
             },
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -181,7 +178,10 @@ export class AOverviewComponent implements OnInit {
               data: MCTemp.ChartSeries[1],
               color: '#FC7500',
             }
-          ]
+          ],
+          credits: {
+            enabled: false,
+          }
         }
       }
     );
@@ -264,6 +264,9 @@ export class AOverviewComponent implements OnInit {
                 enabled: true
               }
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -322,6 +325,9 @@ export class AOverviewComponent implements OnInit {
                 enabled: false
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -380,6 +386,9 @@ export class AOverviewComponent implements OnInit {
                 enabled: false
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -455,7 +464,10 @@ export class AOverviewComponent implements OnInit {
               color: '#008000',
               showInLegend: false
             }
-          ]
+          ],
+          credits: {
+            enabled: false,
+          }
         }
       }
     );
@@ -513,6 +525,9 @@ export class AOverviewComponent implements OnInit {
                 enabled: false
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -575,6 +590,9 @@ export class AOverviewComponent implements OnInit {
                 enabled: false
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -633,6 +651,9 @@ export class AOverviewComponent implements OnInit {
                 enabled: false
               },
             }
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -919,50 +940,53 @@ export class AOverviewComponent implements OnInit {
         let MCTemp = this.CompositeCharts['geographicDistributionOfPathogen'];
 
         MCTemp.ChartOptions = {
-          title: {
-            text: 'Pathogens'
+          chart: {
+            type: "map",
+            map: topography
           },
-
+          title: {
+            text: 'Geographical distribution of pathogen'
+          },
+          legend: {
+            enabled: false
+          },
           mapNavigation: {
             enabled: true,
             buttonOptions: {
               verticalAlign: 'bottom'
             }
           },
-
           mapView: {
-            projection: {
-              name: 'WebMercator'
-            },
-            center: [10, 58],
-            zoom: 2.8
-          },
-
-          colorAxis: {
-            min: 1,
-            max: 1000,
-            type: 'logarithmic'
-          },
-
-          legend: {
-            title: {
-              text: 'Population density per km²'
-            }
+            center: [37.8, 0.6],
+            zoom: 5.5,
           },
 
           series: [{
-            topographyData,
-            topography,
-            joinBy: ['iso-a2', 'code'],
-            name: 'Population density',
+            name: 'Countries',
+            color: '#E0E0E0',
+            enableMouseTracking: false
+          }, {
+            type: 'mapbubble',
+            name: 'Pathogen',
+            joinBy: ['x', 'y'],
+            // joinBy: ['iso-a3', 'code3'],
+            data: topographyData,
+            minSize: 4,
+            maxSize: '12%',
             tooltip: {
-              valueSuffix: '/km²'
+              pointFormat: '{point.facility} ({point.z})'
             }
-          }]
+          }],
+          credits: {
+            enabled: false,
+          }
         }
+
+        let TempChart = new Highcharts.MapChart('geographicDistributionOfPathogen', MCTemp.ChartOptions);
       }
     );
     //#endregion
-
+  
+    HC_exporting(Highcharts);
   }
 }

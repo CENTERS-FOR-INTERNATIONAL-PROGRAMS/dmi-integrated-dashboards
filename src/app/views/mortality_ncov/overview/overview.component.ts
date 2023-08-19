@@ -330,7 +330,10 @@ export class OverviewComponent implements OnInit {
           data: this.covid19CascadeSeries[0],
           showInLegend: false
         }
-      ]
+      ],
+      credits: {
+        enabled: false,
+      }
     };
   }
   //#endregion
@@ -419,14 +422,6 @@ export class OverviewComponent implements OnInit {
         {
           categories: this.covid19PositivityByAgeGenderSeries[0],
           title: { text: '' },
-          reversed: false,
-        },
-        {
-          categories: this.covid19PositivityByAgeGenderSeries[0],
-          title: { text: '' },
-          reversed: false,
-          opposite: true,
-          linkedTo: 0,
         }
       ],
       yAxis: [
@@ -468,8 +463,13 @@ export class OverviewComponent implements OnInit {
           data: this.covid19PositivityByAgeGenderSeries[1],
           color: '#FC7500',
         }
-      ]
+      ],
+      credits: {
+        enabled: false,
+      }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 
@@ -555,8 +555,13 @@ export class OverviewComponent implements OnInit {
             enabled: true
           }
         }
+      },
+      credits: {
+        enabled: false,
       }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 
@@ -625,7 +630,6 @@ export class OverviewComponent implements OnInit {
           },
         },
         {
-          // Secondary yAxis
           title: {
             text: 'Percent Positive',
             // style: {
@@ -647,24 +651,29 @@ export class OverviewComponent implements OnInit {
           name: 'Sample Tested',
           type: 'column',
           color: '#234FEA',
-          yAxis: 1,
           data: this.covid19PositivityOvertimeSeries[1],
         },
         {
           name: 'Positivity (%)',
           type: 'spline',
           color: 'red',
+          yAxis: 1,
           accessibility: { point: { valueSuffix: '%' } },
           data: this.covid19PositivityOvertimeSeries[2],
         },
       ],
       plotOptions: {
-        line: {
+        spline: {
           stacking: 'normal',
           dataLabels: {
-            enabled: true
+            enabled: true,
+            useHTML: true,
+            format: "{y}%"
           }
         }
+      },
+      credits: {
+        enabled: false,
       }
     };
 

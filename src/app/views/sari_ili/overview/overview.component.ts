@@ -8,11 +8,15 @@ import { SCParent } from '../../../models/sari_ili/SCParent.model';
 import * as Highcharts from 'highcharts/highstock';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
+import HighchartsMap from "highcharts/modules/map"
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import { HttpClient } from '@angular/common/http';
+import topography from '../../../data/world.geojson.json'
+import topographyData from '../../../data/afi_pathogen_facility.json'
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
+HighchartsMap(Highcharts);
 
 @Component({
   templateUrl: 'overview.component.html',
@@ -22,78 +26,24 @@ HighchartsSolidGauge(Highcharts);
 export class SIOverviewComponent implements OnInit {
   //#region Prerequisites
   highcharts = Highcharts;
-  //#endregion
-
-  OverviewCharts: SCParent = {};
-
-  //#region Prerequisites --> Overall SARS-COV-2 Positivity
-  overallSARSCOV2Positivity: SARIProperties[] = [];
-  overallSARSCOV2PositivitySeries: any[][] = [];
-  overallSARSCOV2PositivityOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> SARS-COV-2 Positivity over time
-  SARSCOV2PositivityOvertime: SARIProperties[] = [];
-  SARSCOV2PositivityOvertimeSeries: any[] = [];
-  SARSCOV2PositivityOvertimeOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> Influenza Positivity byt type over time
-  influenzaPositivityByTypeOvertime: SARIProperties[] = [];
-  influenzaPositivityByTypeOvertimeSeries: any[][] = [];
-  influenzaPositivityByTypeOvertimeOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> Influenza Strains over time
-  influenzaStrainsOvertime: SARIProperties[] = [];
-  influenzaStrainsOvertimeSeries: any[][] = [];
-  influenzaStrainsOvertimeOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> Influenza Hospitalization over time
-  influenzaHospitalizationOvertime: SARIProperties[] = [];
-  influenzaHospitalizationOvertimeSeries: any[][] = [];
-  influenzaHospitalizationOvertimeOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> Influenza Patient Outcome
-  influenzaPatientOutcome: SARIProperties[] = [];
-  influenzaPatientOutcomeSeries: any[][] = [];
-  influenzaPatientOutcomeOptions: {} = {};
+  CompositeCharts: SCParent = {};
   //#endregion
 
   constructor(private reviewService: ReviewService, private http: HttpClient) { }
 
   ngOnInit(): void {
 
-    this.loadOverviewCharts();
+    this.loadCharts();
 
-    this.SARSCOV2PositivityOvertimeData();
-    this.SARSCOV2PositivityOvertimeChart();
-
-    this.overallSARCOV2PositivityData();
-    this.overallSARCOV2PositivityChart();
-
-    this.influenzaPositivityByTypeOvertimeData();
-    this.influenzaPositivityByTypeOvertimeChart();
-
-    this.influenzaStrainsOvertimeData();
-    this.influenzaStrainsOvertimeChart();
-
-    this.influenzaHospitalizationOvertimeData();
-    this.influenzaHospitalizationOvertimeChart();
-
-    this.influenzaPatientOutcomeData();
-    this.influenzaPatientOutcomeChart();
   }
 
-  loadOverviewCharts() {
+  loadCharts() {
     //#region Load Chart --> Influenza Types Distribution
-    this.OverviewCharts['findTypesByDistribution'] = new SARIILIChart(this.http);
-    this.OverviewCharts['findTypesByDistribution'].loadData(
+    this.CompositeCharts['findTypesByDistribution'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findTypesByDistribution'].loadData(
       "overview/findTypesByDistribution",
       () => {
-        let MCTemp = this.OverviewCharts['findTypesByDistribution'];
+        let MCTemp = this.CompositeCharts['findTypesByDistribution'];
 
         for (let index = 0; index < 5; index++) {
           MCTemp.ChartSeries.push([]);
@@ -104,7 +54,7 @@ export class SIOverviewComponent implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
-        let MCTemp = this.OverviewCharts['findTypesByDistribution'];
+        let MCTemp = this.CompositeCharts['findTypesByDistribution'];
 
         // Influenza A (Index --> 0)
         //Number (Index --> [0][0])
@@ -128,7 +78,7 @@ export class SIOverviewComponent implements OnInit {
         MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].NegativeFluPercent;
       },
       () => {
-        let MCTemp = this.OverviewCharts['findTypesByDistribution'];
+        let MCTemp = this.CompositeCharts['findTypesByDistribution'];
 
         MCTemp.ChartOptions = {
           title: {
@@ -163,6 +113,9 @@ export class SIOverviewComponent implements OnInit {
                 enabled: false
               },
             },
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -170,11 +123,11 @@ export class SIOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Influenza A Subtype Distribution
-    this.OverviewCharts['findInfluenzaASubtypesDistribution'] = new SARIILIChart(this.http);
-    this.OverviewCharts['findInfluenzaASubtypesDistribution'].loadData(
+    this.CompositeCharts['findInfluenzaASubtypesDistribution'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaASubtypesDistribution'].loadData(
       "overview/findInfluenzaASubtypesDistribution",
       () => {
-        let MCTemp = this.OverviewCharts['findInfluenzaASubtypesDistribution'];
+        let MCTemp = this.CompositeCharts['findInfluenzaASubtypesDistribution'];
 
         for (let index = 0; index < 5; index++) {
           MCTemp.ChartSeries.push([]);
@@ -184,7 +137,7 @@ export class SIOverviewComponent implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
-        let MCTemp = this.OverviewCharts['findInfluenzaASubtypesDistribution'];
+        let MCTemp = this.CompositeCharts['findInfluenzaASubtypesDistribution'];
 
         //A1H1 (Index --> 0)
         MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].AH1N1Number;
@@ -206,7 +159,7 @@ export class SIOverviewComponent implements OnInit {
         MCTemp.ChartSeries[4][0] = MCTemp.ChartData[0].TotalInfluenzaSubTypeA;
       },
       () => {
-        let MCTemp = this.OverviewCharts['findInfluenzaASubtypesDistribution'];
+        let MCTemp = this.CompositeCharts['findInfluenzaASubtypesDistribution'];
 
         MCTemp.ChartOptions = {
           title: {
@@ -241,6 +194,9 @@ export class SIOverviewComponent implements OnInit {
                 enabled: false
               },
             },
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
@@ -248,11 +204,11 @@ export class SIOverviewComponent implements OnInit {
     //#endregion    
 
     //#region Load Chart --> Influenza B Lineage Distribution
-    this.OverviewCharts['findInfluenzaBLineageDistribution'] = new SARIILIChart(this.http);
-    this.OverviewCharts['findInfluenzaBLineageDistribution'].loadData(
+    this.CompositeCharts['findInfluenzaBLineageDistribution'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaBLineageDistribution'].loadData(
       "overview/findInfluenzaBLineageDistribution",
       () => {
-        let MCTemp = this.OverviewCharts['findInfluenzaBLineageDistribution'];
+        let MCTemp = this.CompositeCharts['findInfluenzaBLineageDistribution'];
 
         for (let index = 0; index < 3; index++) {
           MCTemp.ChartSeries.push([]);
@@ -262,7 +218,7 @@ export class SIOverviewComponent implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
-        let MCTemp = this.OverviewCharts['findInfluenzaBLineageDistribution'];
+        let MCTemp = this.CompositeCharts['findInfluenzaBLineageDistribution'];
 
         //Victoria (Index --> 0)
         MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].VictoriaNumber;
@@ -277,7 +233,7 @@ export class SIOverviewComponent implements OnInit {
         MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].NotdeterminedNumberPercent;
       },
       () => {
-        let MCTemp = this.OverviewCharts['findInfluenzaBLineageDistribution'];
+        let MCTemp = this.CompositeCharts['findInfluenzaBLineageDistribution'];
 
         MCTemp.ChartOptions = {
           title: {
@@ -312,604 +268,697 @@ export class SIOverviewComponent implements OnInit {
                 enabled: false
               },
             },
+          },
+          credits: {
+            enabled: false,
           }
         }
       }
     );
-    //#endregion    
-  }
+    //#endregion
 
-  //#region Load Chart --> Overall SARS-COV-2 Positivity
-  overallSARCOV2PositivityData() {
-    for (let index = 0; index < 3; index++) {
-      this.overallSARSCOV2PositivitySeries.push([]);
-      this.overallSARSCOV2PositivitySeries[index].push(0);
-      this.overallSARSCOV2PositivitySeries[index].push(0);
-    }
+    //#region Load Chart --> Overall SARS-COV-2 Positivity
+    this.CompositeCharts['findOverallSARSCOV2Positivity'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findOverallSARSCOV2Positivity'].loadData(
+      "overview/findOverallSARSCOV2Positivity",
+      () => {
+        let MCTemp = this.CompositeCharts['findOverallSARSCOV2Positivity'];
 
-    this.reviewService.findOverallSARSCOV2Positivity().subscribe(
-      response => {
-        this.overallSARSCOV2Positivity = response;
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(0);
+          MCTemp.ChartSeries[index].push(0);
+        }
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['findOverallSARSCOV2Positivity'];
 
         //Positive (Index --> 0)
-        this.overallSARSCOV2PositivitySeries[0][0] = this.overallSARSCOV2Positivity[0].CovidPositiveNumber;
-        this.overallSARSCOV2PositivitySeries[0][1] = this.overallSARSCOV2Positivity[0].CovidPositiveNumberPercent;
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].CovidPositiveNumber;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].CovidPositiveNumberPercent;
 
         //Negative (Index --> 0)
-        this.overallSARSCOV2PositivitySeries[1][0] = this.overallSARSCOV2Positivity[0].CovidNegativeNumber;
-        this.overallSARSCOV2PositivitySeries[1][1] = this.overallSARSCOV2Positivity[0].CovidNegativeNumberPercent;
-
-        this.overallSARCOV2PositivityChart();
-      });
-  }
-
-  overallSARCOV2PositivityChart() {
-    this.overallSARSCOV2PositivityOptions = {
-      title: {
-        text: 'Overall SARS-COV-2 Positivity',
-        align: 'left'
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].CovidNegativeNumber;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].CovidNegativeNumberPercent;
       },
-      chart: {
-        type: "pie",
-      },
-      colors: [
-        "#234FEA", // Color for Category 1
-        "#FC7500", // Color for Category 2
-      ],
-      series: [
-        {
-          showInLegend: true,
-          name: "Data",
-          type: 'pie',
-          data: [
-            ["Positive (" + this.overallSARSCOV2PositivitySeries[0][1] + "%)", this.overallSARSCOV2PositivitySeries[0][0]],
-            ["Negative (" + this.overallSARSCOV2PositivitySeries[1][1] + "%)", this.overallSARSCOV2PositivitySeries[1][0]]
-          ]
-        }
-      ],
-      plotOptions: {
-        pie: {
-          innerSize: "70%",
-          depth: 25,
-          dataLabels: {
-            enabled: false
+      () => {
+        let MCTemp = this.CompositeCharts['findOverallSARSCOV2Positivity'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Overall SARS-COV-2 Positivity',
+            align: 'left'
           },
-        },
-      }
-    };
-
-    HC_exporting(Highcharts);
-  }
-  //#endregion
-
-  //#region Load Chart --> SARS-COV-2 Positivity over time
-
-  SARSCOV2PositivityOvertimeData() {
-    this.reviewService.findSARSCOV2PositivityOvertime().subscribe(
-      response => {
-        this.SARSCOV2PositivityOvertime = response;
-
-        //#region Init series indexes
-        // EpiWeek (Index --> 0)
-        this.SARSCOV2PositivityOvertimeSeries.push([]);
-
-        // Percent Positive (Index --> 1)
-        this.SARSCOV2PositivityOvertimeSeries.push([]);
-        //#endregion
-
-        //#region Push series data into array at specific indexes
-        this.SARSCOV2PositivityOvertime.forEach(dataInstance => {
-          //Compile EpiWeek
-          this.SARSCOV2PositivityOvertimeSeries[0].push(dataInstance.EPIWeek);
-
-          //Compile Percent Positive
-          this.SARSCOV2PositivityOvertimeSeries[1].push(dataInstance.Covid19PositivePercent);
-        });
-        //#endregion
-
-        this.SARSCOV2PositivityOvertimeChart();
-      });
-  }
-
-  SARSCOV2PositivityOvertimeChart() {
-    this.SARSCOV2PositivityOvertimeOptions = {
-      title: {
-        text: 'SARS-COV-2 Positivity over time',
-        align: 'left'
-      },
-      chart: {
-        type: "spline"
-      },
-      xAxis: {
-        categories: this.SARSCOV2PositivityOvertimeSeries[0],
-        title: {
-          text: "Epi Week",
-        },
-        min: 0,
-        max: 22,
-        scrollbar: {
-          enabled: true
-        }
-      },
-      yAxis: {
-        title: {
-          text: "Percent Positive",
-        }
-      },
-      series: [
-        {
-          name: "SARS-COV-2 Positive (%)",
-          data: this.SARSCOV2PositivityOvertimeSeries[1],
-          color: "#234FEA",
-        }
-      ],
-      plotOptions: {
-        spline: {
-          stacking: 'normal',
-          dataLabels: {
-            enabled: true
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#234FEA", // Color for Category 1
+            "#FC7500", // Color for Category 2
+          ],
+          series: [
+            {
+              showInLegend: true,
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Positive (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Negative (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]]
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: false
+              },
+            },
+          },
+          credits: {
+            enabled: false,
           }
         }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> SARS-COV-2 Positivity over time
+    this.CompositeCharts['findSARSCOV2PositivityOvertime'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findSARSCOV2PositivityOvertime'].loadData(
+      "overview/findSARSCOV2PositivityOvertime",
+      () => {
+        let MCTemp = this.CompositeCharts['findSARSCOV2PositivityOvertime'];
+        MCTemp.LoadChartOptions();
       },
-      useHighStocks: true
-    };
+      () => {
+        let MCTemp = this.CompositeCharts['findSARSCOV2PositivityOvertime'];
 
-    HC_exporting(Highcharts);
-  }
+        // Initialize series array
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+        }
 
-  //#endregion
+        MCTemp.ChartData.forEach(dataInstance => {
+          //Compile EpiWeek (Index --> 0)
+          MCTemp.ChartSeries[0].push(dataInstance.EPIWeek);
 
-  //#region Load Chart --> Influenza positivity by type overtime
-  influenzaPositivityByTypeOvertimeData() {
-    this.reviewService.findInfluenzaPositivityByTypeOvertime().subscribe(
-      // this.reviewService.findInfluenzaHospitalizationOvertime().subscribe(
-      response => {
-        this.influenzaPositivityByTypeOvertime = response;
+          //Compile Percent Positive (Index --> 1)
+          MCTemp.ChartSeries[1].push(dataInstance.Covid19PositivePercent);
+        });
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['findSARSCOV2PositivityOvertime'];
 
-        this.influenzaPositivityByTypeOvertimeSeries.push([]);
-        this.influenzaPositivityByTypeOvertimeSeries.push([]);
-        this.influenzaPositivityByTypeOvertimeSeries.push([]);
-        this.influenzaPositivityByTypeOvertimeSeries.push([]);
-        this.influenzaPositivityByTypeOvertimeSeries.push([]);
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'SARS-COV-2 Positivity over time',
+            align: 'left'
+          },
+          chart: {
+            type: "spline"
+          },
+          xAxis: {
+            categories: MCTemp.ChartSeries[0],
+            title: {
+              text: "Epi Week",
+            },
+            min: 0,
+            max: 22,
+            scrollbar: {
+              enabled: true
+            }
+          },
+          yAxis: {
+            title: {
+              text: "Percent Positive",
+            }
+          },
+          series: [
+            {
+              name: "SARS-COV-2 Positive (%)",
+              data: MCTemp.ChartSeries[1],
+              color: "#234FEA",
+            }
+          ],
+          plotOptions: {
+            spline: {
+              stacking: 'normal',
+              dataLabels: {
+                enabled: true,
+                useHTML: true,
+                format: "<span style='color: #000'>{y}%</span>"
+              }
+            }
+          },
+          useHighStocks: true,
+          credits: {
+            enabled: false,
+          }
+        }
+      }
+    );
+    //#endregion
 
-        //#region Push series data into array at specific indexes
-        this.influenzaPositivityByTypeOvertime.forEach((dataInstance, index) => {
-          // this.influenzaPositivityByTypeOvertimeSeries.push([]);
+    //#region Load Chart --> Influenza positivity by type overtime
+    this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'].loadData(
+      "overview/findInfluenzaPositivityByTypeOvertime",
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'];
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'];
 
+        // Initialize series array
+        for (let index = 0; index < 5; index++) {
+          MCTemp.ChartSeries.push([]);
+        }
+
+        MCTemp.ChartData.forEach(dataInstance => {
           //Compile Epi Week (Index --> 0)
-          this.influenzaPositivityByTypeOvertimeSeries[0].push(dataInstance.EpiWeek);
+          MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
 
           //Compile Influenza A Positive (Index --> 1)
-          this.influenzaPositivityByTypeOvertimeSeries[1].push(dataInstance.InfluenzaAPositiveNumber);
+          MCTemp.ChartSeries[1].push(dataInstance.InfluenzaAPositiveNumber);
 
           //Compile Influenza B Positive (Index --> 2)
-          this.influenzaPositivityByTypeOvertimeSeries[2].push(dataInstance.InfluenzaBPositiveNumber);
+          MCTemp.ChartSeries[2].push(dataInstance.InfluenzaBPositiveNumber);
 
           //Compile Influenza Positive Percentage (Index --> 3)
-          this.influenzaPositivityByTypeOvertimeSeries[3].push(dataInstance.InfluenzaPositivePercentage);
+          MCTemp.ChartSeries[3].push(dataInstance.InfluenzaPositivePercentage);
 
           //Compile Influenza Negative (Index --> 4)
-          this.influenzaPositivityByTypeOvertimeSeries[4].push(dataInstance.InfluenzaNegativeNumber);
+          MCTemp.ChartSeries[4].push(dataInstance.InfluenzaNegativeNumber);
         });
-        //#endregion
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'];
 
-        this.influenzaPositivityByTypeOvertimeChart();
-      });
-  }
-
-  influenzaPositivityByTypeOvertimeChart() {
-    this.influenzaPositivityByTypeOvertimeOptions = {
-      title: {
-        text: 'Number positive for influenza by type and epiweek',
-        align: 'left'
-      },
-      chart: {
-        type: "column",
-      },
-      xAxis: {
-        categories: this.influenzaPositivityByTypeOvertimeSeries[0],
-        title: false,
-        min: 0,
-        max: 22,
-        scrollbar: {
-          enabled: true
-        }
-      },
-      yAxis: [{
-        title: {
-          text: "Number tested or virus detected",
-        }
-      },
-      {
-        title: {
-          text: "Influenza Positive (%)",
-        },
-        opposite: true
-      }],
-      series: [
-        {
-          showInLegend: true,
-          name: "Influenza A Positive",
-          data: this.influenzaPositivityByTypeOvertimeSeries[1],
-          type: 'column',
-          color: "#FC7500",
-        },
-        {
-          showInLegend: true,
-          name: "Influenza B Positive",
-          data: this.influenzaPositivityByTypeOvertimeSeries[2],
-          type: 'column',
-          color: "#234FEA",
-        },
-        {
-          showInLegend: true,
-          name: "Influenza Positive (%)",
-          data: this.influenzaPositivityByTypeOvertimeSeries[3],
-          type: 'spline',
-          yAxis: 1,
-          color: "#FF0000",
-        },
-        {
-          showInLegend: true,
-          name: "Influenza Negative",
-          data: this.influenzaPositivityByTypeOvertimeSeries[4],
-          type: 'column',
-          color: "#008000",
-        }
-      ],
-      plotOptions: {
-        column: {
-          stacking: 'normal',
-          dataLabels: {
-            enabled: true
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Number positive for influenza by type and epiweek',
+            align: 'left'
+          },
+          chart: {
+            type: "column",
+          },
+          xAxis: {
+            categories: MCTemp.ChartSeries[0],
+            title: false,
+            min: 0,
+            max: 22,
+            scrollbar: {
+              enabled: true
+            }
+          },
+          yAxis: [{
+            title: {
+              text: "Number tested or virus detected",
+            }
+          },
+          {
+            title: {
+              text: "Influenza Positive (%)",
+            },
+            opposite: true
+          }],
+          series: [
+            {
+              showInLegend: true,
+              name: "Influenza A Positive",
+              data: MCTemp.ChartSeries[1],
+              type: 'column',
+              color: "#FC7500",
+            },
+            {
+              showInLegend: true,
+              name: "Influenza B Positive",
+              data: MCTemp.ChartSeries[2],
+              type: 'column',
+              color: "#234FEA",
+            },
+            {
+              showInLegend: true,
+              name: "Influenza Positive (%)",
+              data: MCTemp.ChartSeries[3],
+              type: 'spline',
+              yAxis: 1,
+              color: "#FF0000",
+            },
+            {
+              showInLegend: true,
+              name: "Influenza Negative",
+              data: MCTemp.ChartSeries[4],
+              type: 'column',
+              color: "#008000",
+            }
+          ],
+          plotOptions: {
+            column: {
+              stacking: 'normal',
+              dataLabels: {
+                enabled: false
+              }
+            },
+            spline: {
+              dataLabels: {
+                enabled: true,
+                useHTML: true,
+                format: "{y}%"
+              }
+            }
+          },
+          useHighStocks: true,
+          credits: {
+            enabled: false,
           }
         }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> Influenza strains overtime
+    this.CompositeCharts['findInfluenzaStrainsOvertime'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaStrainsOvertime'].loadData(
+      "overview/findInfluenzaStrainsOvertime",
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaStrainsOvertime'];
+        MCTemp.LoadChartOptions();
       },
-      useHighStocks: true
-    };
-  }
-  //#endregion
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaStrainsOvertime'];
 
-  //#region Load Chart --> Influenza strains overtime
-  influenzaStrainsOvertimeData() {
-    this.reviewService.findInfluenzaStrainsOvertime().subscribe(
-      response => {
-        this.influenzaStrainsOvertime = response;
+        // Initialize series array
+        for (let index = 0; index < 9; index++) {
+          MCTemp.ChartSeries.push([]);
+        }
 
-        this.influenzaStrainsOvertimeSeries.push([]);
-        this.influenzaStrainsOvertimeSeries.push([]);
-        this.influenzaStrainsOvertimeSeries.push([]);
-        this.influenzaStrainsOvertimeSeries.push([]);
-        this.influenzaStrainsOvertimeSeries.push([]);
-        this.influenzaStrainsOvertimeSeries.push([]);
-        this.influenzaStrainsOvertimeSeries.push([]);
-        this.influenzaStrainsOvertimeSeries.push([]);
-        this.influenzaStrainsOvertimeSeries.push([]);
-        this.influenzaStrainsOvertimeSeries.push([]);
-
-        //#region Push series data into array at specific indexes
-        this.influenzaStrainsOvertime.forEach((dataInstance, index) => {
+        MCTemp.ChartData.forEach(dataInstance => {
           // Epi Week (Index --> 0)
-          this.influenzaStrainsOvertimeSeries[0][index] = dataInstance.EpiWeek;
+          MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
 
           // Flu A non-subtypable 2 (Index --> 1)
-          this.influenzaStrainsOvertimeSeries[1][index] = dataInstance.NonSubTypableNumber;
+          MCTemp.ChartSeries[1].push(dataInstance.NonSubTypableNumber);
 
           // Influenza Neg (Index --> 2)
-          this.influenzaStrainsOvertimeSeries[2].push(dataInstance.InfluenzaNeg);
+          MCTemp.ChartSeries[2].push(dataInstance.InfluenzaNeg);
 
           // A/H1N1 (Index --> 3)
-          this.influenzaStrainsOvertimeSeries[3].push(dataInstance.AH1N1Number);
+          MCTemp.ChartSeries[3].push(dataInstance.AH1N1Number);
 
           // A/H3N2 (Index --> 4)
-          this.influenzaStrainsOvertimeSeries[4].push(dataInstance.AH3N2Number);
+          MCTemp.ChartSeries[4].push(dataInstance.AH3N2Number);
 
           // B/Victoria (Index --> 5)
-          this.influenzaStrainsOvertimeSeries[5].push(dataInstance.VictoriaNumber);
+          MCTemp.ChartSeries[5].push(dataInstance.VictoriaNumber);
 
           // B/Yamagata (Index --> 6)
-          this.influenzaStrainsOvertimeSeries[6].push(dataInstance.YamagataNumber);
+          MCTemp.ChartSeries[6].push(dataInstance.YamagataNumber);
 
           // Influenza B Not-determined (Index --> 7)
-          this.influenzaStrainsOvertimeSeries[7].push(dataInstance.NotdeterminedNumber);
+          MCTemp.ChartSeries[7].push(dataInstance.NotdeterminedNumber);
 
-          //  Influenza Positive (Index --> 8)
-          this.influenzaStrainsOvertimeSeries[8].push(0);
+          // Influenza Positive (Index --> 8)
+          MCTemp.ChartSeries[8].push(0);
         });
-        //#endregion
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaStrainsOvertime'];
 
-        this.influenzaStrainsOvertimeChart();
-      });
-  }
-
-  influenzaStrainsOvertimeChart() {
-    this.influenzaStrainsOvertimeOptions = {
-      title: {
-        text: 'Circulating Strains of Influenza Virus over time',
-        align: 'left'
-      },
-      chart: {
-        type: "column",
-      },
-      xAxis: {
-        categories: this.influenzaStrainsOvertimeSeries[0],
-        title: {
-          text: "Epi Week"
-        },
-        min: 0,
-        max: 22,
-        scrollbar: {
-          enabled: true
-        }
-      },
-      yAxis: [{
-        title: {
-          text: "Number tested or virus detected",
-        }
-      },
-      {
-        title: {
-          text: "Influenza Positive (%)",
-        },
-        opposite: true,
-        inverted: true
-      }],
-      series: [
-        {
-          showInLegend: true,
-          name: "Flu A non-subtypable 2",
-          data: this.influenzaStrainsOvertimeSeries[1],
-          type: 'column',
-          color: "#234FEA",
-        },
-        {
-          showInLegend: true,
-          name: "Influenza Neg",
-          data: this.influenzaStrainsOvertimeSeries[2],
-          type: 'column',
-          color: "#008000",
-        },
-        {
-          showInLegend: true,
-          name: "A/H1N1",
-          data: this.influenzaStrainsOvertimeSeries[3],
-          type: 'column',
-          color: "#FF0000",
-        },
-        {
-          showInLegend: true,
-          name: "A/H3N2",
-          data: this.influenzaStrainsOvertimeSeries[4],
-          type: 'column',
-          color: "#66B3FF",
-        },
-        {
-          showInLegend: true,
-          name: "B/Victoria",
-          data: this.influenzaStrainsOvertimeSeries[5],
-          type: 'column',
-          color: "#FFB3E6",
-        },
-        {
-          showInLegend: true,
-          name: "B/Yamagata",
-          data: this.influenzaStrainsOvertimeSeries[6],
-          type: 'column',
-          color: "#CCB3FF",
-        },
-        {
-          showInLegend: true,
-          name: "Influenza B Not-determined",
-          data: this.influenzaStrainsOvertimeSeries[7],
-          type: 'column',
-          color: "#B3FFB3",
-        },
-        {
-          showInLegend: true,
-          name: " Influenza Positive",
-          data: this.influenzaStrainsOvertimeSeries[8],
-          type: 'spline',
-          yAxis: 1,
-          color: "#FC7500",
-        }
-      ],
-      plotOptions: {
-        column: {
-          stacking: 'normal',
-          dataLabels: {
-            enabled: true
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Circulating Strains of Influenza Virus over time',
+            align: 'left'
+          },
+          chart: {
+            type: "column",
+          },
+          xAxis: {
+            categories: MCTemp.ChartSeries[0],
+            title: {
+              text: "Epi Week"
+            },
+            min: 0,
+            max: 22,
+            scrollbar: {
+              enabled: true
+            }
+          },
+          yAxis: [{
+            title: {
+              text: "Number tested or virus detected",
+            }
+          },
+          {
+            title: {
+              text: "Influenza Positive (%)",
+            },
+            opposite: true,
+            inverted: true
+          }],
+          series: [
+            {
+              showInLegend: true,
+              name: "Flu A non-subtypable 2",
+              data: MCTemp.ChartSeries[1],
+              type: 'column',
+              color: "#234FEA",
+            },
+            {
+              showInLegend: true,
+              name: "Influenza Neg",
+              data: MCTemp.ChartSeries[2],
+              type: 'column',
+              color: "#008000",
+            },
+            {
+              showInLegend: true,
+              name: "A/H1N1",
+              data: MCTemp.ChartSeries[3],
+              type: 'column',
+              color: "#FF0000",
+            },
+            {
+              showInLegend: true,
+              name: "A/H3N2",
+              data: MCTemp.ChartSeries[4],
+              type: 'column',
+              color: "#66B3FF",
+            },
+            {
+              showInLegend: true,
+              name: "B/Victoria",
+              data: MCTemp.ChartSeries[5],
+              type: 'column',
+              color: "#FFB3E6",
+            },
+            {
+              showInLegend: true,
+              name: "B/Yamagata",
+              data: MCTemp.ChartSeries[6],
+              type: 'column',
+              color: "#CCB3FF",
+            },
+            {
+              showInLegend: true,
+              name: "Influenza B Not-determined",
+              data: MCTemp.ChartSeries[7],
+              type: 'column',
+              color: "#B3FFB3",
+            },
+            {
+              showInLegend: true,
+              name: " Influenza Positive",
+              data: MCTemp.ChartSeries[8],
+              type: 'spline',
+              yAxis: 1,
+              color: "#FC7500",
+            }
+          ],
+          plotOptions: {
+            column: {
+              stacking: 'normal',
+              dataLabels: {
+                enabled: true
+              }
+            }
+          },
+          useHighStocks: true,
+          credits: {
+            enabled: false,
           }
         }
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> Influenza hospitalization overtime
+    this.CompositeCharts['findInfluenzaHospitalizationOvertime'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaHospitalizationOvertime'].loadData(
+      "overview/findInfluenzaHospitalizationOvertime",
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaHospitalizationOvertime'];
+        MCTemp.LoadChartOptions();
       },
-      useHighStocks: true
-    };
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaHospitalizationOvertime'];
 
-    HC_exporting(Highcharts);
-  }
-  //#endregion
+        // Initialize series array
+        for (let index = 0; index < 4; index++) {
+          MCTemp.ChartSeries.push([]);
+        }
 
-  //#region Load Chart --> Influenza hospitalization overtime
-  influenzaHospitalizationOvertimeData() {
-    this.reviewService.findInfluenzaHospitalizationOvertime().subscribe(
-      response => {
-        this.influenzaHospitalizationOvertime = response;
-
-        this.influenzaHospitalizationOvertimeSeries.push([]);
-        this.influenzaHospitalizationOvertimeSeries.push([]);
-        this.influenzaHospitalizationOvertimeSeries.push([]);
-        this.influenzaHospitalizationOvertimeSeries.push([]);
-
-        //#region Push series data into array at specific indexes
-        this.influenzaHospitalizationOvertime.forEach((dataInstance, index) => {
-          this.influenzaHospitalizationOvertimeSeries.push([]);
-
+        MCTemp.ChartData.forEach(dataInstance => {
           //Compile Epi Week (Index --> 0)
-          this.influenzaHospitalizationOvertimeSeries[0].push(dataInstance.EpiWeek);
+          MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
 
           //Compile Samples Tested (Index --> 1)
-          this.influenzaHospitalizationOvertimeSeries[1].push(dataInstance.Tested);
+          MCTemp.ChartSeries[1].push(dataInstance.Tested);
 
           //Compile Influenza Positive Percent (Index --> 2)
-          this.influenzaHospitalizationOvertimeSeries[2].push(dataInstance.InfluenzaPositivePercent);
+          MCTemp.ChartSeries[2].push(dataInstance.InfluenzaPositivePercent);
 
           //Compile SARS-COV-2 Positive Percent (Index --> 3)
-          this.influenzaHospitalizationOvertimeSeries[3].push(dataInstance.SARSCOV2PositivePercent);
+          MCTemp.ChartSeries[3].push(dataInstance.SARSCOV2PositivePercent);
         });
-        //#endregion
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaHospitalizationOvertime'];
 
-        this.influenzaHospitalizationOvertimeChart();
-      });
-  }
-
-  influenzaHospitalizationOvertimeChart() {
-    this.influenzaHospitalizationOvertimeOptions = {
-      title: {
-        text: 'Weekly number of hospitalized ILI & SARI patients and percent ILI & SARI specimens testing positive for influenza and SARS-COV-2',
-        align: 'left'
-      },
-      chart: {
-        type: "column",
-      },
-      xAxis: {
-        categories: this.influenzaHospitalizationOvertimeSeries[0],
-        title: false,
-        min: 0,
-        max: 22,
-        scrollbar: {
-          enabled: true
-        }
-      },
-      yAxis: [{
-        title: {
-          text: "Number tested or virus detected",
-        }
-      },
-      {
-        title: {
-          text: "SARS-COV-2 Positive (%)",
-        },
-        opposite: true,
-        inverted: true
-      }],
-      series: [
-        {
-          showInLegend: true,
-          name: "Total Samples Tested",
-          data: this.influenzaHospitalizationOvertimeSeries[1],
-          type: 'column',
-          color: "#234FEA",
-        },
-        {
-          showInLegend: true,
-          name: "Percent Influenza Positive",
-          data: this.influenzaHospitalizationOvertimeSeries[2],
-          type: 'spline',
-          yAxis: 1,
-          color: "#FC7500",
-        },
-        {
-          showInLegend: true,
-          name: "Percent SARS-COV-2 Positive",
-          data: this.influenzaHospitalizationOvertimeSeries[3],
-          type: 'spline',
-          yAxis: 1,
-          color: "#FF0000",
-        },
-      ],
-      plotOptions: {
-        column: {
-          stacking: 'normal',
-          dataLabels: {
-            enabled: true
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Weekly number of hospitalized ILI & SARI patients and percent ILI & SARI specimens testing positive for influenza and SARS-COV-2',
+            align: 'left'
+          },
+          chart: {
+            type: "column",
+          },
+          xAxis: {
+            categories: MCTemp.ChartSeries[0],
+            title: false,
+            min: 0,
+            max: 22,
+            scrollbar: {
+              enabled: true
+            }
+          },
+          yAxis: [{
+            title: {
+              text: "Number tested or virus detected",
+            }
+          },
+          {
+            title: {
+              text: "SARS-COV-2 Positive (%)",
+            },
+            opposite: true,
+            inverted: true
+          }],
+          series: [
+            {
+              showInLegend: true,
+              name: "Total Samples Tested",
+              data: MCTemp.ChartSeries[1],
+              type: 'column',
+              color: "#234FEA",
+            },
+            {
+              showInLegend: true,
+              name: "Percent Influenza Positive",
+              data: MCTemp.ChartSeries[2],
+              type: 'spline',
+              yAxis: 1,
+              color: "#FC7500",
+            },
+            {
+              showInLegend: true,
+              name: "Percent SARS-COV-2 Positive",
+              data: MCTemp.ChartSeries[3],
+              type: 'spline',
+              yAxis: 1,
+              color: "#FF0000",
+            },
+          ],
+          plotOptions: {
+            column: {
+              stacking: 'normal',
+              dataLabels: {
+                enabled: true
+              }
+            }
+          },
+          useHighStocks: true,
+          credits: {
+            enabled: false,
           }
         }
-      },
-      useHighStocks: true
-    };
-  }
-  //#endregion
-
-  //#region Load Chart --> Influenza patient outcome
-  influenzaPatientOutcomeData() {
-    for (let index = 0; index < 6; index++) {
-      this.influenzaPatientOutcomeSeries.push([]);
-
-      for (let j = 0; j < 2; j++) {
-        this.influenzaPatientOutcomeSeries[index].push(0);
       }
-    }
+    );
+    //#endregion
 
-    this.reviewService.findInfluenzaPatientOutcome().subscribe(
-      response => {
-        this.influenzaPatientOutcome = response;
+    //#region Load Chart --> Influenza patient outcome
+    this.CompositeCharts['findInfluenzaPatientOutcome'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaPatientOutcome'].loadData(
+      "overview/findInfluenzaPatientOutcome",
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPatientOutcome'];
+
+        for (let index = 0; index < 6; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(0);
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPatientOutcome'];
 
         //Absconded (Index --> 0)
-        this.influenzaPatientOutcomeSeries[0][0] = this.influenzaPatientOutcome[0].AbscondedNumber;
-        this.influenzaPatientOutcomeSeries[0][1] = this.influenzaPatientOutcome[0].AbscondedPercentage;
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].AbscondedNumber;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].AbscondedPercentage;
 
         //Death (Index --> 1)
-        this.influenzaPatientOutcomeSeries[1][0] = this.influenzaPatientOutcome[0].DeathNumber;
-        this.influenzaPatientOutcomeSeries[1][1] = this.influenzaPatientOutcome[0].DeathPercentage;
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].DeathNumber;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].DeathPercentage;
 
         //Discharged from hospital alive (Index --> 2)
-        this.influenzaPatientOutcomeSeries[2][0] = this.influenzaPatientOutcome[0].DischargedFromHospital;
-        this.influenzaPatientOutcomeSeries[2][1] = this.influenzaPatientOutcome[0].DischargedFromHospitalPercentage;
+        MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].DischargedFromHospital;
+        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].DischargedFromHospitalPercentage;
 
         //Reffered to another facility (Index --> 3)
-        this.influenzaPatientOutcomeSeries[3][0] = this.influenzaPatientOutcome[0].RefferedToAnotherFacilityNumber;
-        this.influenzaPatientOutcomeSeries[3][1] = this.influenzaPatientOutcome[0].RefferedToAnotherFacilityPercentage;
+        MCTemp.ChartSeries[3][0] = MCTemp.ChartData[0].RefferedToAnotherFacilityNumber;
+        MCTemp.ChartSeries[3][1] = MCTemp.ChartData[0].RefferedToAnotherFacilityPercentage;
 
         //Refused hospital treatment (Index --> 4)
-        this.influenzaPatientOutcomeSeries[4][0] = this.influenzaPatientOutcome[0].RefusedHospitalTreatment;
-        this.influenzaPatientOutcomeSeries[4][1] = this.influenzaPatientOutcome[0].RefusedHospitalTreatmentPercentage;
+        MCTemp.ChartSeries[4][0] = MCTemp.ChartData[0].RefusedHospitalTreatment;
+        MCTemp.ChartSeries[4][1] = MCTemp.ChartData[0].RefusedHospitalTreatmentPercentage;
 
         //Total (Index --> 5)
-        this.influenzaPatientOutcomeSeries[5][0] = this.influenzaPatientOutcome[0].TotalOutcome;
-
-        this.influenzaPatientOutcomeChart();
-      });
-  }
-
-  influenzaPatientOutcomeChart() {
-    this.influenzaPatientOutcomeOptions = {
-      title: {
-        text: 'Patient Outcome',
-        align: 'left'
+        MCTemp.ChartSeries[5][0] = MCTemp.ChartData[0].TotalOutcome;
       },
-      chart: {
-        type: "pie",
-      },
-      colors: [
-        "#FC7500",
-        "#CCB3FF",
-        "#FF0000",
-        "#234FEA",
-        "#008000"
-      ],
-      series: [
-        {
-          name: "Data",
-          type: 'pie',
-          data: [
-            ["Death (" + this.influenzaPatientOutcomeSeries[0][1] + "%)", this.influenzaPatientOutcomeSeries[0][0]],
-            ["Absconded (" + this.influenzaPatientOutcomeSeries[1][1] + "%)", this.influenzaPatientOutcomeSeries[1][0]],
-            ["Discharged from Hospital Alive (" + this.influenzaPatientOutcomeSeries[2][1] + "%)", this.influenzaPatientOutcomeSeries[2][0]],
-            ["Referred to another facility (" + this.influenzaPatientOutcomeSeries[3][1] + "%)", this.influenzaPatientOutcomeSeries[3][0]],
-            ["Refused hospital treatment (" + this.influenzaPatientOutcomeSeries[4][1] + "%)", this.influenzaPatientOutcomeSeries[4][0]]
-          ]
-        }
-      ],
-      plotOptions: {
-        pie: {
-          innerSize: "70%",
-          depth: 25,
-          dataLabels: {
-            enabled: true
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPatientOutcome'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Patient Outcome',
+            align: 'left'
           },
-        },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#FC7500",
+            "#CCB3FF",
+            "#FF0000",
+            "#234FEA",
+            "#008000"
+          ],
+          series: [
+            {
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Death (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Absconded (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+                ["Discharged from Hospital Alive (" + MCTemp.ChartSeries[2][1] + "%)", MCTemp.ChartSeries[2][0]],
+                ["Referred to another facility (" + MCTemp.ChartSeries[3][1] + "%)", MCTemp.ChartSeries[3][0]],
+                ["Refused hospital treatment (" + MCTemp.ChartSeries[4][1] + "%)", MCTemp.ChartSeries[4][0]]
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: true
+              },
+            },
+          },
+          credits: {
+            enabled: false,
+          }
+        }
       }
-    };
-  }
-  //#endregion
+    );
+    //#endregion
 
+    //#region Load Chart --> Geographic distribution by health facility
+    this.CompositeCharts['geographicDistributionByFacility'] = new SARIILIChart(this.http);
+    this.CompositeCharts['geographicDistributionByFacility'].loadData(
+      "overview/geographicDistributionByFacility",
+      () => {
+        let MCTemp = this.CompositeCharts['geographicDistributionByFacility'];
+
+        for (let index = 0; index < 2; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
+          MCTemp.ChartSeries[index].push(0);
+        }
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['geographicDistributionByFacility'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['geographicDistributionByFacility'];
+
+        MCTemp.ChartOptions = {
+          chart: {
+            type: "map",
+            map: topography
+          },
+          title: {
+            text: 'Geographical distribution by health facility'
+          },
+          legend: {
+            enabled: false
+          },
+          mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+              verticalAlign: 'bottom'
+            }
+          },
+          mapView: {
+            center: [37.8, 0.6],
+            zoom: 5.5,
+          },
+
+          series: [{
+            name: 'Countries',
+            color: '#E0E0E0',
+            enableMouseTracking: false
+          }, {
+            type: 'mapbubble',
+            name: 'Pathogen',
+            joinBy: ['x', 'y'],
+            // joinBy: ['iso-a3', 'code3'],
+            data: topographyData,
+            minSize: 4,
+            maxSize: '12%',
+            tooltip: {
+              pointFormat: '{point.facility} ({point.z})'
+            }
+          }],
+          credits: {
+            enabled: false,
+          }
+        }
+
+        let TempChart = new Highcharts.MapChart('geographicDistributionByFacility', MCTemp.ChartOptions);
+      }
+    );
+    //#endregion
+
+    HC_exporting(Highcharts);
+
+  }
 }

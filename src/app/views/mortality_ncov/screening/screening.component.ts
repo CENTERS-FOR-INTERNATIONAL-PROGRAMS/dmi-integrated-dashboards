@@ -17,10 +17,10 @@ HighchartsSolidGauge(Highcharts);
 })
 
 export class ScreeningComponent implements OnInit {
-    //#region Prerequisites
-    highcharts = Highcharts;
-    //#endregion
-    
+  //#region Prerequisites
+  highcharts = Highcharts;
+  //#endregion
+
   //#region Prerequisites --> Screening Cascade
   screeningCascade: Covid19Properties[] = [];
   screeningByGenderSeries: any[] = [];
@@ -344,13 +344,15 @@ export class ScreeningComponent implements OnInit {
           name: "Epiweek",
           data: this.ScreeningByOverTimeSeries[1],
           color: "#234FEA",
+          type: "spline"
         }
       ],
       plotOptions: {
-        line: {
-          stacking: 'normal',
+        spline: {
           dataLabels: {
-            enabled: true
+            enabled: true,
+            useHTML: true,
+            format: "{y}"
           }
         }
       }

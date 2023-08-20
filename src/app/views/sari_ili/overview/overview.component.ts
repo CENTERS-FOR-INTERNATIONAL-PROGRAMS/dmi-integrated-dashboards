@@ -1,7 +1,5 @@
-import { ReviewService } from '../../../services/sari_ili/service';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { SARIProperties } from '../../../models/sari_ili/SARIProperties.model';
 import { SARIILIChart } from '../../../models/sari_ili/SARIILIChart.model';
 import { SCParent } from '../../../models/sari_ili/SCParent.model';
 
@@ -10,13 +8,16 @@ import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsMap from "highcharts/modules/map"
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
-import { HttpClient } from '@angular/common/http';
+import HighchartsTreeMap from 'highcharts/modules/treemap';
+import HighchartsTreeGraph from 'highcharts/modules/treegraph';
 import topography from '../../../data/world.geojson.json'
 import topographyData from '../../../data/afi_pathogen_facility.json'
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
 HighchartsMap(Highcharts);
+HighchartsTreeMap(Highcharts);
+HighchartsTreeGraph(Highcharts);
 
 @Component({
   templateUrl: 'overview.component.html',
@@ -29,7 +30,7 @@ export class SIOverviewComponent implements OnInit {
   CompositeCharts: SCParent = {};
   //#endregion
 
-  constructor(private reviewService: ReviewService, private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
 
@@ -954,6 +955,113 @@ export class SIOverviewComponent implements OnInit {
         }
 
         let TempChart = new Highcharts.MapChart('geographicDistributionByFacility', MCTemp.ChartOptions);
+      }
+    );
+    //#endregion
+
+    //#region Load Chart --> SARI Influenza Cascade
+    this.CompositeCharts['influenzaCascade'] = new SARIILIChart(this.http);
+    this.CompositeCharts['influenzaCascade'].loadData(
+      "overview/influenzaCascade",
+      () => {
+        let MCTemp = this.CompositeCharts['influenzaCascade'];
+
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['influenzaCascade'];
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['influenzaCascade'];
+
+        MCTemp.ChartOptions = {
+          chart: {
+            spacingBottom: 30,
+            marginRight: 120
+          },
+          title: {
+            align: 'center',
+            text: 'SARI Influenza Cascade'
+          },
+          series: [
+            {
+              type: 'treegraph',
+              keys: ['parent', 'id', 'info'],
+              clip: false,
+              data: [
+                [undefined, 'Screened', 7000],
+                ['Screened', 'Not-Eligible', 0],
+                ['Screened', 'Eligible', 6809],
+                ['Eligible', 'Not-Enrolled', 0],
+                ['Eligible', 'Enrolled', 6809],
+                ['Enrolled', 'Not-Tested', 363],
+                ['Enrolled', 'Tested', 6446],
+                ['Tested', 'Flu-B', 219],
+                ['Tested', 'Flu-A', 550],
+                ['Flu-A', 'Not yet subtyped', 0],
+                ['Flu-A', 'Non-Subtype', 0],
+                ['Flu-A', 'H3N2', 151],
+                ['Flu-A', 'H1N1', 381],
+                ['Flu-B', 'Not determined', 198],
+                ['Flu-B', 'Yamagata', 0],
+                ['Flu-B', 'Victoria', 21],
+              ],
+              marker: {
+                symbol: 'circle',
+                radius: 6,
+                fillColor: '#ffffff',
+                lineWidth: 3
+              },
+              dataLabels: {
+                align: 'left',
+                pointFormat: '{point.id} ({point.info})',
+                style: {
+                  color: '#000000',
+                  textOutline: '3px #ffffff',
+                  whiteSpace: 'nowrap'
+                },
+                x: 24,
+                crop: false,
+                overflow: 'none'
+              },
+              levels: [
+                {
+                  level: 1,
+                  levelIsConstant: false
+                },
+                {
+                  level: 2,
+                  colorByPoint: true
+                },
+                {
+                  level: 3,
+                  colorByPoint: true,
+                },
+                {
+                  level: 4,
+                  colorByPoint: true,
+                },
+                {
+                  level: 5,
+                  colorByPoint: true,
+                },
+                {
+                  level: 6,
+                  colorByPoint: true,
+                  dataLabels: {
+                    x: 10
+                  },
+                  marker: {
+                    radius: 4
+                  }
+                }
+              ]
+            }
+          ],
+          credits: {
+            enabled: false,
+          }
+        }
       }
     );
     //#endregion

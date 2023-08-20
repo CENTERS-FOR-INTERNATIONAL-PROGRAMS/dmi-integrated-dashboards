@@ -66,6 +66,11 @@ const routes: Routes = [
           import('./views/afi/results_rdt/results.module').then((m) => m.AResultsModule)
       },
       {
+        path: 'afi/pcr_results',
+        loadChildren: () =>
+          import('./views/afi/results_pcr/results.module').then((m) => m.AResultsModule)
+      },
+      {
         path: 'afi/outcome',
         loadChildren: () =>
           import('./views/afi/outcome/outcome.module').then((m) => m.AOutcomeModule)

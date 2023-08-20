@@ -2,13 +2,9 @@ import { INavData } from '@coreui/angular';
 
 export const navItems: INavData[] = [
   {
-    name: 'Intergrated Dashboards',
-    title: true
-  },
-  {
     name: 'Mortality (COVID-19)',
     url: '/mortality_ncov',
-    iconComponent: { name: 'cil-chart' },
+    icon: 'fa fa-virus-covid',
     children: [
       {
         name: 'About',
@@ -35,7 +31,7 @@ export const navItems: INavData[] = [
   {
     name: 'AFI',
     url: '/afi',
-    iconComponent: { name: 'cil-chart' },
+    icon: 'fa fa-temperature-full',
     children: [
       {
         name: 'About',
@@ -54,6 +50,10 @@ export const navItems: INavData[] = [
         url: '/afi/rdt_results'
       },
       {
+        name: 'TAC PCR Laboratory Results',
+        url: '/afi/pcr_results'
+      },
+      {
         name: 'Diagnosis and Outcome',
         url: '/afi/outcome'
       }
@@ -62,7 +62,7 @@ export const navItems: INavData[] = [
   {
     name: 'SARI/ILI',
     url: '/sari_ili',
-    iconComponent: { name: 'cil-chart' },
+    icon: 'fa fa-lungs-virus',
     children: [
       {
         name: 'About',

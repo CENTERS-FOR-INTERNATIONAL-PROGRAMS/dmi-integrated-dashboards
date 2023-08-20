@@ -1,7 +1,7 @@
-import { ReviewService } from '../../../services/sari_ili/service';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { SARIProperties } from '../../../models/sari_ili/SARIProperties.model';
+import { SARIILIChart } from '../../../models/sari_ili/SARIILIChart.model';
+import { SCParent } from '../../../models/sari_ili/SCParent.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -19,187 +19,183 @@ HighchartsSolidGauge(Highcharts);
 export class EnrolmentComponent implements OnInit {
   //#region Prerequisites
   highcharts = Highcharts;
+  CompositeCharts: SCParent = {};
   //#endregion
 
-  //#region Prerequisites --> Influenza positivity by type
-  influenzaPositivityByType: SARIProperties[] = [];
-  influenzaPositivityByTypeSeries: any[] = [];
-  influenzaPositivityByTypeOptions: {} = {};
-  //#endregion
-
-  //#region Prerequisites --> Influenza positivity by subtype
-  influenzaPositivityBySubtype: SARIProperties[] = [];
-  influenzaPositivityBySubtypeSeries: any[] = [];
-  influenzaPositivityBySubtypeOptions: {} = {};
-  //#endregion
-
-  constructor(private reviewService: ReviewService) { }
+  constructor(private http: HttpClient) { }
   ngOnInit(): void {
-    this.influenzaPositivityByTypeData();
-    this.influenzaPositivityByTypeChart();
-
-    this.influenzaPositivityBySubtypeData();
-    this.influenzaPositivityBySubtypeChart();
+    this.loadCharts();
   }
 
-  //#region Load Chart --> Influenza positivity by type
-  influenzaPositivityByTypeData() {
-    for (let index = 0; index < 4; index++) {
-      this.influenzaPositivityByTypeSeries.push([]);
+  loadCharts() {
+    //#region Load Chart --> Influenza positivity by type
+    this.CompositeCharts['findInfluenzaPositivityByType'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaPositivityByType'].loadData(
+      "overview/findInfluenzaPositivityByType",
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPositivityByType'];
 
-      for (let j = 0; j < 2; j++) {
-        this.influenzaPositivityByTypeSeries[index].push(0);
-      }
-    }
+        for (let index = 0; index < 4; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(0);
+          MCTemp.ChartSeries[index].push(0);
+        }
 
-    this.reviewService.findInfluenzaPositivityByType().subscribe(
-      response => {
-        this.influenzaPositivityByType = response;
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPositivityByType'];
 
         //Influenza A Positive (Index --> 0)
-        this.influenzaPositivityByTypeSeries[0][0] = this.influenzaPositivityByType[0].InfluenzaAPositiveNumber;
-        this.influenzaPositivityByTypeSeries[0][1] = this.influenzaPositivityByType[0].InfluenzaAPositivePercentage;
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].InfluenzaAPositiveNumber;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].InfluenzaAPositivePercentage;
 
         //Influenza B Positive (Index --> 1)
-        this.influenzaPositivityByTypeSeries[1][0] = this.influenzaPositivityByType[0].InfluenzaBPositiveNumber;
-        this.influenzaPositivityByTypeSeries[1][1] = this.influenzaPositivityByType[0].InfluenzaBPositivePercentage;
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].InfluenzaBPositiveNumber;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].InfluenzaBPositivePercentage;
 
         //Influenza AB Positive (Index --> 2)
-        this.influenzaPositivityByTypeSeries[2][0] = this.influenzaPositivityByType[0].InfluenzaABPositiveNumber;
-        this.influenzaPositivityByTypeSeries[2][1] = this.influenzaPositivityByType[0].InfluenzaABPositivePercentage;
+        MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].InfluenzaABPositiveNumber;
+        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].InfluenzaABPositivePercentage;
 
         //Negative (Index --> 3)
-        this.influenzaPositivityByTypeSeries[3][0] = this.influenzaPositivityByType[0].TestedNegativeFluNumber;
-
-        this.influenzaPositivityByTypeChart();
-      });
-  }
-
-  influenzaPositivityByTypeChart() {
-    this.influenzaPositivityByTypeOptions = {
-      title: {
-        text: 'Influenza Positivity by Types',
-        align: 'left'
+        MCTemp.ChartSeries[3][0] = MCTemp.ChartData[0].TestedNegativeFluNumber;
       },
-      chart: {
-        type: "pie",
-      },
-      colors: [
-        "#FF0000",
-        "#234FEA",
-        "#FC7500",
-        "#008000"
-      ],
-      series: [
-        {
-          name: "Data",
-          type: 'pie',
-          data: [
-            ["Flu A Pos (" + this.influenzaPositivityByTypeSeries[0][1] + "%)", this.influenzaPositivityByTypeSeries[0][0]],
-            ["Flu B Pos (" + this.influenzaPositivityByTypeSeries[1][1] + "%)", this.influenzaPositivityByTypeSeries[1][0]],
-            ["Flu A/B Pos (" + this.influenzaPositivityByTypeSeries[2][1] + "%)", this.influenzaPositivityByTypeSeries[2][0]],
-            ["Negative", this.influenzaPositivityByTypeSeries[3][0]]
-          ]
-        }
-      ],
-      plotOptions: {
-        pie: {
-          dataLabels: {
-            enabled: true
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPositivityByType'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Influenza Positivity by Types',
+            align: 'left'
           },
-        },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#FF0000",
+            "#234FEA",
+            "#FC7500",
+            "#008000"
+          ],
+          series: [
+            {
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Flu A Pos (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Flu B Pos (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+                ["Flu A/B Pos (" + MCTemp.ChartSeries[2][1] + "%)", MCTemp.ChartSeries[2][0]],
+                ["Negative", MCTemp.ChartSeries[3][0]]
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              dataLabels: {
+                enabled: true
+              },
+            },
+          },
+          credits: {
+            enabled: false,
+          }
+        }
       }
-    };
+    );
+    //#endregion
 
-    HC_exporting(Highcharts);
-  }
-  //#endregion
+    //#region Load Chart --> Influenza positivity by subtype
+    this.CompositeCharts['findInfluenzaPositivityBySubtype'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaPositivityBySubtype'].loadData(
+      "overview/findInfluenzaPositivityBySubtype",
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPositivityBySubtype'];
 
-  //#region Load Chart --> Influenza positivity by subtype
-  influenzaPositivityBySubtypeData() {
-    for (let index = 0; index < 6; index++) {
-      this.influenzaPositivityBySubtypeSeries.push([]);
+        for (let index = 0; index < 6; index++) {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(0);
+          MCTemp.ChartSeries[index].push(0);
+        }
 
-      for (let j = 0; j < 2; j++) {
-        this.influenzaPositivityBySubtypeSeries[index].push(0);
-      }
-    }
-
-    this.reviewService.findInfluenzaPositivityBySubtype().subscribe(
-      response => {
-        this.influenzaPositivityBySubtype = response;
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPositivityBySubtype'];
 
         //Flu A Non-subtypable (Index --> 0)
-        this.influenzaPositivityBySubtypeSeries[0][0] = this.influenzaPositivityBySubtype[0].FluANonSubTypableNumber;
-        this.influenzaPositivityBySubtypeSeries[0][1] = this.influenzaPositivityBySubtype[0].FluANonSubTypablePercentage;
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].FluANonSubTypableNumber;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].FluANonSubTypablePercentage;
 
         //H1N1 (Index --> 1)
-        this.influenzaPositivityBySubtypeSeries[1][0] = this.influenzaPositivityBySubtype[0].H1N1Number;
-        this.influenzaPositivityBySubtypeSeries[1][1] = this.influenzaPositivityBySubtype[0].H1N1Percentage;
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].H1N1Number;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].H1N1Percentage;
 
         //H3N2 (Index --> 2)
-        this.influenzaPositivityBySubtypeSeries[2][0] = this.influenzaPositivityBySubtype[0].H3N2Number;
-        this.influenzaPositivityBySubtypeSeries[2][1] = this.influenzaPositivityBySubtype[0].H3N2Percentage;
+        MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].H3N2Number;
+        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].H3N2Percentage;
 
         //Victoria (Index --> 3)
-        this.influenzaPositivityBySubtypeSeries[3][0] = this.influenzaPositivityBySubtype[0].VictoriaNumber;
-        this.influenzaPositivityBySubtypeSeries[3][1] = this.influenzaPositivityBySubtype[0].VictoriaPercentage;
+        MCTemp.ChartSeries[3][0] = MCTemp.ChartData[0].VictoriaNumber;
+        MCTemp.ChartSeries[3][1] = MCTemp.ChartData[0].VictoriaPercentage;
 
         //Flu A Not Yet Subtyped (Index --> 4)
-        this.influenzaPositivityBySubtypeSeries[4][0] = this.influenzaPositivityBySubtype[0].FluANotYetSubTypedNumber;
-        this.influenzaPositivityBySubtypeSeries[4][1] = this.influenzaPositivityBySubtype[0].FluANotYetSubTypedPercentage;
+        MCTemp.ChartSeries[4][0] = MCTemp.ChartData[0].FluANotYetSubTypedNumber;
+        MCTemp.ChartSeries[4][1] = MCTemp.ChartData[0].FluANotYetSubTypedPercentage;
 
         //Flu b Not Yet Determined (Index --> 5)
-        this.influenzaPositivityBySubtypeSeries[5][0] = this.influenzaPositivityBySubtype[0].FlueBNotYetDeterminedNumber;
-        this.influenzaPositivityBySubtypeSeries[5][1] = this.influenzaPositivityBySubtype[0].FlueBNotYetDeterminedPercentage;
-
-        this.influenzaPositivityBySubtypeChart();
-      });
-  }
-
-  influenzaPositivityBySubtypeChart() {
-    this.influenzaPositivityBySubtypeOptions = {
-      title: {
-        text: 'Influenza Positivity by Subtypes',
-        align: 'left'
+        MCTemp.ChartSeries[5][0] = MCTemp.ChartData[0].FlueBNotYetDeterminedNumber;
+        MCTemp.ChartSeries[5][1] = MCTemp.ChartData[0].FlueBNotYetDeterminedPercentage;
       },
-      chart: {
-        type: "pie",
-      },
-      colors: [
-        "#234FEA",
-        "#FF0000",
-        "#008000",
-        "#FFB3E6",
-        "#CCB3FF",
-        "#FC7500",
-        "#B3FFB3",
-      ],
-      series: [
-        {
-          name: "Data",
-          type: 'pie',
-          data: [
-            ["Flu A non-subtypable (" + this.influenzaPositivityBySubtypeSeries[0][1] + "%)", this.influenzaPositivityBySubtypeSeries[0][0]],
-            ["H1N1 (" + this.influenzaPositivityBySubtypeSeries[1][1] + "%)", this.influenzaPositivityBySubtypeSeries[1][0]],
-            ["H3N2 (" + this.influenzaPositivityBySubtypeSeries[2][1] + "%)", this.influenzaPositivityBySubtypeSeries[2][0]],
-            ["Victoria (" + this.influenzaPositivityBySubtypeSeries[3][1] + "%)", this.influenzaPositivityBySubtypeSeries[3][0]],
-            ["Flu A Not yet Subtyped (" + this.influenzaPositivityBySubtypeSeries[4][1] + "%)", this.influenzaPositivityBySubtypeSeries[4][0]],
-            ["Flu B Not-determined (" + this.influenzaPositivityBySubtypeSeries[5][1] + "%)", this.influenzaPositivityBySubtypeSeries[5][0]],
-          ]
-        }
-      ],
-      plotOptions: {
-        pie: {
-          dataLabels: {
-            enabled: true
+      () => {
+        let MCTemp = this.CompositeCharts['findInfluenzaPositivityBySubtype'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Influenza Positivity by Subtypes',
+            align: 'left'
           },
-        },
+          chart: {
+            type: "pie",
+          },
+          colors: [
+            "#234FEA",
+            "#FF0000",
+            "#008000",
+            "#FFB3E6",
+            "#CCB3FF",
+            "#FC7500",
+            "#B3FFB3",
+          ],
+          series: [
+            {
+              name: "Data",
+              type: 'pie',
+              data: [
+                ["Flu A non-subtypable (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["H1N1 (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
+                ["H3N2 (" + MCTemp.ChartSeries[2][1] + "%)", MCTemp.ChartSeries[2][0]],
+                ["Victoria (" + MCTemp.ChartSeries[3][1] + "%)", MCTemp.ChartSeries[3][0]],
+                ["Flu A Not yet Subtyped (" + MCTemp.ChartSeries[4][1] + "%)", MCTemp.ChartSeries[4][0]],
+                ["Flu B Not-determined (" + MCTemp.ChartSeries[5][1] + "%)", MCTemp.ChartSeries[5][0]],
+              ]
+            }
+          ],
+          plotOptions: {
+            pie: {
+              dataLabels: {
+                enabled: true
+              },
+            },
+          },
+          credits: {
+            enabled: false,
+          }
+        }
       }
-    };
+    );
+    //#endregion
 
     HC_exporting(Highcharts);
   }
-  //#endregion
-
 }

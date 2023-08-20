@@ -1,7 +1,5 @@
-import { ReviewService } from '../../../services/sari_ili/service';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { AFIProperties } from '../../../models/afi/AFIProperties.model';
 import { AFIChart } from '../../../models/afi/AFIChart.model';
 import { ACParent } from '../../../models/afi/ACParent.model';
 
@@ -10,7 +8,6 @@ import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import HighchartsMap from "highcharts/modules/map"
-import { HttpClient } from '@angular/common/http';
 import topography from '../../../data/world.geojson.json'
 import topographyData from '../../../data/afi_pathogen_facility.json'
 
@@ -29,7 +26,7 @@ export class AOverviewComponent implements OnInit {
   highcharts = Highcharts;
   //#endregion
 
-  constructor(private reviewService: ReviewService, private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     this.loadCharts();

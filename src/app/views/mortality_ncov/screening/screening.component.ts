@@ -114,7 +114,10 @@ export class ScreeningComponent implements OnInit {
           color: "#234FEA",
           showInLegend: false
         }
-      ]
+      ],
+      credits: {
+        enabled: false,
+      }
     };
 
     HC_exporting(Highcharts);
@@ -197,7 +200,12 @@ export class ScreeningComponent implements OnInit {
           }
         }
       },
+      credits: {
+        enabled: false,
+      }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 
@@ -290,7 +298,12 @@ export class ScreeningComponent implements OnInit {
           type: 'bar'
         }
       ],
+      credits: {
+        enabled: false,
+      }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 
@@ -355,8 +368,13 @@ export class ScreeningComponent implements OnInit {
             format: "{y}"
           }
         }
+      },
+      credits: {
+        enabled: false,
       }
     };
+
+    HC_exporting(Highcharts);
   }
   //#endregion
 

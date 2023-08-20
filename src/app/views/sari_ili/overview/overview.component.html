@@ -1,7 +1,8 @@
-<c-card class="mb-4">
-  <c-card-header>
+<c-card>
+  <c-card-header class="view-background-color--none">
     <h5>SARI/ILI Overview</h5>
   </c-card-header>
+
   <c-card-body>
     <p>
       This dashboard aims to monitor the evolution of SARI-ILI, identify more lethal strains, and track the extent of
@@ -10,6 +11,19 @@
     </p>
   </c-card-body>
 </c-card>
+
+<br />
+
+<c-row>
+  <c-col>
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['influenzaCascade'].ChartOptions"
+        style="height: 600px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
 
 <c-row>
   <c-col [sm]="4">

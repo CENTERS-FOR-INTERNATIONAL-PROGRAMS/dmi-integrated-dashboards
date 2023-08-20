@@ -1,5 +1,5 @@
-<c-card class="mb-4">
-  <c-card-header>
+<c-card>
+  <c-card-header class="view-background-color--none">
     <h5>SARI/ILI Enrolment</h5>
   </c-card-header>
 </c-card>
@@ -8,19 +8,17 @@
 <c-row>
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="influenzaPositivityByTypeOptions"
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findInfluenzaPositivityByType'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <!-- <c-card-body> -->
-      <highcharts-chart [Highcharts]="highcharts" [options]="influenzaPositivityBySubtypeOptions"
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findInfluenzaPositivityBySubtype'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-      <!-- </c-card-body> -->
     </c-card>
   </c-col>
 </c-row>

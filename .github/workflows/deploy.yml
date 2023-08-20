@@ -22,6 +22,7 @@ jobs:
           sudo rm -rf dist
           sudo rm package-lock.json
           sudo rm -rf node_modules
+          sudo git stash
           sudo git pull
           sudo npm install
           sudo find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +

@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/morlig-angular-template'),
+      dir: require('path').join(__dirname, './coverage/dmi-integrated-dashboards-template'),
       subdir: '.',
       reporters: [
         { type: 'html' },

@@ -1,6 +1,6 @@
 <c-card class="mb-4">
   <c-card-header class="view-background-color--none">
-    <h5>COVID-19 Overview</h5>
+    <h5>COVID-19 Mortality <span class="view-margin--side--10">/</span> Overview</h5>
   </c-card-header>
   
   <c-card-body>
@@ -20,13 +20,8 @@
 
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
-          <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 30px;">
+          <c-col style="padding: 0 0 0 5px; margin-top: 45px;">
             <h4>{{this.covid19SummaryGroup[0][0][0]}}</h4>
-          </c-col>
-
-          <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts"
-              style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
           </c-col>
         </c-row>
       </c-card-body>

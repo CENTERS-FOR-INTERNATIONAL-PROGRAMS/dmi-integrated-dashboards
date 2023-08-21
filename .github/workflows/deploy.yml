@@ -17,7 +17,6 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd /etc/dmi-integrated-dashboards
-          sudo systemctl stop nginx
           sudo pm2 stop integrated-dashboards-api
           sudo rm -rf dist
           sudo rm package-lock.json
@@ -27,7 +26,5 @@ jobs:
           sudo npm install
           sudo find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +
           sudo ng build --configuration production
-          sudo systemctl restart nginx
-          sudo systemctl status nginx
           sudo pm2 reload integrated-dashboards-api
           echo "Dashboards are upto date! Deployment successful!"

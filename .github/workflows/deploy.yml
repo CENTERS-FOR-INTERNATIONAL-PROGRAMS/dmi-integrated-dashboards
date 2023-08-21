@@ -27,7 +27,7 @@ jobs:
           sudo find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +
           sudo ng build --configuration production
           cd /etc/dmi-integrated-dashboards
-          cp -rf /etc/dmi-integrated-dashboards/* /tmp/dmi-integrated-dashboards-backup/*
+          cp -rf /etc/dmi-integrated-dashboards/* /tmp/dmi-integrated-dashboards-backup/
           sudo cp -rf /var/lib/github_workflows/dmi-integrated-dashboards/* .
           sudo pm2 reload integrated-dashboards-api
           echo "Dashboards are upto date! Deployment successful!"

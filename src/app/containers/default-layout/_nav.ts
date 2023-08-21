@@ -2,9 +2,10 @@ import { INavData } from '@coreui/angular';
 
 export const navItems: INavData[] = [
   {
-    name: 'Mortality (COVID-19)',
+    name: 'COVID-19 Mortality',
     url: '/mortality_ncov',
     icon: 'fa fa-virus-covid',
+    class: 'view-drawer--link',
     children: [
       {
         name: 'About',
@@ -32,6 +33,7 @@ export const navItems: INavData[] = [
     name: 'AFI',
     url: '/afi',
     icon: 'fa fa-temperature-full',
+    class: 'view-drawer--link',
     children: [
       {
         name: 'About',
@@ -63,6 +65,7 @@ export const navItems: INavData[] = [
     name: 'SARI/ILI',
     url: '/sari_ili',
     icon: 'fa fa-lungs-virus',
+    class: 'view-drawer--link',
     children: [
       {
         name: 'About',

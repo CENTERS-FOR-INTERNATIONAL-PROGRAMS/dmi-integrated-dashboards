@@ -1,24 +1,31 @@
 import { ReviewService } from '../../../services/mortality_ncov/service';
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { Covid19Summary } from '../../../models/mortality_ncov/covid19Summary.model';
 import { Covid19Properties } from '../../../models/mortality_ncov/covid19Properties.model';
+import { DataFilter } from '../../../models/DataFilter.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
+import * as moment from 'moment';
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
 
 @Component({
   templateUrl: 'overview.component.html',
-  styleUrls: ['overview.component.scss']
+  styleUrls: ['overview.component.scss'],
 })
 
 export class OverviewComponent implements OnInit {
+  DataFilterInstance = new DataFilter();
+
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
   //#region Prerequisites
   highcharts = Highcharts;
   //#endregion
@@ -56,8 +63,6 @@ export class OverviewComponent implements OnInit {
   covid19CascadeChartOptions: {} = {};
   //#endregion
 
-  // constructor(private chartsData: OverviewChartsData) { }
-
   constructor(private reviewService: ReviewService) { }
 
   ngOnInit(): void {
@@ -75,6 +80,10 @@ export class OverviewComponent implements OnInit {
 
     this.loadCovid19PositivityByFacilityData();
     this.loadCovid19PositivityByFacilityChart();
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
   }
 
   //#region Load Chart --> Covid-19 Summary
@@ -389,12 +398,10 @@ export class OverviewComponent implements OnInit {
 
             if (!female_found) {
               this.covid19PositivityByAgeGenderSeries[1].push(0);
-              console.log(ageGroupInstance, '!Female');
             }
 
             if (!male_found) {
               this.covid19PositivityByAgeGenderSeries[2].push(0);
-              console.log(ageGroupInstance, '!Male');
             }
           }
         );

@@ -8,13 +8,20 @@
   <meta content="Intergrated Dashboards" name="description" />
   <meta content="G. Miller" name="author" />
   <meta content="dmi,icap" name="keyword" />
-  <link href="assets/images/icon-dashboard-white-32.png" rel="icon" type="image/x-icon">
+  <link href="assets/images/bar-chart.png" rel="icon" type="image/x-icon">
   <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <title>Intergrated Dashboards</title>
 </head>
 
 <style>
-  .view-background-color--none {
+  .card-header {
+    border-color: rgb(240, 240, 240) !important;
+  }
+
+  .view-background--color-none {
     background: none !important;
   }
 
@@ -29,9 +36,60 @@
   .view-drawer--body {
     background-color: rgba(0, 0, 21, 0.2);
   }
+
+  .view-card--row {
+    background: rgb(255, 255, 255);
+  }
+
+  .view-width--100-percent {
+    width: 100%;
+  }
+
+  .mdc-text-field--filled {
+    --mdc-filled-text-field-active-indicator-height: 0px !important;
+    background: none !important;
+    border: solid 1px #03062C33;
+    border-radius: 5px !important;
+  }
+
+  .mat-date-range-input-container,
+  .mat-mdc-select {
+    font-size: 14px !important;
+  }
+
+  .bg-light {
+    background: none !important;
+  }
+
+  .highcharts-root {
+    border-radius: 5px;
+  }
+
+  .view-border--none {
+    border: none !important;
+  }
+
+  .view-border--right {
+    border-right: solid 1px rgb(0, 0, 0);
+  }
+
+  .view-margin--vertical {
+    margin-top: 10px !important;
+    margin-bottom: 60px !important;
+  }
+
+  .view-text--cascade {
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  .view-text--cascade-small {
+    font-weight: bold;
+    font-size: 18px;
+  }
 </style>
 
-<body>
+<body class="mat-typography">
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <app-root>
     <div class="fade show" style="text-align: center; padding-top: calc(100vh / 2); height: 100vh">

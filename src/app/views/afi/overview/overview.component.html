@@ -1,14 +1,10 @@
-<c-card>
-  <c-card-header class="view-background-color--none">
-    <h5>AFI <span class="view-margin--side--10">/</span> Overview</h5>
-  </c-card-header>
+<c-card class="view-border--none">
+  <h2>AFI <span class="view-margin--side--10">:</span> Overview</h2>
 
-  <c-card-body>
-    <p>
-      The AFI dashboard aims to: identify causes of AFI/UF inpatients/outpatients, describe epidemiological
-      characteristics in Kenya, and detect emerging infections of public health importance.
-    </p>
-  </c-card-body>
+  <p>
+    The AFI dashboard aims to: identify causes of AFI/UF inpatients/outpatients, describe epidemiological
+    characteristics in Kenya, and detect emerging infections of public health importance.
+  </p>
 </c-card>
 
 <br />
@@ -16,12 +12,14 @@
 <c-row>
   <c-col [sm]="3">
     <c-card>
-      <c-card-header style="background-color: #fff; padding-left: 5px;">Screened</c-card-header>
+      <c-card-header class="view-background--color-none">
+        Screened
+      </c-card-header>
 
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
-          <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
-            <h4>14493</h4>
+          <c-col [sm]="6" style="padding: 0 0 0 15px; text-align: left; margin-top: 50px;">
+            <label class="view-text--cascade">{{CompositeCharts['screenedCascade'].ChartSeries[0]}}</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
@@ -31,7 +29,7 @@
         </c-row>
       </c-card-body>
 
-      <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
+      <c-card-footer class="view-border--none view-background--color-none">
         <label style="font-size: 12px;">110,000 last month</label>
       </c-card-footer>
     </c-card>
@@ -39,24 +37,25 @@
 
   <c-col [sm]="3">
     <c-card>
-      <c-card-header style="background-color: #fff; padding-left: 5px;">Eligible</c-card-header>
+      <c-card-header class="view-background--color-none">
+        Eligible
+      </c-card-header>
 
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
-          <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
-            <h4>21,761</h4>
-
+          <c-col [sm]="6" style="padding: 0 0 0 15px; text-align: left; margin-top: 50px;">
+            <label class="view-text--cascade">{{CompositeCharts['aligibleCascade'].ChartSeries[0]}}</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['screenedCascade'].ChartOptions"
+            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['aligibleCascade'].ChartOptions"
               style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
             <p></p>
           </c-col>
         </c-row>
       </c-card-body>
 
-      <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
+      <c-card-footer class="view-border--none view-background--color-none">
         <label style="font-size: 12px;">25,000 last month</label>
       </c-card-footer>
     </c-card>
@@ -64,22 +63,24 @@
 
   <c-col [sm]="3">
     <c-card>
-      <c-card-header style="background-color: #fff; padding-left: 5px;">Enrolled</c-card-header>
+      <c-card-header class="view-background--color-none">
+        Enrolled
+      </c-card-header>
 
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
-          <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
-            <h4>16,223</h4>
+          <c-col [sm]="6" style="padding: 0 0 0 15px; text-align: left; margin-top: 50px;">
+            <label class="view-text--cascade">{{CompositeCharts['enrolledCascade'].ChartSeries[0]}}</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['aligibleCascade'].ChartOptions"
+            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['enrolledCascade'].ChartOptions"
               style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
           </c-col>
         </c-row>
       </c-card-body>
 
-      <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
+      <c-card-footer class="view-border--none view-background--color-none">
         <label style="font-size: 12px;">20,000 last month</label>
       </c-card-footer>
     </c-card>
@@ -87,11 +88,14 @@
 
   <c-col [sm]="3">
     <c-card>
-      <c-card-header style="background-color: #fff; padding-left: 5px;">Sampled</c-card-header>
+      <c-card-header class="view-background--color-none">
+        Sampled
+      </c-card-header>
+
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
-          <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
-            <h4>9,244</h4>
+          <c-col [sm]="6" style="padding: 0 0 0 15px; text-align: left; margin-top: 50px;">
+            <label class="view-text--cascade">{{CompositeCharts['sampledCascade'].ChartSeries[0]}}</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
@@ -101,7 +105,7 @@
         </c-row>
       </c-card-body>
 
-      <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
+      <c-card-footer class="view-border--none view-background--color-none">
         <label style="font-size: 12px;">10,000 last month</label>
       </c-card-footer>
     </c-card>
@@ -129,7 +133,7 @@
 <br />
 
 <c-row>
-  <c-col>
+  <c-col [sm]="12">
     <c-card>
       <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['screenedOverTime'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>

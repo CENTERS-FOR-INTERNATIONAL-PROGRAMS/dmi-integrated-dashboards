@@ -1,7 +1,5 @@
-<c-card>
-  <c-card-header class="view-background-color--none">
-    <h5>AFI <span class="view-margin--side--10">/</span> Malaria and Leptospirosis RDT Results</h5>
-  </c-card-header>
+<c-card class="view-border--none">
+  <h2>AFI <span class="view-margin--side--10">:</span> Malaria and Leptospirosis RDT Results</h2>
 </c-card>
 
 <br />
@@ -12,7 +10,7 @@
       <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['malariaResults'].ChartOptions"
         style="height: 300px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
-    
+
     <c-card>
       <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['malariaPositiveResults'].ChartOptions"
         style="height: 300px; display: inline-block; max-width: 100%;"></highcharts-chart>

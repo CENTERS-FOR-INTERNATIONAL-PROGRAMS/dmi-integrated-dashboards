@@ -5,14 +5,15 @@
 <c-row>
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="screeningCascadeChartOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['screeningCascade'].ChartOptions"
         style="width: 100%; height: 400px; display: block"></highcharts-chart>
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="screeningByFacilitiesChartOptions"
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findScreeningByFacility'].ChartOptions"
         style="width: 100%; height: 400px; display: block"></highcharts-chart>
     </c-card>
   </c-col>
@@ -21,7 +22,7 @@
 <c-card class="mb-4">
   <c-card-body>
     <div class="screenedCharts">
-      <highcharts-chart [Highcharts]="highcharts" [options]="screenedovertimechartOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['findScreeningOvertime'].ChartOptions"
         style="width: 100%; height: 400px; display: block"></highcharts-chart>
     </div>
   </c-card-body>

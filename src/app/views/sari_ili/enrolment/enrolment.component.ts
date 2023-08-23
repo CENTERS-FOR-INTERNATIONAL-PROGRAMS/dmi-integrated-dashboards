@@ -31,7 +31,7 @@ export class EnrolmentComponent implements OnInit {
     //#region Load Chart --> Influenza positivity by type
     this.CompositeCharts['findInfluenzaPositivityByType'] = new SARIILIChart(this.http);
     this.CompositeCharts['findInfluenzaPositivityByType'].loadData(
-      "overview/findInfluenzaPositivityByType",
+      "enrolment/findInfluenzaPositivityByType",
       () => {
         let MCTemp = this.CompositeCharts['findInfluenzaPositivityByType'];
 
@@ -108,7 +108,7 @@ export class EnrolmentComponent implements OnInit {
     //#region Load Chart --> Influenza positivity by subtype
     this.CompositeCharts['findInfluenzaPositivityBySubtype'] = new SARIILIChart(this.http);
     this.CompositeCharts['findInfluenzaPositivityBySubtype'].loadData(
-      "overview/findInfluenzaPositivityBySubtype",
+      "enrolment/findInfluenzaPositivityBySubtype",
       () => {
         let MCTemp = this.CompositeCharts['findInfluenzaPositivityBySubtype'];
 

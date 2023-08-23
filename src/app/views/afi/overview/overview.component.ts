@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AFIChart } from '../../../models/afi/AFIChart.model';
 import { ACParent } from '../../../models/afi/ACParent.model';
 
-import * as Highcharts from 'highcharts';
+import * as Highcharts from 'highcharts/highstock';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
@@ -55,7 +55,7 @@ export class AOverviewComponent implements OnInit {
         // Female Data (Index --> 0)
         MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].FemaleEnrolledNumber;
         MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].FemaleEnrolledPercentage;
-        
+
         // Male Data (Index --> 1)
         MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].MaleEnrolledNumber;
         MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].MaleEnrolledPercentage;
@@ -166,8 +166,6 @@ export class AOverviewComponent implements OnInit {
           }
         );
         //#endregion
-
-        console.log(MCTemp.ChartSeries);
       },
       () => {
         let MCTemp = this.CompositeCharts['enrolledByAgeGender'];
@@ -238,28 +236,44 @@ export class AOverviewComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Screened over time
-    this.CompositeCharts['screenedOverTime'] = new AFIChart(this.http);
-    this.CompositeCharts['screenedOverTime'].loadData(
-      "overview/screenedOverTime",
+    //#region Load Chart --> Syndromes over time
+    this.CompositeCharts['syndromesOverTime'] = new AFIChart(this.http);
+    this.CompositeCharts['syndromesOverTime'].loadData(
+      "overview/syndromesOverTime",
       () => {
-        let MCTemp = this.CompositeCharts['screenedOverTime'];
-
-        for (let index = 0; index < 2; index++) {
-          MCTemp.ChartSeries.push([]);
-
-          for (let j = 0; j < 6; j++) {
-            MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 50));
-          }
-        }
+        let MCTemp = this.CompositeCharts['syndromesOverTime'];
 
         MCTemp.LoadChartOptions();
       },
       () => {
-        let MCTemp = this.CompositeCharts['screenedOverTime'];
+        let MCTemp = this.CompositeCharts['syndromesOverTime'];
+
+        for (let index = 0; index < 6; index++) {
+          MCTemp.ChartSeries.push([]);
+        }
+
+        MCTemp.ChartData.forEach((dataInstance) => {
+          //Compile Epi Week (Index --> 0)
+          MCTemp.ChartSeries[0].push(dataInstance.WeekNumber);
+
+          //Compile SARI (Index --> 1)
+          MCTemp.ChartSeries[1].push(dataInstance.SARINumber);
+
+          //Compile UF (Index --> 2)
+          MCTemp.ChartSeries[2].push(dataInstance.UFNumber);
+
+          //Compile DF (Index --> 3)
+          MCTemp.ChartSeries[3].push(dataInstance.DFNumber);
+
+          //Compile MERS-Cov (Index --> 4)
+          MCTemp.ChartSeries[4].push(dataInstance.MERSCovNumber);
+
+          //Compile NonUFSARIDFMERSCVONumber (Index --> 5)
+          MCTemp.ChartSeries[5].push(dataInstance.NonUFSARIDFMERSCVONumber);
+        });
       },
       () => {
-        let MCTemp = this.CompositeCharts['screenedOverTime'];
+        let MCTemp = this.CompositeCharts['syndromesOverTime'];
 
         MCTemp.ChartOptions = {
           title: {
@@ -270,8 +284,13 @@ export class AOverviewComponent implements OnInit {
             type: "column",
           },
           xAxis: {
-            categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Period
-            title: false
+            categories: MCTemp.ChartSeries[0],
+            title: false,
+            min: 0,
+            max: 22,
+            scrollbar: {
+              enabled: true
+            }
           },
           yAxis: {
             title: {
@@ -282,28 +301,35 @@ export class AOverviewComponent implements OnInit {
             {
               showInLegend: true,
               name: "SARI",
-              data: [1, 0, 12, 3, 21, 45, 12, 45, 32, 23, 23, 72],
+              data: MCTemp.ChartSeries[1],
               type: 'spline',
               color: "#234FEA",
             },
             {
               showInLegend: true,
               name: "UF",
-              data: [10, 32, 32, 56, 21, 32, 27, 62, 12, 13, 23, 23],
+              data: MCTemp.ChartSeries[2],
               type: 'spline',
               color: "#FF0000",
             },
             {
               showInLegend: true,
               name: "DF",
-              data: [12, 34, 42, 12, 11, 15, 13, 42, 31, 42, 12, 26],
+              data: MCTemp.ChartSeries[3],
               type: 'spline',
               color: "#FF0000",
             },
             {
               showInLegend: true,
               name: "MERS-COV",
-              data: [19, 3, 34, 33, 45, 44, 33, 42, 42, 55, 33, 42],
+              data: MCTemp.ChartSeries[4],
+              type: 'spline',
+              color: "#FFA500",
+            },
+            {
+              showInLegend: true,
+              name: "Non UF/SARI/DF/MERS-CoV",
+              data: MCTemp.ChartSeries[5],
               type: 'spline',
               color: "#FFA500",
             }
@@ -316,6 +342,7 @@ export class AOverviewComponent implements OnInit {
               }
             }
           },
+          useHighStocks: true,
           credits: {
             enabled: false,
           }
@@ -341,6 +368,14 @@ export class AOverviewComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['RTDResultsMalaria'];
+
+        // Positive (Index --> 0)
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].PositiveNumber;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].PositivePercentage;
+
+        // Negative (Index --> 1)
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].NegativeNumber;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].NegativePercentage;
       },
       () => {
         let MCTemp = this.CompositeCharts['RTDResultsMalaria'];
@@ -402,6 +437,14 @@ export class AOverviewComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['RTDResultsLeptospirosis'];
+
+        // Positive (Index --> 0)
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].PositiveNumber;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].PositivePercentage;
+
+        // Negative (Index --> 1)
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].NegativeNumber;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].NegativePercentage;
       },
       () => {
         let MCTemp = this.CompositeCharts['RTDResultsLeptospirosis'];
@@ -446,25 +489,53 @@ export class AOverviewComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> PCR Results
+    //#region Load Chart --> Molecular PCR laboratory results
     this.CompositeCharts['PCRResults'] = new AFIChart(this.http);
     this.CompositeCharts['PCRResults'].loadData(
       "overview/PCRResults",
       () => {
         let MCTemp = this.CompositeCharts['PCRResults'];
 
-        MCTemp.ChartSeries.push([]);
-        MCTemp.ChartSeries.push([]);
-
-        for (let index = 0; index < 15; index++) {
-          MCTemp.ChartSeries[0].push(Math.floor(Math.random() * 1000));
-          // MCTemp.ChartSeries[index].push(0);
-        }
-
         MCTemp.LoadChartOptions();
       },
       () => {
         let MCTemp = this.CompositeCharts['PCRResults'];
+
+        MCTemp.ChartSeries.push([]);
+        MCTemp.ChartSeries.push([]);
+        MCTemp.ChartSeries[0].push("Negative");
+        MCTemp.ChartSeries[0].push("Plasmodium");
+        MCTemp.ChartSeries[0].push("HIV-1");
+        MCTemp.ChartSeries[0].push("Salmonella");
+        MCTemp.ChartSeries[0].push("Rickettsia");
+        MCTemp.ChartSeries[0].push("Dengue");
+        MCTemp.ChartSeries[0].push("Brucella");
+        MCTemp.ChartSeries[0].push("S.pneumoniae");
+        MCTemp.ChartSeries[0].push("Chikungunya");
+        MCTemp.ChartSeries[0].push("Leishmania");
+        MCTemp.ChartSeries[0].push("Bartonella");
+        MCTemp.ChartSeries[0].push("Leptospira");
+        MCTemp.ChartSeries[0].push("C.burnetii");
+        MCTemp.ChartSeries[0].push("Rift Valley Fever");
+        MCTemp.ChartSeries[0].push("B.pseudomallei");
+        MCTemp.ChartSeries[0].reverse();
+
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].NegativeNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].PlasmodiumNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].HIV1Number);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].SalmonellaNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].RickettsiaNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].DengueNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].BrucellaNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].SPneumoniaeNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].ChikungunyaNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].LeishmaniaNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].BartonellaNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].LeptospiraNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].CburnetiiNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].RiftValleyFeverNumber);
+        MCTemp.ChartSeries[1].push(MCTemp.ChartData[0].BPseudomalleiNumber);
+        MCTemp.ChartSeries[1].reverse();
       },
       () => {
         let MCTemp = this.CompositeCharts['PCRResults'];
@@ -483,7 +554,7 @@ export class AOverviewComponent implements OnInit {
             },
           },
           xAxis: {
-            categories: ["Negative", "Plasmodium", "HIV-1", "Salmonella", "Rickettsia", "Dengue", "Brucella", "S.pneumoniae", "Chikungunya", "Leishmania", "Bartonella", "Leptospira", "C.burnetii", "Rift Valley Fever", "B.pseudomallei"],
+            categories: MCTemp.ChartSeries[0],
             title: { text: '' },
             reversed: false,
           },
@@ -503,15 +574,13 @@ export class AOverviewComponent implements OnInit {
             }
           },
           tooltip: {
-            format:
-              '<b>{series.name}, age {point.category}</b><br/>' +
-              'Population: {(abs point.y):.1f}%',
+            format: '<b>{x}, {y}</b>',
           },
           legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
               name: 'Count',
-              data: MCTemp.ChartSeries[0],
+              data: MCTemp.ChartSeries[1],
               color: '#008000',
               showInLegend: false
             }

@@ -1,19 +1,42 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
-import { Covid19Summary } from '../../models/mortality_ncov/covid19Summary.model';
+import { CholeraProperties } from './CholeraProperties.model';
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class ReviewService {
-    public BASE_URL_COVID19_SUMMARYBYMONTH = 'http://localhost:8080/api/mortality_ncov/overview/findSummaryByLastMonth';
+export class CholeraChart {
+    chart_api_endpoint: string = "http://localhost:8080/api/cholera";
+    ChartAPIService: any;
+    ChartData: CholeraProperties[] = [];
+    ChartSeries: any[] = [];
+    ChartOptions: {} = {};
+    PreProcessData: any;
+    PostProcessData: any;
+    LoadChartOptions: any;
 
     constructor(private http: HttpClient) { }
 
-    findSummaryByMonth(): Observable<Covid19Summary[]> {
-        return this.http.get<Covid19Summary[]>(`${this.BASE_URL_COVID19_SUMMARYBYMONTH}`).pipe(
+    loadData(endpoint: string, preProcessData: any, postProcessData: any, loadOptions: any): void {
+        this.chart_api_endpoint += "/" + endpoint;
+        this.PreProcessData = preProcessData;
+        this.PostProcessData = postProcessData;
+        this.LoadChartOptions = loadOptions;
+
+        this.PreProcessData();
+
+        this.readAPI().subscribe(
+            response => {
+                this.ChartData = response;
+                this.PostProcessData();
+                this.LoadChartOptions();
+            });
+    }
+
+    readAPI(): Observable<CholeraProperties[]> {
+        return this.http.get<CholeraProperties[]>(`${this.chart_api_endpoint}`).pipe(
             retry(1),
             catchError(this.handleError)
         );

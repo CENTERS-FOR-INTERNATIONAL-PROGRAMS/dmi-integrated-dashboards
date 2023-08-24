@@ -12,8 +12,8 @@
 <c-row>
   <c-col [sm]="3">
     <c-card class="view-border--none">
-      <c-card-header class="view-background--color-none view-border--none">
-        Health Facility
+      <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
+        <label>Health Facility</label>
       </c-card-header>
 
       <mat-form-field>
@@ -28,7 +28,7 @@
 
   <c-col [sm]="3">
     <c-card class="view-border--none">
-      <c-card-header class="view-background--color-none view-border--none">
+      <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
         Date Range
       </c-card-header>
 
@@ -47,7 +47,7 @@
 
   <c-col [sm]="3">
     <c-card class="view-border--none">
-      <c-card-header class="view-background--color-none view-border--none">
+      <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
         Year
       </c-card-header>
 
@@ -94,7 +94,7 @@
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
           <c-col style="padding: 0 0 0 5px; margin-top: 45px;">
-            <label class="view-text--cascade-small">{{this.covid19SummaryGroup[0][0][0]}}</label>
+            <label class="view-text--cascade-small">{{CompositeCharts['screenedCascade'].ChartSeries[0]}}</label>
           </c-col>
         </c-row>
       </c-card-body>
@@ -112,11 +112,11 @@
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
           <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
-            <label class="view-text--cascade-small">{{this.covid19SummaryGroup[1][0][0]}}</label>
+            <label class="view-text--cascade-small">{{CompositeCharts['eligibleCascade'].ChartSeries[0]}}</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[1][1]"
+            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['eligibleCascade'].ChartOptions"
               style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
             <p></p>
           </c-col>
@@ -136,11 +136,11 @@
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
           <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
-            <label class="view-text--cascade-small">{{this.covid19SummaryGroup[2][0][0]}}</label>
+            <label class="view-text--cascade-small">{{CompositeCharts['enrolledCascade'].ChartSeries[0]}}</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[2][1]"
+            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['enrolledCascade'].ChartOptions"
               style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
             <p></p>
           </c-col>
@@ -160,11 +160,11 @@
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
           <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
-            <label class="view-text--cascade-small">{{this.covid19SummaryGroup[3][0][0]}}</label>
+            <label class="view-text--cascade-small">{{CompositeCharts['testedCascade'].ChartSeries[0]}}</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[3][1]"
+            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['testedCascade'].ChartOptions"
               style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
             <p></p>
           </c-col>
@@ -184,11 +184,11 @@
       <c-card-body style="padding: 0; height: 105px;">
         <c-row style="margin: 0">
           <c-col [sm]="6" style="padding: 0 0 0 5px; text-align: left; margin-top: 50px;">
-            <label class="view-text--cascade-small">{{this.covid19SummaryGroup[4][0][0]}}</label>
+            <label class="view-text--cascade-small">{{CompositeCharts['positiveCascade'].ChartSeries[0]}}</label>
           </c-col>
 
           <c-col [sm]="6" style="padding: 0;">
-            <highcharts-chart [Highcharts]="highcharts" [options]="this.covid19SummaryGroup[4][1]"
+            <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['positiveCascade'].ChartOptions"
               style="max-width:100%; height: 100px; display: inline-block;"></highcharts-chart>
             <p></p>
           </c-col>
@@ -207,28 +207,31 @@
 <c-row>
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="covid19CascadeChartOptions"
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findScreeningEnrolmentCascade'].ChartOptions"
         style="width: 100%; height: 400px; display: block;"></highcharts-chart>
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="covid19PositivityByAgeGenderOptions"
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findPositivityByAgeGender'].ChartOptions"
         style="width: 100%; height: 400px; display: block;"></highcharts-chart>
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="covid19OverallPositivityByFacilityChartOptions"
+      <highcharts-chart [Highcharts]="highcharts"
+        [options]="CompositeCharts['findOverallPositivityByFacility'].ChartOptions"
         style="width: 100%; height: 400px; display: block;"></highcharts-chart>
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="covid19PositivityOvertimeOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['findOverTime'].ChartOptions"
         style="width: 100%; height: 400px; display: block;"></highcharts-chart>
     </c-card>
   </c-col>

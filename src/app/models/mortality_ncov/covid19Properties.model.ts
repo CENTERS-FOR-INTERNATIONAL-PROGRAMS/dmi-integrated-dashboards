@@ -1,4 +1,5 @@
 export interface Covid19Properties {
+  PercentEligible: any;
   EpiWeek: number;
   SampleTested: Number;
   CovidPositive: number;

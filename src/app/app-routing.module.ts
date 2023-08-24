@@ -10,7 +10,7 @@ import { RegisterComponent } from './views/pages/register/register.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'mortality_ncov/about',
     pathMatch: 'full'
   },
   {
@@ -89,6 +89,16 @@ const routes: Routes = [
         path: 'sari_ili/enrolment',
         loadChildren: () =>
           import('./views/sari_ili/enrolment/enrolment.module').then((m) => m.SIEnrolmentModule)
+      },
+      {
+        path: 'cholera/about',
+        loadChildren: () =>
+          import('./views/cholera/about/about.module').then((m) => m.AboutModule)
+      },
+      {
+        path: 'cholera/overview',
+        loadChildren: () =>
+          import('./views/cholera/overview/overview.module').then((m) => m.OverviewModule)
       },
       {
         path: 'dashboard',

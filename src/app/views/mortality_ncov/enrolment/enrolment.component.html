@@ -5,14 +5,14 @@
 <c-row>
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="enrollmentByGenderOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['findByGender'].ChartOptions"
         style="width: 100%; height: 400px; display: block"></highcharts-chart>
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="enrollmentByAgeGenderOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['findByAgeGender'].ChartOptions"
         style="width: 100%; height: 400px; display: block"></highcharts-chart>
     </c-card>
   </c-col>
@@ -23,14 +23,14 @@
 <c-row>
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="enrollmentByFacilityOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['findByFacility'].ChartOptions"
         style="width: 100%; height: 400px; display: block"></highcharts-chart>
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="enrollmentOverTimeOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['findOverTime'].ChartOptions"
         style="width: 100%; height: 400px; display: block"></highcharts-chart>
     </c-card>
   </c-col>

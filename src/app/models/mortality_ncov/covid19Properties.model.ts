@@ -15,9 +15,15 @@ export interface Covid19Properties {
 
   TotalScreened: number;
   Eligible: number;
+  
   Enrolled: number;
+  PercentEnrolled: number;
+  
   Tested: number;
+  PercentTested: number;
+
   Positive: number;
+  PercentPositive: number;
 
   female: number;
   male: number;

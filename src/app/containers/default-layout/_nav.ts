@@ -80,5 +80,21 @@ export const navItems: INavData[] = [
         url: '/sari_ili/enrolment'
       }
     ]
+  },
+  {
+    name: 'Cholera',
+    url: '/cholera',
+    icon: 'fa fa-bacteria',
+    class: 'view-drawer--link',
+    children: [
+      {
+        name: 'About',
+        url: '/cholera/about'
+      },
+      {
+        name: 'Overview',
+        url: '/cholera/overview'
+      }
+    ]
   }
 ];

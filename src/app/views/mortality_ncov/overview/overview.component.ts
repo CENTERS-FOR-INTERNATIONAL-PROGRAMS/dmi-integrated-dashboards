@@ -161,7 +161,7 @@ export class OverviewComponent implements OnInit {
         let MCTemp = this.CompositeCharts['eligibleCascade'];
 
         MCTemp.ChartSeries[0] = MCTemp.ChartData[0].Eligible;
-        MCTemp.ChartSeries[1] = MCTemp.ChartData[0].ElligibleNumber;
+        MCTemp.ChartSeries[1] = MCTemp.ChartData[0].PercentEligible;
       },
       () => {
         let MCTemp = this.CompositeCharts['eligibleCascade'];

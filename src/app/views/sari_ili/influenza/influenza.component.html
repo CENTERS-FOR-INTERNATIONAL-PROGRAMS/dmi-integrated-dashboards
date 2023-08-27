@@ -1,5 +1,5 @@
 <c-card class="view-border--none">
-  <h2>SARI/ILI <span class="view-margin--side--10">:</span> Overview</h2>
+  <h2>SARI/ILI <span class="view-margin--side--10">:</span> Influenza</h2>
 
   <p>
     This dashboard aims to monitor the evolution of SARI-ILI, identify more lethal strains, and track the extent of
@@ -9,6 +9,7 @@
 </c-card>
 
 <br />
+
 <c-row>
   <c-col>
     <c-card>
@@ -19,35 +20,7 @@
 </c-row>
 
 <br />
-<c-row>
-  <c-col [sm]="12">
-    <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts"
-        [options]="CompositeCharts['findInfluenzaHospitalizationOvertime'].ChartOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-    </c-card>
-  </c-col>
-</c-row>
 
-<br />
-<c-row>
-  <c-col [sm]="6">
-    <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['enrolledByAgeGroup'].ChartOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-    </c-card>
-  </c-col>
-
-  <c-col [sm]="6">
-    <c-card class="mb-4">
-      <highcharts-chart [Highcharts]="highcharts"
-        [options]="CompositeCharts['findInfluenzaPatientOutcome'].ChartOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-    </c-card>
-  </c-col>
-</c-row>
-<!-- 
-<br />
 <c-row>
   <c-col [sm]="4">
     <c-card class="mb-4">
@@ -76,16 +49,14 @@
 <c-row>
   <c-col [sm]="6">
     <c-card>
-      <highcharts-chart [Highcharts]="highcharts"
-        [options]="CompositeCharts['findOverallSARSCOV2Positivity'].ChartOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['enrolledByAgeGroup'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card>
-      <highcharts-chart [Highcharts]="highcharts"
-        [options]="CompositeCharts['findSARSCOV2PositivityOvertime'].ChartOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['fluPositiveByAgeGroup'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>
@@ -111,4 +82,13 @@
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>
-</c-row> -->
+</c-row>
+
+<br />
+<c-row>
+  <c-col>
+    <c-card>
+      <div id="geographicDistributionByFacility" style="height: 600px;"></div>
+    </c-card>
+  </c-col>
+</c-row>

@@ -86,9 +86,14 @@ const routes: Routes = [
           import('./views/sari_ili/overview/overview.module').then((m) => m.SIOverviewModule)
       },
       {
-        path: 'sari_ili/enrolment',
+        path: 'sari_ili/influenza',
         loadChildren: () =>
-          import('./views/sari_ili/enrolment/enrolment.module').then((m) => m.SIEnrolmentModule)
+          import('./views/sari_ili/influenza/influenza.module').then((m) => m.InfluenzaModule)
+      },
+      {
+        path: 'sari_ili/sarscov',
+        loadChildren: () =>
+          import('./views/sari_ili/sarscov/sarscov.module').then((m) => m.SARSCOV2Module)
       },
       {
         path: 'cholera/about',

@@ -11,6 +11,7 @@ export class Chart {
     chart_api_endpoint: string = "http://localhost:8080/api/mortality_ncov";
     ChartAPIService: any;
     ChartData: Covid19Properties[] = [];
+    ChartFilterData: any = {};
     ChartSeries: any[] = [];
     ChartOptions: {} = {};
     PreProcessData: any;

@@ -78,7 +78,7 @@ export class ACasesComponent implements OnInit {
           },
           // colors: [
           // "#234FEA",
-          // "#FC7500"
+          // "#FFA500"
           // ],
           series: [
             {

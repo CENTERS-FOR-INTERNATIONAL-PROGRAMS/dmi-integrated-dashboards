@@ -703,7 +703,7 @@ export class OverviewComponent implements OnInit {
             {
               name: 'Female',
               data: MCTemp.ChartSeries[1],
-              color: '#FC7500',
+              color: '#FFA500',
             }
           ],
           credits: {

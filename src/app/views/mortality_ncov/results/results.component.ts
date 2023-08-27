@@ -67,7 +67,7 @@ export class ResultsComponent implements OnInit {
           },
           colors: [
             "#234FEA",
-            "#FC7500",
+            "#FFA500",
           ],
           series: [
             {
@@ -287,7 +287,7 @@ export class ResultsComponent implements OnInit {
             {
               name: "Female",
               data: MCTemp.ChartSeries[1],
-              color: "#FC7500",
+              color: "#FFA500",
               type: 'bar'
             }
           ],

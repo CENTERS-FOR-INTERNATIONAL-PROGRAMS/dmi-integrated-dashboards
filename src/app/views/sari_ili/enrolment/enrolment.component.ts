@@ -75,7 +75,7 @@ export class EnrolmentComponent implements OnInit {
           colors: [
             "#FF0000",
             "#234FEA",
-            "#FC7500",
+            "#FFA500",
             "#008000"
           ],
           series: [
@@ -164,7 +164,7 @@ export class EnrolmentComponent implements OnInit {
             "#008000",
             "#FFB3E6",
             "#CCB3FF",
-            "#FC7500",
+            "#FFA500",
             "#B3FFB3",
           ],
           series: [

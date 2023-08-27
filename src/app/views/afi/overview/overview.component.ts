@@ -72,7 +72,7 @@ export class AOverviewComponent implements OnInit {
             type: "pie",
           },
           colors: [
-            "#FC7500",
+            "#FFA500",
             "#234FEA",
           ],
           series: [
@@ -225,7 +225,7 @@ export class AOverviewComponent implements OnInit {
             {
               name: 'Female',
               data: MCTemp.ChartSeries[2],
-              color: '#FC7500',
+              color: '#FFA500',
             }
           ],
           credits: {

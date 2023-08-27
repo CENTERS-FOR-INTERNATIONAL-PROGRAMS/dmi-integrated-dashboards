@@ -216,7 +216,7 @@ export class SIOverviewComponent implements OnInit {
               data: MCTemp.ChartSeries[2],
               type: 'spline',
               yAxis: 1,
-              color: "#FC7500",
+              color: "#FFA500",
             },
             {
               showInLegend: true,
@@ -335,7 +335,7 @@ export class SIOverviewComponent implements OnInit {
             {
               name: 'Enrolled Percentage',
               data: MCTemp.ChartSeries[2],
-              color: '#FC7500',
+              color: '#FFA500',
               type: "spline",
               yAxis: 1
             }
@@ -401,7 +401,7 @@ export class SIOverviewComponent implements OnInit {
             type: "pie",
           },
           colors: [
-            "#FC7500",
+            "#FFA500",
             "#CCB3FF",
             "#FF0000",
             "#234FEA",
@@ -572,7 +572,7 @@ export class SIOverviewComponent implements OnInit {
           },
           colors: [
             "#234FEA", // Color for Category 1
-            "#FC7500", // Color for Category 2
+            "#FFA500", // Color for Category 2
           ],
           series: [
             {
@@ -716,7 +716,7 @@ export class SIOverviewComponent implements OnInit {
           },
           colors: [
             "#234FEA", // Color for Category 1
-            "#FC7500", // Color for Category 2
+            "#FFA500", // Color for Category 2
           ],
           series: [
             {
@@ -893,7 +893,7 @@ export class SIOverviewComponent implements OnInit {
               name: "Influenza A Positive",
               data: MCTemp.ChartSeries[1],
               type: 'column',
-              color: "#FC7500",
+              color: "#FFA500",
             },
             {
               showInLegend: true,
@@ -1077,7 +1077,7 @@ export class SIOverviewComponent implements OnInit {
               data: MCTemp.ChartSeries[8],
               type: 'spline',
               yAxis: 1,
-              color: "#FC7500",
+              color: "#FFA500",
             }
           ],
           plotOptions: {

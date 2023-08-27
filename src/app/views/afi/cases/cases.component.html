@@ -15,7 +15,7 @@
 <c-row>
   <c-col [sm]="6">
     <c-card>
-      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['syndromesByGender'].ChartOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['syndromes'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>
@@ -32,7 +32,7 @@
 
 <c-col>
   <c-card>
-    <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['syndromesOvertime'].ChartOptions"
+    <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['syndromesOverTime'].ChartOptions"
       style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
   </c-card>
 </c-col>

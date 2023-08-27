@@ -76,8 +76,12 @@ export const navItems: INavData[] = [
         url: '/sari_ili/overview'
       },
       {
-        name: 'Enrolment',
-        url: '/sari_ili/enrolment'
+        name: 'Influenza',
+        url: '/sari_ili/influenza'
+      },
+      {
+        name: 'SARS-COV-2',
+        url: '/sari_ili/sarscov'
       }
     ]
   },

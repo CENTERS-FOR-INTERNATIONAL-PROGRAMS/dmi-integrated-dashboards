@@ -35,3 +35,25 @@
     </c-card>
   </c-col>
 </c-row>
+
+<br />
+
+<c-row>
+  <c-col [sm]="12">
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['malariaPositiveResultsOverTime'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
+
+<c-row>
+  <c-col [sm]="12">
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['leptospirosisPositiveResultsOverTime'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>

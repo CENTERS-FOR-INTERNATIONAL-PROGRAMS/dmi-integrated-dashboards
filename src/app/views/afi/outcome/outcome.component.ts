@@ -36,14 +36,22 @@ export class AOutcomeComponent implements OnInit {
     //#region Load Chart --> Enrolled with diagnosis
     this.CompositeCharts['enrolledWithDiagnosis'] = new AFIChart(this.http);
     this.CompositeCharts['enrolledWithDiagnosis'].loadData(
-      "overview/enrolledWithDiagnosis",
+      "outcome/enrolledWithDiagnosis",
       () => {
         let MCTemp = this.CompositeCharts['enrolledWithDiagnosis'];
+
+        for (let i = 0; i < 3; i++) {
+          MCTemp.ChartSeries.push(0);
+        }
 
         MCTemp.LoadChartOptions();
       },
       () => {
         let MCTemp = this.CompositeCharts['enrolledWithDiagnosis'];
+
+        MCTemp.ChartSeries[0] = MCTemp.ChartData[0].EnrolledNumber;
+        MCTemp.ChartSeries[1] = MCTemp.ChartData[0].HaveADiagnosisNumber;
+        MCTemp.ChartSeries[2] = MCTemp.ChartData[0].OfEnrolledHaveADocumentedPercentage;
       },
       () => {
         let MCTemp = this.CompositeCharts['enrolledWithDiagnosis'];
@@ -105,7 +113,7 @@ export class AOutcomeComponent implements OnInit {
             {
               name: '',
               type: 'solidgauge',
-              data: [89],
+              data: [MCTemp.ChartSeries[2]],
               tooltip: {
                 valueSuffix: '',
               },
@@ -122,14 +130,22 @@ export class AOutcomeComponent implements OnInit {
     //#region Load Chart --> Enrolled with outcome
     this.CompositeCharts['enrolledWithOutcome'] = new AFIChart(this.http);
     this.CompositeCharts['enrolledWithOutcome'].loadData(
-      "overview/enrolledWithOutcome",
+      "outcome/enrolledWithOutcome",
       () => {
         let MCTemp = this.CompositeCharts['enrolledWithOutcome'];
+
+        for (let i = 0; i < 3; i++) {
+          MCTemp.ChartSeries.push(0);
+        }
 
         MCTemp.LoadChartOptions();
       },
       () => {
         let MCTemp = this.CompositeCharts['enrolledWithOutcome'];
+
+        MCTemp.ChartSeries[0] = MCTemp.ChartData[0].EnrolledNumber;
+        MCTemp.ChartSeries[1] = MCTemp.ChartData[0].HaveADiagnosisNumber;
+        MCTemp.ChartSeries[2] = MCTemp.ChartData[0].OfEnrolledHaveOutcomePercentage;
       },
       () => {
         let MCTemp = this.CompositeCharts['enrolledWithOutcome'];
@@ -191,7 +207,7 @@ export class AOutcomeComponent implements OnInit {
             {
               name: '',
               type: 'solidgauge',
-              data: [78],
+              data: [MCTemp.ChartSeries[2]],
               tooltip: {
                 valueSuffix: '',
               }
@@ -205,16 +221,16 @@ export class AOutcomeComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> AFI Diagnosis
+    //#region Load Chart --> AFI Diagnosis [X]
     this.CompositeCharts['AFIDiagnosis'] = new AFIChart(this.http);
     this.CompositeCharts['AFIDiagnosis'].loadData(
-      "overview/AFIDiagnosis",
+      "outcome/AFIDiagnosis",
       () => {
         let MCTemp = this.CompositeCharts['AFIDiagnosis'];
 
         for (let index = 0; index < 10; index++) {
           MCTemp.ChartSeries.push([]);
-          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
+          MCTemp.ChartSeries[index].push(0);
           MCTemp.ChartSeries[index].push(0);
         }
 
@@ -222,6 +238,13 @@ export class AOutcomeComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['AFIDiagnosis'];
+
+        MCTemp.ChartSeries = [];
+        MCTemp.ChartData.forEach((dataInstance, index) => {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(dataInstance.OutcomeDescription + "(" + dataInstance.OutcomePercentage + "%)");
+          MCTemp.ChartSeries[index].push(dataInstance.OutcomeNumber);
+        });
       },
       () => {
         let MCTemp = this.CompositeCharts['AFIDiagnosis'];
@@ -277,20 +300,28 @@ export class AOutcomeComponent implements OnInit {
     //#region Load Chart --> AFI Outcome
     this.CompositeCharts['AFIOutcome'] = new AFIChart(this.http);
     this.CompositeCharts['AFIOutcome'].loadData(
-      "overview/AFIOutcome",
+      "outcome/AFIOutcome",
       () => {
         let MCTemp = this.CompositeCharts['AFIOutcome'];
 
         for (let index = 0; index < 6; index++) {
           MCTemp.ChartSeries.push([]);
-          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 1000));
           MCTemp.ChartSeries[index].push(0);
+          MCTemp.ChartSeries[index].push(0);
+          // MCTemp.ChartSeries[index].push(0);
         }
 
         MCTemp.LoadChartOptions();
       },
       () => {
         let MCTemp = this.CompositeCharts['AFIOutcome'];
+
+        MCTemp.ChartSeries = [];
+        MCTemp.ChartData.forEach((dataInstance, index) => {
+          MCTemp.ChartSeries.push([]);
+          MCTemp.ChartSeries[index].push(dataInstance.OutcomeDescription + "(" + dataInstance.OutcomePercentage + "%)");
+          MCTemp.ChartSeries[index].push(dataInstance.OutcomeNumber);
+        });
       },
       () => {
         let MCTemp = this.CompositeCharts['AFIOutcome'];
@@ -303,25 +334,18 @@ export class AOutcomeComponent implements OnInit {
           chart: {
             type: "pie",
           },
-          colors: [
-            "#FFA500",
-            "#FF0000",
-            "#234FEA",
-            "#008000"
-          ],
+          // colors: [
+          //   "#FFA500",
+          //   "#FF0000",
+          //   "#234FEA",
+          //   "#008000"
+          // ],
           series: [
             {
               showInLegend: false,
               name: "Data",
               type: 'pie',
-              data: [
-                ["Dishcarged home in stabel condition (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
-                ["Died (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
-                ["Absconded (" + MCTemp.ChartSeries[2][1] + "%)", MCTemp.ChartSeries[2][0]],
-                ["Transferred to another hospital (" + MCTemp.ChartSeries[3][1] + "%)", MCTemp.ChartSeries[3][0]],
-                ["Discharged home against medical advice (" + MCTemp.ChartSeries[4][1] + "%)", MCTemp.ChartSeries[4][0]],
-                ["Discharged home in critical condition (" + MCTemp.ChartSeries[5][1] + "%)", MCTemp.ChartSeries[5][0]]
-              ]
+              data: MCTemp.ChartSeries
             }
           ],
           plotOptions: {
@@ -344,41 +368,50 @@ export class AOutcomeComponent implements OnInit {
     //#region Load Chart --> AFI Other diagnosis
     this.CompositeCharts['AFIDiagnosisOther'] = new AFIChart(this.http);
     this.CompositeCharts['AFIDiagnosisOther'].loadData(
-      "overview/AFIDiagnosisOther",
+      "outcome/AFIDiagnosisOther",
       () => {
         let MCTemp = this.CompositeCharts['AFIDiagnosisOther'];
 
-        for (let index = 0; index < 12; index++) {
-          MCTemp.ChartSeries.push(Math.floor(Math.random() * 1000));
+        for (let index = 0; index < 20; index++) {
+          MCTemp.ChartSeries.push(index);
+          MCTemp.ChartSeries.push(index);
         }
 
         MCTemp.LoadChartOptions();
       },
       () => {
         let MCTemp = this.CompositeCharts['AFIDiagnosisOther'];
+
+        // MCTemp.ChartSeries = [];
+        // MCTemp.ChartData.forEach((dataInstance, index) => {
+        //   MCTemp.ChartSeries.push([]);
+        //   MCTemp.ChartSeries[index].push(dataInstance.Otheradmissiondiagnosis);
+        //   MCTemp.ChartSeries[index].push(dataInstance.Weight);
+        // });
       },
       () => {
         let MCTemp = this.CompositeCharts['AFIDiagnosisOther'];
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Outcome',
+            text: 'Outcome (Others',
             align: 'left'
           },
           chart: {
             type: "pie",
           },
-          colors: [
-            "#FFA500",
-            "#FF0000",
-            "#234FEA",
-            "#008000"
-          ],
+          // colors: [
+          //   "#FFA500",
+          //   "#FF0000",
+          //   "#234FEA",
+          //   "#008000"
+          // ],
           series: [
             {
               showInLegend: false,
               name: "Data",
               type: 'wordcloud',
+              // data: MCTemp.ChartSeries
               data: [
                 ["Febrille", MCTemp.ChartSeries[0]],
                 ["Anaemia", MCTemp.ChartSeries[1]],

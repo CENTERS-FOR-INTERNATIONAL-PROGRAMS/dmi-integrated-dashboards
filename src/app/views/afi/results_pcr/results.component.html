@@ -1,5 +1,5 @@
 <c-card class="view-border--none">
-  <h2>AFI <span class="view-margin--side--10">:</span> Malaria and Leptospirosis PCR Results</h2>
+  <h2>AFI <span class="view-margin--side--10">:</span> TAC PCR Results</h2>
 </c-card>
 
 <br />
@@ -7,20 +7,15 @@
 <c-row>
   <c-col [sm]="6">
     <c-card>
-      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['malariaResults'].ChartOptions"
-        style="height: 300px; display: inline-block; max-width: 100%;"></highcharts-chart>
-    </c-card>
-
-    <c-card>
-      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['malariaPositiveResults'].ChartOptions"
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['overallResults'].ChartOptions"
         style="height: 300px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>
 
   <c-col [sm]="6">
     <c-card>
-      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['leptospirosisResults'].ChartOptions"
-        style="height: 600px; display: inline-block; max-width: 100%;"></highcharts-chart>
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['pathogensIdentified'].ChartOptions"
+        style="height: 300px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>
 </c-row>
@@ -30,8 +25,8 @@
 <c-row>
   <c-col [sm]="12">
     <c-card>
-      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['RDTResultsByFacility'].ChartOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['syndromesOvertime'].ChartOptions"
+        style="height: 600px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>
 </c-row>

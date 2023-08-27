@@ -34,7 +34,7 @@ export class AOverviewComponent implements OnInit {
 
   loadCharts() {
 
-    //#region Load Chart --> Enrolled by gender
+    //#region Load Chart --> Enrolment by gender
     this.CompositeCharts['enrolledByGender'] = new AFIChart(this.http);
     this.CompositeCharts['enrolledByGender'].loadData(
       "overview/enrolledByGender",
@@ -65,7 +65,7 @@ export class AOverviewComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Enrolled By Gender',
+            text: 'Enrolment By Gender',
             align: 'left'
           },
           chart: {
@@ -102,7 +102,7 @@ export class AOverviewComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Enrolled by age and gender
+    //#region Load Chart --> Enrolment by age and gender
     this.CompositeCharts['enrolledByAgeGender'] = new AFIChart(this.http);
     this.CompositeCharts['enrolledByAgeGender'].loadData(
       "overview/enrolledByAgeGender",
@@ -172,7 +172,7 @@ export class AOverviewComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Enrolled by Age and Gender',
+            text: 'Enrolment by Age and Gender',
             align: 'left',
           },
           chart: {
@@ -323,13 +323,6 @@ export class AOverviewComponent implements OnInit {
               showInLegend: true,
               name: "MERS-COV",
               data: MCTemp.ChartSeries[4],
-              type: 'spline',
-              color: "#FFA500",
-            },
-            {
-              showInLegend: true,
-              name: "Non UF/SARI/DF/MERS-CoV",
-              data: MCTemp.ChartSeries[5],
               type: 'spline',
               color: "#FFA500",
             }
@@ -610,6 +603,14 @@ export class AOverviewComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['priorityIDSRReportableDiseases'];
+
+        // Dengue (Index --> 0)
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].DengueNumber;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].DenguePercentage;
+
+        // Rift Valley Fever (Index --> 0)
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].RiftValleyFeverNumber;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].RiftValleyFeverPercentage;
       },
       () => {
         let MCTemp = this.CompositeCharts['priorityIDSRReportableDiseases'];
@@ -654,7 +655,7 @@ export class AOverviewComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Mongthly IDSR reportable Diseases/Microbes
+    //#region Load Chart --> Monthly IDSR reportable Diseases/Microbes
     this.CompositeCharts['monthlyIDSRReportableDiseases'] = new AFIChart(this.http);
     this.CompositeCharts['monthlyIDSRReportableDiseases'].loadData(
       "overview/monthlyIDSRReportableDiseases",
@@ -671,13 +672,29 @@ export class AOverviewComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['monthlyIDSRReportableDiseases'];
+
+        // HIV 1 (Index --> 0)
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].HIV1Number;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].HIV1Percentage;
+
+        // S. pneumoniae (Index --> 1)
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].SPneumonieNumber;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].SPneumoniePercentage;
+
+        // Leishmania (Index --> 2)
+        MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].LeishmaniaNumber;
+        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].LeishmaniaPercentage;
+
+        // Plasmodium (Index --> 3)
+        MCTemp.ChartSeries[3][0] = MCTemp.ChartData[0].PlasmodiumNumber;
+        MCTemp.ChartSeries[3][1] = MCTemp.ChartData[0].PlasmodiumPercentage;
       },
       () => {
         let MCTemp = this.CompositeCharts['monthlyIDSRReportableDiseases'];
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Mongthly IDSR reportable Diseases/Microbes',
+            text: 'Monthly IDSR reportable Diseases/Microbes',
             align: 'left'
           },
           chart: {
@@ -967,7 +984,7 @@ export class AOverviewComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Enrolled Cascade
+    //#region Load Chart --> Enrolment Cascade
     this.CompositeCharts['enrolledCascade'] = new AFIChart(this.http);
     this.CompositeCharts['enrolledCascade'].loadData(
       "overview/AFICascade",

@@ -1,4 +1,16 @@
 export interface SARIProperties {
+    SARSCOV2TestedNumber(SARSCOV2TestedNumber: any): unknown;
+    SARSCOV2TestedPercentage(SARSCOV2TestedPercentage: any): unknown;
+    SARSCOV2PositivePercentage: any;
+    PercentagePositive: any;
+    SARSCOV2PositiveNumber: any;
+    FluPositiveNumber: any;
+    FluPositivePercentage: any;
+    AgeCategory(AgeCategory: any): unknown;
+    EnrolledPercentage(EnrolledPercentage: any): unknown;
+    AgeGroup: string;
+    Gender: string;
+    EnrolledNumber(EnrolledNumber: any): unknown;
     Covid19TestedNumber: number;
     Covid19PositiveNumber: number;
     Covid19PositivePercent: number;

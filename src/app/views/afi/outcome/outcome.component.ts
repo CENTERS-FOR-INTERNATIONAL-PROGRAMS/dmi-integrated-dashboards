@@ -221,7 +221,7 @@ export class AOutcomeComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> AFI Diagnosis [X]
+    //#region Load Chart --> AFI Diagnosis [No query]
     this.CompositeCharts['AFIDiagnosis'] = new AFIChart(this.http);
     this.CompositeCharts['AFIDiagnosis'].loadData(
       "outcome/AFIDiagnosis",
@@ -230,7 +230,7 @@ export class AOutcomeComponent implements OnInit {
 
         for (let index = 0; index < 10; index++) {
           MCTemp.ChartSeries.push([]);
-          MCTemp.ChartSeries[index].push(0);
+          MCTemp.ChartSeries[index].push(Math.floor(Math.random() * 100));
           MCTemp.ChartSeries[index].push(0);
         }
 
@@ -239,12 +239,12 @@ export class AOutcomeComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['AFIDiagnosis'];
 
-        MCTemp.ChartSeries = [];
-        MCTemp.ChartData.forEach((dataInstance, index) => {
-          MCTemp.ChartSeries.push([]);
-          MCTemp.ChartSeries[index].push(dataInstance.OutcomeDescription + "(" + dataInstance.OutcomePercentage + "%)");
-          MCTemp.ChartSeries[index].push(dataInstance.OutcomeNumber);
-        });
+        // MCTemp.ChartSeries = [];
+        // MCTemp.ChartData.forEach((dataInstance, index) => {
+        //   MCTemp.ChartSeries.push([]);
+        //   MCTemp.ChartSeries[index].push(dataInstance.OutcomeDescription + "(" + dataInstance.OutcomePercentage + "%)");
+        //   MCTemp.ChartSeries[index].push(dataInstance.OutcomeNumber);
+        // });
       },
       () => {
         let MCTemp = this.CompositeCharts['AFIDiagnosis'];

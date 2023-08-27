@@ -91,7 +91,7 @@ export class EnrolmentComponent implements OnInit {
             },
             {
               name: 'FEMALE',
-              color: "#FC7500",
+              color: "#FFA500",
               data: MCTemp.ChartSeries[1]
             }
           ],
@@ -201,7 +201,7 @@ export class EnrolmentComponent implements OnInit {
             {
               name: "Female",
               data: MCTemp.ChartSeries[1],
-              color: "#FC7500",
+              color: "#FFA500",
               type: 'bar'
             }
           ],

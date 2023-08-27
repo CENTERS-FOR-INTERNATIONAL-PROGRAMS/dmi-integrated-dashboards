@@ -221,7 +221,7 @@ export class SARSCOV2Component implements OnInit {
             {
               name: 'Enrolled Percentage',
               data: MCTemp.ChartSeries[2],
-              color: '#FC7500',
+              color: '#FFA500',
               type: "spline",
               yAxis: 1
             }
@@ -316,7 +316,7 @@ export class SARSCOV2Component implements OnInit {
             {
               name: 'Positive Percentage',
               data: MCTemp.ChartSeries[2],
-              color: '#FC7500',
+              color: '#FFA500',
               type: "spline",
               yAxis: 1,
             }

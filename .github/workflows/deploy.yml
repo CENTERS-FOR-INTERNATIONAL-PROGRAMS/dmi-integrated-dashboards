@@ -28,4 +28,4 @@ jobs:
           sudo ng build --configuration production
           sudo cp -rf . /etc/dmi-integrated-dashboards/
           sudo pm2 reload all --update-env
-          echo "Dashboards are upto date! Deployment successful!"
+          echo "Dashboards are upto date! Deployment successful."

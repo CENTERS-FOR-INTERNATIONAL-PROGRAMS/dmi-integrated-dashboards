@@ -18,6 +18,7 @@ jobs:
         script: |
           sudo cp -rf /etc/dmi-integrated-dashboards/* /tmp/dmi-integrated-dashboards-backup/
           cd /var/lib/github_workflows/dmi-integrated-dashboards
+          sudo git switch main
           sudo rm -rf dist
           sudo rm package-lock.json
           sudo rm -rf node_modules

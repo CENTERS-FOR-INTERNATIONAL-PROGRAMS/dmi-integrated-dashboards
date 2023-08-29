@@ -7,7 +7,7 @@ import { CholeraProperties } from './CholeraProperties.model';
     providedIn: 'root'
 })
 
-export class CholeraChart {
+export class Chart {
     chart_api_endpoint: string = "http://localhost:8080/api/cholera";
     ChartAPIService: any;
     ChartData: CholeraProperties[] = [];

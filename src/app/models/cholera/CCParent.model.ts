@@ -1,5 +1,5 @@
-import { CholeraChart } from './CholeraChart.model';
+import { Chart } from './CholeraChart.model';
 
 export interface CCParent {
-    [key: string]: CholeraChart
+    [key: string]: Chart
 }

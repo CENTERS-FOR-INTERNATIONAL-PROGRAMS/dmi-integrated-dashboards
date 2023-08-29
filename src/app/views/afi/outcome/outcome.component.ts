@@ -20,7 +20,7 @@ wordCloud(Highcharts);
   styleUrls: ['outcome.component.scss']
 })
 
-export class AOutcomeComponent implements OnInit {
+export class OutcomeComponent implements OnInit {
   //#region Prerequisites
   CompositeCharts: ACParent = {};
   highcharts = Highcharts;

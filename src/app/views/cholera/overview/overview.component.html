@@ -2,8 +2,23 @@
   <h2>Cholera <span class="view-margin--side--10">:</span> Overview</h2>
 
   <p>
-    
+
   </p>
 </c-card>
 
 <br />
+<c-row>
+  <c-col [sm]="6">
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['casesByGender'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="6">
+    <c-card>
+      <highcharts-chart [Highcharts]="highcharts" [options]="CompositeCharts['casesOverTime'].ChartOptions"
+        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
+    </c-card>
+  </c-col>
+</c-row>

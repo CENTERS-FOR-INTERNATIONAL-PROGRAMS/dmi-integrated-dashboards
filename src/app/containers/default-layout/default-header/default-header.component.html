@@ -25,7 +25,7 @@
     </c-header-nav>
 
   </c-container>
-  <c-header-divider></c-header-divider>
+  <!-- <c-header-divider></c-header-divider> -->
   <c-container [fluid]="true" style="display: none;">
     <c-breadcrumb-router class="ms-2"></c-breadcrumb-router>
   </c-container>
@@ -33,7 +33,7 @@
 <!--</c-header>-->
 
 <ng-template #userDropdown>
-  <c-dropdown alignment="end" variant="nav-item" style="display: none;">
+  <c-dropdown alignment="end" variant="nav-item">
     <button
       cButton
       color=""
@@ -47,7 +47,7 @@
         size="md"
         src=""
         status="success"
-      >
+      ><i class="far fa-user"></i>
       </c-avatar>
     </button>
     <ul cDropdownMenu class="pt-0 pr-5 w-auto">      

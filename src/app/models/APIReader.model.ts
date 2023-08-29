@@ -1,19 +1,32 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
-import { Covid19Summary } from '../../models/mortality_ncov/covid19Summary.model';
+// import { DMIFacility } from './DMIFacility.model';
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class ReviewService {
-    public BASE_URL_COVID19_SUMMARYBYMONTH = 'http://localhost:8080/api/mortality_ncov/overview/findSummaryByLastMonth';
+export class APIReader {
+    api_endpoint: string = "http://localhost:8080/api";
+    postProcessData: any;
+    CompositeData: any;
 
     constructor(private http: HttpClient) { }
 
-    findSummaryByMonth(): Observable<Covid19Summary[]> {
-        return this.http.post<Covid19Summary[]>(`${this.BASE_URL_COVID19_SUMMARYBYMONTH}`, {}).pipe(
+    loadData(endpoint: string, postProcessData: any): void {
+        this.api_endpoint = this.api_endpoint + "/" + endpoint;
+        this.postProcessData = postProcessData;
+
+        this.readAPI().subscribe(
+            response => {
+                this.CompositeData = response;
+                this.postProcessData();
+            });
+    }
+
+    readAPI(): Observable<any[]> {
+        return this.http.post<any[]>(`${this.api_endpoint}`, {}).pipe(
             retry(1),
             catchError(this.handleError)
         );

@@ -9,7 +9,6 @@ const routes: Routes = [
     component: EnrolmentComponent,
     data: {
       title: `Enrolment`
-      // title: $localize`Dashboard`
     }
   }
 ];

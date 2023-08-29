@@ -1,7 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
-import { Covid19Properties } from './covid19Properties.model';
+import { COVID19Properties } from './COVID19Properties.model';
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +10,7 @@ import { Covid19Properties } from './covid19Properties.model';
 export class Chart {
     chart_api_endpoint: string = "http://localhost:8080/api/mortality_ncov";
     ChartAPIService: any;
-    ChartData: Covid19Properties[] = [];
+    ChartData: COVID19Properties[] = [];
     ChartFilterData: any = {};
     ChartSeries: any[] = [];
     ChartOptions: {} = {};
@@ -36,8 +36,27 @@ export class Chart {
             });
     }
 
-    readAPI(): Observable<Covid19Properties[]> {
-        return this.http.get<Covid19Properties[]>(`${this.chart_api_endpoint}`).pipe(
+    reloadData() {
+        this.readAPI().subscribe(
+            response => {
+                this.ChartData = response;
+                this.PostProcessData();
+                this.LoadChartOptions();
+            });
+    }
+
+    readAPI(): Observable<COVID19Properties[]> {
+        const requestOptions = {
+            headers: new HttpHeaders(
+                {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                }
+            )
+        };
+
+        return this.http.post<COVID19Properties[]>(`${this.chart_api_endpoint}`, this.ChartFilterData, requestOptions).pipe(
             retry(1),
             catchError(this.handleError)
         );

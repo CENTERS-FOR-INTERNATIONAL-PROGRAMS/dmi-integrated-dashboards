@@ -1,4 +1,7 @@
-export interface Covid19Properties {
+export interface COVID19Properties {
+  ScreenedNumber(ScreenedNumber: any): unknown;
+  EligibleNumber(EligibleNumber: any): unknown;
+  TestedNumber(TestedNumber: any): unknown;
   PercentEligible: any;
   EpiWeek: number;
   SampleTested: Number;

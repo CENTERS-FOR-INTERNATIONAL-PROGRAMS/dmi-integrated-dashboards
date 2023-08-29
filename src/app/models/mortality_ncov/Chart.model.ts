@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, retry, throwError } from 'rxjs';
-import { COVID19Properties } from './covid19Properties.model';
+import { COVID19Properties } from './COVID19Properties.model';
 
 @Injectable({
     providedIn: 'root'

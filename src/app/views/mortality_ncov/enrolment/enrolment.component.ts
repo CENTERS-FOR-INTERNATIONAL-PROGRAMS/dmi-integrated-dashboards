@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { Chart } from '../../../models/mortality_ncov/Chart.model';
 import { ChartParent } from '../../../models/mortality_ncov/ChartParent.model';
 
+import { APIReader } from 'src/app/models/APIReader.model';
+import { IDFilter } from 'src/app/models/IDFilter.model';
+import { IDFacility } from 'src/app/models/IDFacility.model';
+
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 
@@ -15,12 +19,42 @@ export class EnrolmentComponent implements OnInit {
   //#region Prerequisites
   highcharts = Highcharts;
   CompositeCharts: ChartParent = {};
+
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
   //#endregion
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.loadFilters();
     this.loadCharts();
+  }
+
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
+  loadFilters() {
+    //#region Acqurie composite facilities
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+      this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
+      });
+    });
+    //#endregion
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
+
+    //#region Reload all charts
+    Object.keys(this.CompositeCharts).forEach(chart_ident => {
+      this.CompositeCharts[chart_ident].ChartFilterData = this.DataFilterInstance;
+      this.CompositeCharts[chart_ident].reloadData();
+    });
+    //#endregion
   }
 
   loadCharts() {

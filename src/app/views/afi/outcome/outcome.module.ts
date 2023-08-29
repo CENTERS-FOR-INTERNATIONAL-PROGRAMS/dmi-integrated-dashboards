@@ -19,7 +19,7 @@ import { IconModule } from '@coreui/icons-angular';
 import { ChartjsModule } from '@coreui/angular-chartjs';
 
 import { AOutcomeRoutingModule } from './outcome-routing.module';
-import { AOutcomeComponent } from './outcome.component';
+import { OutcomeComponent } from './outcome.component';
 
 @NgModule({
   imports: [
@@ -41,7 +41,7 @@ import { AOutcomeComponent } from './outcome.component';
     TableModule,
     HighchartsChartModule
   ],
-  declarations: [AOutcomeComponent]
+  declarations: [OutcomeComponent]
 })
 export class AOutcomeModule {
 }

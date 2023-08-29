@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AOutcomeComponent } from './outcome.component';
+import { OutcomeComponent } from './outcome.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: AOutcomeComponent,
+    component: OutcomeComponent,
     data: {
-      title: `Laboratory Outcome`
+      title: `Diagnosis and Outcome`
       // title: $localize`Dashboard`
     }
   }

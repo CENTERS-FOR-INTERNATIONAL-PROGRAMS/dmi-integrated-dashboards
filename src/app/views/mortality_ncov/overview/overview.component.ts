@@ -5,8 +5,9 @@ import { Chart } from '../../../models/mortality_ncov/Chart.model';
 import { ChartParent } from '../../../models/mortality_ncov/ChartParent.model';
 
 import { Covid19Summary } from '../../../models/mortality_ncov/covid19Summary.model';
-import { Covid19Properties } from '../../../models/mortality_ncov/covid19Properties.model';
-import { DataFilter } from '../../../models/DataFilter.model';
+import { IDFilter } from '../../../models/IDFilter.model';
+import { APIReader } from '../../../models/APIReader.model';
+import { IDFacility } from '../../../models/IDFacility.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -24,14 +25,13 @@ HighchartsSolidGauge(Highcharts);
 
 export class OverviewComponent implements OnInit {
   //#region Prerequisites
-  CompositeCharts: ChartParent = {};
   highcharts = Highcharts;
-  DataFilterInstance = new DataFilter();
-  //#endregion
+  CompositeCharts: ChartParent = {};
 
-  formatLabel(value: number): string {
-    return `${value}`;
-  }
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
+  //#endregion
 
   //#region Prerequisites --> COVID-19 Summary
   covid19Summary: Covid19Summary[] = [];
@@ -45,8 +45,34 @@ export class OverviewComponent implements OnInit {
   constructor(private reviewService: ReviewService, private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.loadFilters();
     this.loadCharts();
     this.loadCovid19SummaryData();
+  }
+
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
+  loadFilters() {
+    //#region Acqurie composite facilities
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+      this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
+      });
+    });
+    //#endregion
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
+
+    //#region Reload all charts
+    Object.keys(this.CompositeCharts).forEach(chart_ident => {
+      this.CompositeCharts[chart_ident].ChartFilterData = this.DataFilterInstance;
+      this.CompositeCharts[chart_ident].reloadData();
+    });
+    //#endregion
   }
 
   loadCharts() {
@@ -530,12 +556,16 @@ export class OverviewComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['findScreeningEnrolmentCascade'];
+
+        MCTemp.ChartSeries = [];
         MCTemp.ChartSeries.push([]);
-        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].TotalScreened);
-        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].Eligible);
-        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].Enrolled);
-        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].Tested);
-        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].Positive);
+        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].ScreenedNumber);
+        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].EligibleNumber);
+        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].EnrolledNumber);
+        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].TestedNumber);
+        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].PositiveNumber);
+
+        // MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].PositiveNumber + Math.floor(Math.random() * 200));
       },
       () => {
         let MCTemp = this.CompositeCharts['findScreeningEnrolmentCascade'];
@@ -606,6 +636,7 @@ export class OverviewComponent implements OnInit {
         MCTemp.ChartSeries[0].push('35-64 Yrs');
         MCTemp.ChartSeries[0].push('65-84 Yrs');
         MCTemp.ChartSeries[0].push('85+ Yrs');
+        MCTemp.ChartSeries[0].reverse();
 
         //Positivity - Female (Index --> 1)
         MCTemp.ChartSeries.push([]);
@@ -910,10 +941,6 @@ export class OverviewComponent implements OnInit {
     //#endregion
 
     HC_exporting(Highcharts);
-  }
-
-  processFilters() {
-    this.DataFilterInstance.processDates();
   }
 
   //#region Load Chart --> Covid-19 Summary by last month

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { DefaultLayoutComponent } from './containers';
+import { AboutComponent } from './views/mortality_ncov/about/about.component'
 import { Page404Component } from './views/pages/page404/page404.component';
 import { Page500Component } from './views/pages/page500/page500.component';
 import { LoginComponent } from './views/pages/login/login.component';
@@ -20,61 +21,7 @@ const routes: Routes = [
       title: 'Home'
     },
     children: [
-      {
-        path: 'mortality_ncov/about',
-        loadChildren: () =>
-          import('./views/mortality_ncov/about/about.module').then((m) => m.AboutModule)
-      },
-      {
-        path: 'mortality_ncov/overview',
-        loadChildren: () =>
-          import('./views/mortality_ncov/overview/overview.module').then((m) => m.OverviewModule)
-      },
-      {
-        path: 'mortality_ncov/screening',
-        loadChildren: () =>
-          import('./views/mortality_ncov/screening/screening.module').then((m) => m.ScreeningModule)
-      },
-      {
-        path: 'mortality_ncov/enrolment',
-        loadChildren: () =>
-          import('./views/mortality_ncov/enrolment/enrolment.module').then((m) => m.EnrolmentModule)
-      },
-      {
-        path: 'mortality_ncov/results',
-        loadChildren: () =>
-          import('./views/mortality_ncov/results/results.module').then((m) => m.ResultsModule)
-      },
-      {
-        path: 'afi/about',
-        loadChildren: () =>
-          import('./views/afi/about/about.module').then((m) => m.AboutModule)
-      },
-      {
-        path: 'afi/overview',
-        loadChildren: () =>
-          import('./views/afi/overview/overview.module').then((m) => m.AOverviewModule)
-      },
-      {
-        path: 'afi/cases',
-        loadChildren: () =>
-          import('./views/afi/cases/cases.module').then((m) => m.ACasesModule)
-      },
-      {
-        path: 'afi/rdt_results',
-        loadChildren: () =>
-          import('./views/afi/results_rdt/results.module').then((m) => m.AResultsModule)
-      },
-      {
-        path: 'afi/pcr_results',
-        loadChildren: () =>
-          import('./views/afi/results_pcr/results.module').then((m) => m.AResultsModule)
-      },
-      {
-        path: 'afi/outcome',
-        loadChildren: () =>
-          import('./views/afi/outcome/outcome.module').then((m) => m.AOutcomeModule)
-      },
+
       {
         path: 'sari_ili/about',
         loadChildren: () =>
@@ -115,6 +62,79 @@ const routes: Routes = [
         loadChildren: () =>
           import('./views/pages/pages.module').then((m) => m.PagesModule)
       },
+    ]
+  },
+  {
+    path: '',
+    component: DefaultLayoutComponent,
+    data: {
+      title: 'COVID-19 Mortality'
+    },
+    children: [
+      {
+        path: 'mortality_ncov/about',
+        loadChildren: () =>
+          import('./views/mortality_ncov/about/about.module').then((m) => m.AboutModule)
+      },
+      {
+        path: 'mortality_ncov/overview',
+        loadChildren: () =>
+          import('./views/mortality_ncov/overview/overview.module').then((m) => m.OverviewModule)
+      },
+      {
+        path: 'mortality_ncov/screening',
+        loadChildren: () =>
+          import('./views/mortality_ncov/screening/screening.module').then((m) => m.ScreeningModule)
+      },
+      {
+        path: 'mortality_ncov/enrolment',
+        loadChildren: () =>
+          import('./views/mortality_ncov/enrolment/enrolment.module').then((m) => m.EnrolmentModule)
+      },
+      {
+        path: 'mortality_ncov/results',
+        loadChildren: () =>
+          import('./views/mortality_ncov/results/results.module').then((m) => m.ResultsModule)
+      }
+    ]
+  },
+  {
+    path: '',
+    component: DefaultLayoutComponent,
+    data: {
+      title: 'AFI'
+    },
+    children: [
+      {
+        path: 'afi/about',
+        loadChildren: () =>
+          import('./views/afi/about/about.module').then((m) => m.AboutModule)
+      },
+      {
+        path: 'afi/overview',
+        loadChildren: () =>
+          import('./views/afi/overview/overview.module').then((m) => m.AOverviewModule)
+      },
+      {
+        path: 'afi/cases',
+        loadChildren: () =>
+          import('./views/afi/cases/cases.module').then((m) => m.ACasesModule)
+      },
+      {
+        path: 'afi/rdt_results',
+        loadChildren: () =>
+          import('./views/afi/results_rdt/results.module').then((m) => m.AResultsModule)
+      },
+      {
+        path: 'afi/pcr_results',
+        loadChildren: () =>
+          import('./views/afi/results_pcr/results.module').then((m) => m.AResultsModule)
+      },
+      {
+        path: 'afi/outcome',
+        loadChildren: () =>
+          import('./views/afi/outcome/outcome.module').then((m) => m.AOutcomeModule)
+      }
     ]
   },
   {
@@ -159,5 +179,6 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
+
 export class AppRoutingModule {
 }

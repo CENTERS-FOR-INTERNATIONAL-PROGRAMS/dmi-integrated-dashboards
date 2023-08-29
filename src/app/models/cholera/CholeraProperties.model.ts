@@ -1,3 +1,5 @@
 export interface CholeraProperties {
-    TotalNumber(TotalNumber: any): unknown;
+    Gender: string;
+    EpiWeek: string;
+    CasesNumber: number;
 }

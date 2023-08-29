@@ -9,7 +9,6 @@ const routes: Routes = [
     component: ScreeningComponent,
     data: {
       title: `Screening`
-      // title: $localize`Dashboard`
     }
   }
 ];

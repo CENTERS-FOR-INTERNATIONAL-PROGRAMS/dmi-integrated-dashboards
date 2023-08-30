@@ -36,7 +36,7 @@ export class Chart {
     }
 
     readAPI(): Observable<CholeraProperties[]> {
-        return this.http.get<CholeraProperties[]>(`${this.chart_api_endpoint}`).pipe(
+        return this.http.post<CholeraProperties[]>(`${this.chart_api_endpoint}`, {}).pipe(
             retry(1),
             catchError(this.handleError)
         );

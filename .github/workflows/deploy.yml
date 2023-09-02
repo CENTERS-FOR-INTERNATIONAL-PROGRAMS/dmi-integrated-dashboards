@@ -1,0 +1,32 @@
+name: Deploy Integrated dashboards
+on:
+  push:
+    branches: [ main ]
+jobs:
+
+  build:
+    name: Deploy Dashboards
+    runs-on: ubuntu-latest
+    steps:
+    - name: updating and deploying app
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          sudo cp -rf /etc/dmi-integrated-dashboards/* /tmp/dmi-integrated-dashboards-backup/
+          cd /var/lib/github_workflows/dmi-integrated-dashboards
+          sudo git switch main
+          sudo rm -rf dist
+          sudo rm package-lock.json
+          sudo rm -rf node_modules
+          sudo git stash
+          sudo git pull
+          sudo npm install
+          sudo find . -type f -exec sed -i 's/http:\/\/localhost:8080//g' {} +
+          sudo ng build --configuration production
+          sudo cp -rf . /etc/dmi-integrated-dashboards/
+          sudo pm2 reload all --update-env
+          echo "Dashboards are upto date! Deployment successful."

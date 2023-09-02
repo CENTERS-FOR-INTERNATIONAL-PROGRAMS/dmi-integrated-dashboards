@@ -13,9 +13,9 @@
       <mat-form-field>
         <mat-select placeholder="Select facility" [(value)]="DataFilterInstance.filter_facility"
           (selectionChange)="processFilters()">
-          <mat-option value="-1">None</mat-option>
+          <mat-option value="-1">All</mat-option>
           <mat-option *ngFor="let FacilityInstance of CompositeFacilities"
-            [value]="FacilityInstance.facility_code">{{FacilityInstance.facility_name}}</mat-option>
+            [value]="FacilityInstance.facility_id">{{FacilityInstance.facility_name}}</mat-option>
         </mat-select>
       </mat-form-field>
     </c-card>

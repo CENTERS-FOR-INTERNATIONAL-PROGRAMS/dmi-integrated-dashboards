@@ -1,4 +1,5 @@
 export interface COVID19Properties {
+  Sex: string;
   ScreenedNumber(ScreenedNumber: any): unknown;
   EligibleNumber(EligibleNumber: any): unknown;
   TestedNumber(TestedNumber: any): unknown;

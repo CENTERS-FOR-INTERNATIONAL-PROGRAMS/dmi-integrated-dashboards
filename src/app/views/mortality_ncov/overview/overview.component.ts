@@ -73,6 +73,8 @@ export class OverviewComponent implements OnInit {
       this.CompositeCharts[chart_ident].reloadData();
     });
     //#endregion
+
+    this.loadCovid19SummaryData();
   }
 
   loadCharts() {
@@ -627,6 +629,9 @@ export class OverviewComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findPositivityByAgeGender'];
 
+        //Reset
+        MCTemp.ChartSeries = [];
+
         //#region Init series indexes
         // Age Group(Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -654,8 +659,10 @@ export class OverviewComponent implements OnInit {
 
             MCTemp.ChartData.forEach((dataInstance) => {
               if (dataInstance.AgeGroup == ageGroupInstance) {
+                console.log(dataInstance);
+
                 //Compile Female (Index --> 1)
-                if (dataInstance.Gender == 'Female') {
+                if (dataInstance.Sex == 'Female') {
                   MCTemp.ChartSeries[1].push(
                     dataInstance.PositiveNumber
                   );
@@ -663,7 +670,7 @@ export class OverviewComponent implements OnInit {
                 }
 
                 //Compile Male (Index --> 2)
-                else if (dataInstance.Gender == 'Male') {
+                else if (dataInstance.Sex == 'Male') {
                   MCTemp.ChartSeries[2].push(dataInstance.PositiveNumber);
                   male_found = true;
                 }
@@ -680,6 +687,8 @@ export class OverviewComponent implements OnInit {
           }
         );
         //#endregion
+      
+        console.log(">>-", MCTemp.ChartSeries);
       },
       () => {
         let MCTemp = this.CompositeCharts['findPositivityByAgeGender'];
@@ -756,6 +765,9 @@ export class OverviewComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['findOverallPositivityByFacility'];
+
+        //Reset
+        MCTemp.ChartSeries = [];
 
         //#region Init series indexes
         // Facilities (Index --> 0)
@@ -852,6 +864,9 @@ export class OverviewComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findOverTime'];
 
+        //Reset
+        MCTemp.ChartSeries = [];
+
         //#region Init series indexes
         //EpiWeek (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -860,14 +875,18 @@ export class OverviewComponent implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         // CovidPositive (Index --> 2)
+        MCTemp.ChartSeries.push([]);        
+        
+        // CovidPositive (Index --> 3)
         MCTemp.ChartSeries.push([]);
         //#endregion
 
         //#region Push series data into array at specific indexes
         MCTemp.ChartData.forEach((dataInstance) => {
           MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
-          MCTemp.ChartSeries[1].push(dataInstance.SampleTested);
-          MCTemp.ChartSeries[2].push(dataInstance.CovidPositive);
+          MCTemp.ChartSeries[1].push(dataInstance.TestedNumber);
+          MCTemp.ChartSeries[2].push(dataInstance.PositiveNumber);
+          MCTemp.ChartSeries[3].push(dataInstance.Year);
         });
         //#endregion
 
@@ -945,6 +964,8 @@ export class OverviewComponent implements OnInit {
 
   //#region Load Chart --> Covid-19 Summary by last month
   loadCovid19SummaryData() {
+    this.covid19SummaryGroup = [];
+
     for (let index = 0; index < 5; index++) {
       //Init Group Instance
       this.covid19SummaryGroup.push([]);

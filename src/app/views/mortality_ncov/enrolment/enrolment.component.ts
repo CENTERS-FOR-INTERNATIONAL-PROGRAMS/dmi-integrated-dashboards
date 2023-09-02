@@ -70,6 +70,9 @@ export class EnrolmentComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findByGender'];
 
+        //Reset
+        MCTemp.ChartSeries = [];
+
         //#region Push series data into array at specific indexes
         //Male Series (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -148,6 +151,9 @@ export class EnrolmentComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['findByAgeGender'];
+
+        //Reset
+        MCTemp.ChartSeries = [];
 
         //#region Init series indexes
         // Age Group(Index --> 0)
@@ -259,6 +265,9 @@ export class EnrolmentComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findByFacility'];
 
+        //Reset
+        MCTemp.ChartSeries = [];
+
         //#region Init series indexes
         // Facilities (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -279,7 +288,7 @@ export class EnrolmentComponent implements OnInit {
           MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
 
           //Compile Positives (Index --> 2)
-          MCTemp.ChartSeries[2].push(dataInstance.Covid19Positive);
+          MCTemp.ChartSeries[2].push(dataInstance.PositiveNumber);
         });
         //#endregion
       },

@@ -85,20 +85,20 @@ export const navItems: INavData[] = [
       }
     ]
   },
-  {
-    name: 'Cholera',
-    url: '/cholera',
-    icon: 'fa fa-bacteria',
-    class: 'view-drawer--link',
-    children: [
-      {
-        name: 'About',
-        url: '/cholera/about'
-      },
-      {
-        name: 'Overview',
-        url: '/cholera/overview'
-      }
-    ]
-  }
+  // {
+  //   name: 'Cholera',
+  //   url: '/cholera',
+  //   icon: 'fa fa-bacteria',
+  //   class: 'view-drawer--link',
+  //   children: [
+  //     {
+  //       name: 'About',
+  //       url: '/cholera/about'
+  //     },
+  //     {
+  //       name: 'Overview',
+  //       url: '/cholera/overview'
+  //     }
+  //   ]
+  // }
 ];

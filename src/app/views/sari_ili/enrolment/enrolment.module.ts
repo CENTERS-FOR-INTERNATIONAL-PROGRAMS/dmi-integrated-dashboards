@@ -2,6 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSelectModule } from '@angular/material/select';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
 
 import {
   AvatarModule,
@@ -39,7 +48,16 @@ import { EnrolmentComponent } from './enrolment.component';
     ChartjsModule,
     AvatarModule,
     TableModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSliderModule,
+    MatSelectModule,
+    MatGridListModule,
+    MatCardModule,
+    FormsModule
   ],
   declarations: [EnrolmentComponent]
 })

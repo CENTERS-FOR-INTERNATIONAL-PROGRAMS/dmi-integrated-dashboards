@@ -72,10 +72,14 @@ export class ScreeningComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['screeningCascade'];
+        
+        // Reset
+        MCTemp.ChartSeries = [];
+
         MCTemp.ChartSeries.push([]);
-        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].TotalScreened);
-        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].Eligible);
-        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].Enrolled);
+        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].ScreenedNumber);
+        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].EligibleNumber);
+        MCTemp.ChartSeries[0].push(MCTemp.ChartData[0].EnrolledNumber);
       },
       () => {
         let MCTemp = this.CompositeCharts['screeningCascade'];
@@ -140,6 +144,9 @@ export class ScreeningComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findScreeningByFacility'];
 
+        // Reset
+        MCTemp.ChartSeries = [];
+
         //#region Init series indexes
         // Facilities (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -157,10 +164,10 @@ export class ScreeningComponent implements OnInit {
           MCTemp.ChartSeries[0].push(dataInstance.Facility);
 
           //Compile Enrollments
-          MCTemp.ChartSeries[1].push(dataInstance.Enrolled);
+          MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
 
           //Compile Positives
-          MCTemp.ChartSeries[2].push(dataInstance.Covid19Positive);
+          MCTemp.ChartSeries[2].push(dataInstance.Covid19PositiveNumber);
         });
         //#endregion
       },
@@ -228,6 +235,9 @@ export class ScreeningComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findScreeningOvertime'];
 
+        // Reset
+        MCTemp.ChartSeries = [];
+
         //#region Init series indexes
         // EpiWeek (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -242,7 +252,7 @@ export class ScreeningComponent implements OnInit {
           MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
 
           //Compile Screenings
-          MCTemp.ChartSeries[1].push(dataInstance.Screened);
+          MCTemp.ChartSeries[1].push(dataInstance.ScreenedNumber);
         });
         //#endregion
       },

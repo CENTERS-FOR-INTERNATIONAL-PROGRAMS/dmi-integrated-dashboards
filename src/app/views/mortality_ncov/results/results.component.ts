@@ -141,6 +141,9 @@ export class ResultsComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findByFacility'];
 
+        //Reset
+        MCTemp.ChartSeries = [];
+
         //#region Init series indexes
         // Facilities (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -158,10 +161,10 @@ export class ResultsComponent implements OnInit {
           MCTemp.ChartSeries[0].push(dataInstance.Facility);
 
           //Compile Negative
-          MCTemp.ChartSeries[1].push(dataInstance.Covid19Negative);
+          MCTemp.ChartSeries[1].push(dataInstance.Covid19NegativeNumber);
 
           //Compile Enrolled --> Positive
-          MCTemp.ChartSeries[2].push(dataInstance.Covid19Positive);
+          MCTemp.ChartSeries[2].push(dataInstance.Covid19PositiveNumber);
         });
         //#endregion
       },
@@ -238,6 +241,9 @@ export class ResultsComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findByAgeGender'];
 
+        //Reset
+        MCTemp.ChartSeries = [];
+
         //#region Init series indexes
         // Age Group(Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -247,6 +253,8 @@ export class ResultsComponent implements OnInit {
         MCTemp.ChartSeries[0].push("35-64 Yrs");
         MCTemp.ChartSeries[0].push("65-84 Yrs");
         MCTemp.ChartSeries[0].push("85+ Yrs");
+
+        MCTemp.ChartSeries[0] = MCTemp.ChartSeries[0].reverse();
 
         //Positivity - Female (Index --> 1)
         MCTemp.ChartSeries.push([]);
@@ -264,13 +272,13 @@ export class ResultsComponent implements OnInit {
           MCTemp.ChartData.forEach(dataInstance => {
             if (dataInstance.AgeGroup == ageGroupInstance) {
               if (dataInstance.Gender == "Female") {
-                MCTemp.ChartSeries[1].push(dataInstance.Covid19Positive);
+                MCTemp.ChartSeries[1].push(dataInstance.Covid19PositiveNumber);
                 female_found = true;
               }
 
               //Compile Male Positivity
               else if (dataInstance.Gender == "Male") {
-                MCTemp.ChartSeries[2].push(dataInstance.Covid19Positive);
+                MCTemp.ChartSeries[2].push(dataInstance.Covid19PositiveNumber);
                 male_found = true;
               }
             }
@@ -344,6 +352,9 @@ export class ResultsComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findByPositivityOverTime'];
 
+        //Reset
+        MCTemp.ChartSeries = [];
+
         //#region Init series indexes
         // EpiWeek (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -361,10 +372,10 @@ export class ResultsComponent implements OnInit {
           MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
 
           //Compile SampleTested
-          MCTemp.ChartSeries[1].push(dataInstance.SampleTested);
+          MCTemp.ChartSeries[1].push(dataInstance.SampleTestedNumber);
 
           //Compile COVID-19 Positive
-          MCTemp.ChartSeries[2].push(dataInstance.Covid19Positive);
+          MCTemp.ChartSeries[2].push(dataInstance.Covid19PositiveNumber);
         });
         //#endregion
       },

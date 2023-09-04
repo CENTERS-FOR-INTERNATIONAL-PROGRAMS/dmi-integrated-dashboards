@@ -687,7 +687,7 @@ export class OverviewComponent implements OnInit {
           }
         );
         //#endregion
-      
+
         console.log(">>-", MCTemp.ChartSeries);
       },
       () => {
@@ -789,7 +789,7 @@ export class OverviewComponent implements OnInit {
           MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
 
           //Compile Positives (Index --> 2)
-          MCTemp.ChartSeries[2].push(dataInstance.Covid19Positive);
+          MCTemp.ChartSeries[2].push(dataInstance.PositiveNumber);
         });
         //#endregion
       },
@@ -875,8 +875,8 @@ export class OverviewComponent implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         // CovidPositive (Index --> 2)
-        MCTemp.ChartSeries.push([]);        
-        
+        MCTemp.ChartSeries.push([]);
+
         // CovidPositive (Index --> 3)
         MCTemp.ChartSeries.push([]);
         //#endregion
@@ -899,15 +899,26 @@ export class OverviewComponent implements OnInit {
             text: 'COVID-19 Positivity over time',
             align: 'left',
           },
-          xAxis: [
-            {
-              title: {
-                text: '',
-              },
-              categories: MCTemp.ChartSeries[0],
-              crosshair: true
-            }
-          ],
+          xAxis: {
+            categories: [
+              {
+                name: "Epi Week",
+                categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              }, {
+                name: "Year",
+                categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+              }
+            ]
+          },
+          // xAxis: [
+          //   {
+          //     title: {
+          //       text: '',
+          //     },
+          //     categories: MCTemp.ChartSeries[0],
+          //     crosshair: true
+          //   }
+          // ],
           yAxis: [
             {
               labels: {

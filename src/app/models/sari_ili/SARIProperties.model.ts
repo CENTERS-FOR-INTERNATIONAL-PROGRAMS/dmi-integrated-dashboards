@@ -1,4 +1,13 @@
 export interface SARIProperties {
+    VictoriaPercent: any;
+    YamagataPercent: any;
+    NotdeterminedPercent: any;
+    FluPositivePercent: any;
+    EnrolledPercent: any;
+    DischargedFromHospitalNumber: any;
+    RefusedHospitalTreatmentNumber: any;
+    YEAR: string;
+    TestedNumber: any;
     SARSCOV2TestedNumber(SARSCOV2TestedNumber: any): unknown;
     SARSCOV2TestedPercentage(SARSCOV2TestedPercentage: any): unknown;
     SARSCOV2PositivePercentage: any;

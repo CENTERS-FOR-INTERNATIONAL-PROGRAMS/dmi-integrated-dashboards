@@ -356,6 +356,9 @@ export class EnrolmentComponent implements OnInit {
       () => {
         let MCTemp = this.CompositeCharts['findOverTime'];
 
+        //Reset
+        MCTemp.ChartSeries = [];
+
         //#region Init series indexes
         // EpiWeek (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -371,9 +374,10 @@ export class EnrolmentComponent implements OnInit {
         MCTemp.ChartData.forEach(dataInstance => {
           //Compile EpiWeek
           MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
+          // MCTemp.ChartSeries[0].push(dataInstance.EpiWeek + " (" + dataInstance.Year + ")");
 
           //Compile Elligible
-          MCTemp.ChartSeries[1].push(dataInstance.ElligibleNumber);
+          MCTemp.ChartSeries[1].push(dataInstance.EligibleNumber);
 
           //Compile Enrolled
           MCTemp.ChartSeries[2].push(dataInstance.EnrolledNumber);
@@ -388,12 +392,12 @@ export class EnrolmentComponent implements OnInit {
             text: 'Enrolment over time',
             align: 'left'
           },
-          xAxis: {
+          xAxis: [{
             categories: MCTemp.ChartSeries[0],
             title: {
-              text: "Epiweek",
+              text: "Epi Week",
             }
-          },
+          }],
           yAxis: [{
             title: {
               text: "Number Eligible",

@@ -687,7 +687,6 @@ export class OverviewComponent implements OnInit {
           }
         );
         //#endregion
-
         console.log(">>-", MCTemp.ChartSeries);
       },
       () => {

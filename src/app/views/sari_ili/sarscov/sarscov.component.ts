@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { SARIILIChart } from '../../../models/sari_ili/SARIILIChart.model';
-import { SCParent } from '../../../models/sari_ili/SCParent.model';
+import { Chart } from '../../../models/sari_ili/Chart.model';
+import { ChartParent } from '../../../models/sari_ili/ChartParent.model';
+import { IDFilter } from '../../../models/IDFilter.model';
+import { APIReader } from '../../../models/APIReader.model';
+import { IDFacility } from '../../../models/IDFacility.model';
 
 import * as Highcharts from 'highcharts/highstock';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -10,8 +13,6 @@ import HighchartsMap from "highcharts/modules/map"
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import HighchartsTreeMap from 'highcharts/modules/treemap';
 import HighchartsTreeGraph from 'highcharts/modules/treegraph';
-import topography from '../../../data/world.geojson.json'
-import topographyData from '../../../data/afi_pathogen_facility.json'
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
@@ -27,20 +28,48 @@ HighchartsTreeGraph(Highcharts);
 export class SARSCOV2Component implements OnInit {
   //#region Prerequisites
   highcharts = Highcharts;
-  CompositeCharts: SCParent = {};
+  CompositeCharts: ChartParent = {};
+
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
   //#endregion
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-
+    this.loadFilters();
     this.loadCharts();
+  }
 
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
+  loadFilters() {
+    //#region Acqurie composite facilities
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+      this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
+      });
+    });
+    //#endregion
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
+
+    //#region Reload all charts
+    Object.keys(this.CompositeCharts).forEach(chart_ident => {
+      this.CompositeCharts[chart_ident].ChartFilterData = this.DataFilterInstance;
+      this.CompositeCharts[chart_ident].reloadData();
+    });
+    //#endregion
   }
 
   loadCharts() {
     //#region Load Chart --> ILI & SARI SARS-COV-2 Cascade
-    this.CompositeCharts['influenzaCascade'] = new SARIILIChart(this.http);
+    this.CompositeCharts['influenzaCascade'] = new Chart(this.http);
     this.CompositeCharts['influenzaCascade'].loadData(
       "sarscov/influenzaCascade",
       () => {
@@ -140,7 +169,7 @@ export class SARSCOV2Component implements OnInit {
     //#endregion
 
     //#region Load Chart --> Tested for SARS-COV-2 by Age Category (Tested for SARS-COV-2 by Age Group)
-    this.CompositeCharts['testedByAgeGroup'] = new SARIILIChart(this.http);
+    this.CompositeCharts['testedByAgeGroup'] = new Chart(this.http);
     this.CompositeCharts['testedByAgeGroup'].loadData(
       "sarscov/testedByAgeGroup",
       () => {
@@ -235,7 +264,7 @@ export class SARSCOV2Component implements OnInit {
     //#endregion
 
     //#region Load Chart --> SARS-COV-2 Positive Distribution by Age Category
-    this.CompositeCharts['positiveDistributionByAgeGroup'] = new SARIILIChart(this.http);
+    this.CompositeCharts['positiveDistributionByAgeGroup'] = new Chart(this.http);
     this.CompositeCharts['positiveDistributionByAgeGroup'].loadData(
       "sarscov/positiveDistributionByAgeGroup",
       () => {
@@ -330,7 +359,7 @@ export class SARSCOV2Component implements OnInit {
     //#endregion
 
     //#region Load Chart --> Number of Speciment Tested and % Positive for SARS-COV-2 over time
-    this.CompositeCharts['SARSCOV2PositiveOvertime'] = new SARIILIChart(this.http);
+    this.CompositeCharts['SARSCOV2PositiveOvertime'] = new Chart(this.http);
     this.CompositeCharts['SARSCOV2PositiveOvertime'].loadData(
       "sarscov/SARSCOV2PositiveOvertime",
       () => {

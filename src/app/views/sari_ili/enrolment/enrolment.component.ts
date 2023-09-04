@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { SARIILIChart } from '../../../models/sari_ili/SARIILIChart.model';
-import { SCParent } from '../../../models/sari_ili/SCParent.model';
+import { Chart } from '../../../models/sari_ili/Chart.model';
+import { ChartParent } from '../../../models/sari_ili/ChartParent.model';
+import { IDFilter } from '../../../models/IDFilter.model';
+import { APIReader } from '../../../models/APIReader.model';
+import { IDFacility } from '../../../models/IDFacility.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -19,17 +22,47 @@ HighchartsSolidGauge(Highcharts);
 export class EnrolmentComponent implements OnInit {
   //#region Prerequisites
   highcharts = Highcharts;
-  CompositeCharts: SCParent = {};
+  CompositeCharts: ChartParent = {};
+
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
   //#endregion
 
   constructor(private http: HttpClient) { }
   ngOnInit(): void {
+    this.loadFilters();
     this.loadCharts();
+  }
+
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
+  loadFilters() {
+    //#region Acqurie composite facilities
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+      this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
+      });
+    });
+    //#endregion
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
+
+    //#region Reload all charts
+    Object.keys(this.CompositeCharts).forEach(chart_ident => {
+      this.CompositeCharts[chart_ident].ChartFilterData = this.DataFilterInstance;
+      this.CompositeCharts[chart_ident].reloadData();
+    });
+    //#endregion
   }
 
   loadCharts() {
     //#region Load Chart --> Influenza positivity by type
-    this.CompositeCharts['findInfluenzaPositivityByType'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaPositivityByType'] = new Chart(this.http);
     this.CompositeCharts['findInfluenzaPositivityByType'].loadData(
       "enrolment/findInfluenzaPositivityByType",
       () => {
@@ -106,7 +139,7 @@ export class EnrolmentComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Influenza positivity by subtype
-    this.CompositeCharts['findInfluenzaPositivityBySubtype'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaPositivityBySubtype'] = new Chart(this.http);
     this.CompositeCharts['findInfluenzaPositivityBySubtype'].loadData(
       "enrolment/findInfluenzaPositivityBySubtype",
       () => {

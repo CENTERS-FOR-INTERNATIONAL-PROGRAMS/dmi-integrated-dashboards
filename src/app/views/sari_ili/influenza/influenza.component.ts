@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { SARIILIChart } from '../../../models/sari_ili/SARIILIChart.model';
-import { SCParent } from '../../../models/sari_ili/SCParent.model';
+import { Chart } from '../../../models/sari_ili/Chart.model';
+import { ChartParent } from '../../../models/sari_ili/ChartParent.model';
+import { IDFilter } from '../../../models/IDFilter.model';
+import { APIReader } from '../../../models/APIReader.model';
+import { IDFacility } from '../../../models/IDFacility.model';
 
 import * as Highcharts from 'highcharts/highstock';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -27,20 +30,48 @@ HighchartsTreeGraph(Highcharts);
 export class InfluenzaComponent implements OnInit {
   //#region Prerequisites
   highcharts = Highcharts;
-  CompositeCharts: SCParent = {};
+  CompositeCharts: ChartParent = {};
+
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
   //#endregion
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-
+    this.loadFilters();
     this.loadCharts();
+  }
 
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
+  loadFilters() {
+    //#region Acqurie composite facilities
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+      this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
+      });
+    });
+    //#endregion
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
+
+    //#region Reload all charts
+    Object.keys(this.CompositeCharts).forEach(chart_ident => {
+      this.CompositeCharts[chart_ident].ChartFilterData = this.DataFilterInstance;
+      this.CompositeCharts[chart_ident].reloadData();
+    });
+    //#endregion
   }
 
   loadCharts() {
     //#region Load Chart --> SARI Influenza Cascade
-    this.CompositeCharts['influenzaCascade'] = new SARIILIChart(this.http);
+    this.CompositeCharts['influenzaCascade'] = new Chart(this.http);
     this.CompositeCharts['influenzaCascade'].loadData(
       "influenza/influenzaCascade",
       () => {
@@ -147,7 +178,7 @@ export class InfluenzaComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Influenza Types Distribution
-    this.CompositeCharts['findTypesByDistribution'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findTypesByDistribution'] = new Chart(this.http);
     this.CompositeCharts['findTypesByDistribution'].loadData(
       "influenza/findTypesByDistribution",
       () => {
@@ -166,14 +197,14 @@ export class InfluenzaComponent implements OnInit {
 
         // Influenza A (Index --> 0)
         //Number (Index --> [0][0])
-        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].InfluenzaAPositive;
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].InfluenzaAPositiveNumber;
 
         //Percent (Index --> [0][1])
         MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].InfluenzaAPositivePercent;
 
         // Influenza B (Index --> 1)
         //Number (Index --> [1][0])
-        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].InfluenzaBPositive;
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].InfluenzaBPositiveNumber;
 
         //Percent (Index --> [1][1])
         MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].InfluenzaBPositivePercent;
@@ -231,7 +262,7 @@ export class InfluenzaComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Influenza A Subtype Distribution
-    this.CompositeCharts['findInfluenzaASubtypesDistribution'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaASubtypesDistribution'] = new Chart(this.http);
     this.CompositeCharts['findInfluenzaASubtypesDistribution'].loadData(
       "influenza/findInfluenzaASubtypesDistribution",
       () => {
@@ -312,7 +343,7 @@ export class InfluenzaComponent implements OnInit {
     //#endregion    
 
     //#region Load Chart --> Influenza B Lineage Distribution
-    this.CompositeCharts['findInfluenzaBLineageDistribution'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaBLineageDistribution'] = new Chart(this.http);
     this.CompositeCharts['findInfluenzaBLineageDistribution'].loadData(
       "influenza/findInfluenzaBLineageDistribution",
       () => {
@@ -330,15 +361,15 @@ export class InfluenzaComponent implements OnInit {
 
         //Victoria (Index --> 0)
         MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].VictoriaNumber;
-        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].VictoriaNumberPercent;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].VictoriaPercent;
 
         //Yamagata (Index --> 1)
         MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].YamagataNumber;
-        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].YamagataNumberPercent;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].YamagataPercent;
 
         //Non-determined (Index --> 2)
         MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].NotdeterminedNumber;
-        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].NotdeterminedNumberPercent;
+        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].NotdeterminedPercent;
       },
       () => {
         let MCTemp = this.CompositeCharts['findInfluenzaBLineageDistribution'];
@@ -386,7 +417,7 @@ export class InfluenzaComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Number Enrolled by Age Category (Enrolled by Age Group)
-    this.CompositeCharts['enrolledByAgeGroup'] = new SARIILIChart(this.http);
+    this.CompositeCharts['enrolledByAgeGroup'] = new Chart(this.http);
     this.CompositeCharts['enrolledByAgeGroup'].loadData(
       "overview/enrolledByAgeGroup",
       () => {
@@ -489,8 +520,8 @@ export class InfluenzaComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Number Enrolled by Age Category (Enrolled by Age Group)
-    this.CompositeCharts['fluPositiveByAgeGroup'] = new SARIILIChart(this.http);
+    //#region Load Chart --> Number Positive for Flu by Age Category (positivity by Age Group)
+    this.CompositeCharts['fluPositiveByAgeGroup'] = new Chart(this.http);
     this.CompositeCharts['fluPositiveByAgeGroup'].loadData(
       "influenza/flupositiveByAgeGroup",
       () => {
@@ -500,6 +531,9 @@ export class InfluenzaComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['fluPositiveByAgeGroup'];
+
+        // Reset
+        MCTemp.ChartSeries = [];
 
         // Age Group (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -513,7 +547,7 @@ export class InfluenzaComponent implements OnInit {
         MCTemp.ChartData.forEach((dataInstance) => {
           MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
           MCTemp.ChartSeries[1].push(dataInstance.FluPositiveNumber);
-          MCTemp.ChartSeries[2].push(dataInstance.FluPositivePercentage);
+          MCTemp.ChartSeries[2].push(dataInstance.FluPositivePercent);
         });
       },
       () => {
@@ -587,7 +621,7 @@ export class InfluenzaComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Number Positive for Influenza by Type and Epiweek
-    this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'] = new Chart(this.http);
     this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'].loadData(
       "influenza/findInfluenzaPositivityByTypeOvertime",
       () => {
@@ -706,7 +740,7 @@ export class InfluenzaComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Circulating Strains of Influenza Virus over time
-    this.CompositeCharts['findInfluenzaStrainsOvertime'] = new SARIILIChart(this.http);
+    this.CompositeCharts['findInfluenzaStrainsOvertime'] = new Chart(this.http);
     this.CompositeCharts['findInfluenzaStrainsOvertime'].loadData(
       "influenza/findInfluenzaStrainsOvertime",
       () => {
@@ -861,7 +895,7 @@ export class InfluenzaComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Geographic distribution by health facility
-    this.CompositeCharts['geographicDistributionByFacility'] = new SARIILIChart(this.http);
+    this.CompositeCharts['geographicDistributionByFacility'] = new Chart(this.http);
     this.CompositeCharts['geographicDistributionByFacility'].loadData(
       "influenza/geographicDistributionByFacility",
       () => {

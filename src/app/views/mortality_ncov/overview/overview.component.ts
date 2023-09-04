@@ -8,13 +8,17 @@ import { Covid19Summary } from '../../../models/mortality_ncov/covid19Summary.mo
 import { IDFilter } from '../../../models/IDFilter.model';
 import { APIReader } from '../../../models/APIReader.model';
 import { IDFacility } from '../../../models/IDFacility.model';
+import { GroupedCategory } from '../../../models/GroupedCategory.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
+import HighchartsGroupedCategories from 'highcharts-grouped-categories';
+
 import * as moment from 'moment';
 
+HighchartsGroupedCategories(Highcharts);
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
 
@@ -75,6 +79,27 @@ export class OverviewComponent implements OnInit {
     //#endregion
 
     this.loadCovid19SummaryData();
+  }
+
+  attachGroupedCategory(GCHaystack: any[], gc_name: string, gc_last: boolean) {
+    let gc_found = -1;
+
+    GCHaystack.forEach((GCInstance, index) => {
+      if (GCInstance.name == gc_name) {
+        gc_found = index;
+      }
+    });
+
+    if (gc_found == -1) {
+      if (gc_last) {
+        GCHaystack.push(gc_name);
+      } else {
+        GCHaystack.push(new GroupedCategory(gc_name, []));
+      }
+      gc_found = (GCHaystack.length - 1);
+    }
+
+    return gc_found;
   }
 
   loadCharts() {
@@ -659,8 +684,6 @@ export class OverviewComponent implements OnInit {
 
             MCTemp.ChartData.forEach((dataInstance) => {
               if (dataInstance.AgeGroup == ageGroupInstance) {
-                console.log(dataInstance);
-
                 //Compile Female (Index --> 1)
                 if (dataInstance.Sex == 'Female') {
                   MCTemp.ChartSeries[1].push(
@@ -861,6 +884,7 @@ export class OverviewComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['findOverTime'];
+        let GCYears: GroupedCategory[] = [];
 
         //Reset
         MCTemp.ChartSeries = [];
@@ -873,9 +897,6 @@ export class OverviewComponent implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         // CovidPositive (Index --> 2)
-        MCTemp.ChartSeries.push([]);        
-        
-        // CovidPositive (Index --> 3)
         MCTemp.ChartSeries.push([]);
         //#endregion
 
@@ -884,10 +905,15 @@ export class OverviewComponent implements OnInit {
           MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
           MCTemp.ChartSeries[1].push(dataInstance.TestedNumber);
           MCTemp.ChartSeries[2].push(dataInstance.PositiveNumber);
-          MCTemp.ChartSeries[3].push(dataInstance.Year);
+
+          let gc_year_index = this.attachGroupedCategory(GCYears, dataInstance.Year, false);
+          let gc_month_index = this.attachGroupedCategory(GCYears[gc_year_index].categories, dataInstance.Month, false);
+          let gc_epiweek_index = this.attachGroupedCategory(GCYears[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
         });
         //#endregion
 
+        // Period (index --> 3)
+        MCTemp.ChartSeries.push(JSON.parse(JSON.stringify(GCYears)));
       },
       () => {
         let MCTemp = this.CompositeCharts['findOverTime'];
@@ -898,25 +924,20 @@ export class OverviewComponent implements OnInit {
             align: 'left',
           },
           xAxis: {
-            categories: [
-              {
-                name: "Epi Week",
-                categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            name: "Period",
+            title: {text: "Period (Year, Month, Epi Week)"},
+            labels: {
+              useHTML: true,
+              format: "{text}",
+              y: 18,
+              groupedOptions: [{
+                y: 10,
               }, {
-                name: "Year",
-                categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-              }
-            ]
+                y: 10
+              }]
+            },
+            categories: MCTemp.ChartSeries[3]
           },
-          // xAxis: [
-          //   {
-          //     title: {
-          //       text: '',
-          //     },
-          //     categories: MCTemp.ChartSeries[0],
-          //     crosshair: true
-          //   }
-          // ],
           yAxis: [
             {
               labels: {

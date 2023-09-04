@@ -875,6 +875,12 @@ export class OverviewComponent implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         // CovidPositive (Index --> 2)
+        MCTemp.ChartSeries.push([]);        
+        
+        // CovidPositive (Index --> 3)
+        MCTemp.ChartSeries.push([]);
+
+        // CovidPositive (Index --> 3)
         MCTemp.ChartSeries.push([]);
 
         // CovidPositive (Index --> 3)

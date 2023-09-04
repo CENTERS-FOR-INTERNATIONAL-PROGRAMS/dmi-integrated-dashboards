@@ -898,6 +898,7 @@ export class OverviewComponent implements OnInit {
 
         // CovidPositive (Index --> 2)
         MCTemp.ChartSeries.push([]);
+        //#endregion
 
         //#region Push series data into array at specific indexes
         MCTemp.ChartData.forEach((dataInstance) => {

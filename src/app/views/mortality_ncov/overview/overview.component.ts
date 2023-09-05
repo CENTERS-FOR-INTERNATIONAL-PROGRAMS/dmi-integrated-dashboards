@@ -15,7 +15,6 @@ import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 
-HighchartsGroupedCategories(Highcharts);
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
 
@@ -76,27 +75,6 @@ export class OverviewComponent implements OnInit {
     //#endregion
 
     this.loadCovid19SummaryData();
-  }
-
-  attachGroupedCategory(GCHaystack: any[], gc_name: string, gc_last: boolean) {
-    let gc_found = -1;
-
-    GCHaystack.forEach((GCInstance, index) => {
-      if (GCInstance.name == gc_name) {
-        gc_found = index;
-      }
-    });
-
-    if (gc_found == -1) {
-      if (gc_last) {
-        GCHaystack.push(gc_name);
-      } else {
-        GCHaystack.push(new GroupedCategory(gc_name, []));
-      }
-      gc_found = (GCHaystack.length - 1);
-    }
-
-    return gc_found;
   }
 
   loadCharts() {
@@ -926,8 +904,6 @@ export class OverviewComponent implements OnInit {
             title: { text: "Period (Year, Month, Epi Week)" },
             tickWidth: 1,
             labels: {
-              useHTML: true,
-              format: "{text}",
               y: 18,
               groupedOptions: [{
                 y: 10,

@@ -5,6 +5,7 @@ import { ChartParent } from '../../../models/mortality_ncov/ChartParent.model';
 import { APIReader } from 'src/app/models/APIReader.model';
 import { IDFilter } from 'src/app/models/IDFilter.model';
 import { IDFacility } from 'src/app/models/IDFacility.model';
+import { GroupedCategory } from '../../../models/GroupedCategory.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -99,8 +100,8 @@ export class ResultsComponent implements OnInit {
             type: "pie",
           },
           colors: [
-            "#234FEA",
-            "#FFA500",
+            "#FF0000",
+            "#008000"
           ],
           series: [
             {
@@ -160,11 +161,11 @@ export class ResultsComponent implements OnInit {
           //Compile Facilities
           MCTemp.ChartSeries[0].push(dataInstance.Facility);
 
-          //Compile Negative
-          MCTemp.ChartSeries[1].push(dataInstance.Covid19NegativeNumber);
-
           //Compile Enrolled --> Positive
-          MCTemp.ChartSeries[2].push(dataInstance.Covid19PositiveNumber);
+          MCTemp.ChartSeries[1].push(dataInstance.Covid19PositiveNumber);
+
+          //Compile Negative
+          MCTemp.ChartSeries[2].push(dataInstance.Covid19NegativeNumber);
         });
         //#endregion
       },
@@ -211,15 +212,15 @@ export class ResultsComponent implements OnInit {
             }
           },
           series: [{
-            name: 'Negative',
-            data: MCTemp.ChartSeries[2],
-            type: 'column',
-            color: '#008000'
-          }, {
             name: 'Positive',
             data: MCTemp.ChartSeries[1],
             type: 'column',
             color: '#FF0000'
+          }, {
+            name: 'Negative',
+            data: MCTemp.ChartSeries[2],
+            type: 'column',
+            color: '#008000'
           }],
           credits: {
             enabled: false,
@@ -351,6 +352,8 @@ export class ResultsComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['findByPositivityOverTime'];
+        let GCPeriod: GroupedCategory[] = [];
+        let GCInstance = new GroupedCategory("", []);
 
         //Reset
         MCTemp.ChartSeries = [];
@@ -376,8 +379,16 @@ export class ResultsComponent implements OnInit {
 
           //Compile COVID-19 Positive
           MCTemp.ChartSeries[2].push(dataInstance.Covid19PositiveNumber);
+
+          //Compile Period
+          let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.Year, false);
+          let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
+          let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
         });
         //#endregion
+
+        //Period (Index --> 3)
+        MCTemp.ChartSeries.push(JSON.parse(JSON.stringify(GCPeriod)));
       },
       () => {
         let MCTemp = this.CompositeCharts['findByPositivityOverTime'];
@@ -388,10 +399,17 @@ export class ResultsComponent implements OnInit {
             align: 'left'
           },
           xAxis: {
-            categories: MCTemp.ChartSeries[0],
-            title: {
-              text: "Epiweek",
-            }
+            title: { text: "Period (Year, Month, Epi Week)" },
+            tickWidth: 1,
+            labels: {
+              y: 18,
+              groupedOptions: [{
+                y: 10,
+              }, {
+                y: 10
+              }]
+            },
+            categories: MCTemp.ChartSeries[3]
           },
           yAxis: [{
             title: {

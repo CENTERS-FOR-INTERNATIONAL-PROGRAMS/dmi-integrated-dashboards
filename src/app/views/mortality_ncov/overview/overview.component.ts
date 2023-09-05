@@ -14,11 +14,7 @@ import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
-import HighchartsGroupedCategories from 'highcharts-grouped-categories';
 
-import * as moment from 'moment';
-
-HighchartsGroupedCategories(Highcharts);
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
 
@@ -79,27 +75,6 @@ export class OverviewComponent implements OnInit {
     //#endregion
 
     this.loadCovid19SummaryData();
-  }
-
-  attachGroupedCategory(GCHaystack: any[], gc_name: string, gc_last: boolean) {
-    let gc_found = -1;
-
-    GCHaystack.forEach((GCInstance, index) => {
-      if (GCInstance.name == gc_name) {
-        gc_found = index;
-      }
-    });
-
-    if (gc_found == -1) {
-      if (gc_last) {
-        GCHaystack.push(gc_name);
-      } else {
-        GCHaystack.push(new GroupedCategory(gc_name, []));
-      }
-      gc_found = (GCHaystack.length - 1);
-    }
-
-    return gc_found;
   }
 
   loadCharts() {
@@ -884,7 +859,8 @@ export class OverviewComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['findOverTime'];
-        let GCYears: GroupedCategory[] = [];
+        let GCPeriod: GroupedCategory[] = [];
+        let GCInstance = new GroupedCategory("", []);
 
         //Reset
         MCTemp.ChartSeries = [];
@@ -898,6 +874,7 @@ export class OverviewComponent implements OnInit {
 
         // CovidPositive (Index --> 2)
         MCTemp.ChartSeries.push([]);
+        //#endregion
 
         //#region Push series data into array at specific indexes
         MCTemp.ChartData.forEach((dataInstance) => {
@@ -905,14 +882,14 @@ export class OverviewComponent implements OnInit {
           MCTemp.ChartSeries[1].push(dataInstance.TestedNumber);
           MCTemp.ChartSeries[2].push(dataInstance.PositiveNumber);
 
-          let gc_year_index = this.attachGroupedCategory(GCYears, dataInstance.Year, false);
-          let gc_month_index = this.attachGroupedCategory(GCYears[gc_year_index].categories, dataInstance.Month, false);
-          let gc_epiweek_index = this.attachGroupedCategory(GCYears[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
+          let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.Year, false);
+          let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
+          let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
         });
         //#endregion
 
         // Period (index --> 3)
-        MCTemp.ChartSeries.push(JSON.parse(JSON.stringify(GCYears)));
+        MCTemp.ChartSeries.push(JSON.parse(JSON.stringify(GCPeriod)));
       },
       () => {
         let MCTemp = this.CompositeCharts['findOverTime'];
@@ -924,10 +901,9 @@ export class OverviewComponent implements OnInit {
           },
           xAxis: {
             name: "Period",
-            title: {text: "Period (Year, Month, Epi Week)"},
+            title: { text: "Period (Year, Month, Epi Week)" },
+            tickWidth: 1,
             labels: {
-              useHTML: true,
-              format: "{text}",
               y: 18,
               groupedOptions: [{
                 y: 10,
@@ -966,7 +942,6 @@ export class OverviewComponent implements OnInit {
               type: 'spline',
               color: 'red',
               yAxis: 1,
-              accessibility: { point: { valueSuffix: '%' } },
               data: MCTemp.ChartSeries[2],
             },
           ],
@@ -976,7 +951,7 @@ export class OverviewComponent implements OnInit {
               dataLabels: {
                 enabled: true,
                 useHTML: true,
-                format: "{y}%"
+                format: "<span style='text-shadow: 0px 0px 3px black; color: white; font-weight: bold'>{y}%</span>"
               }
             }
           },

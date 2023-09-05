@@ -5,6 +5,11 @@ import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from './icons/icon-subset';
 import { Title } from '@angular/platform-browser';
 
+import * as Highcharts from 'highcharts';
+import HighchartsGroupedCategories from 'highcharts-grouped-categories';
+
+HighchartsGroupedCategories(Highcharts);
+
 @Component({
   selector: 'app-root',
   template: '<router-outlet></router-outlet>',

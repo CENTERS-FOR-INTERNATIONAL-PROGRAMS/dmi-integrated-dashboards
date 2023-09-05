@@ -7,9 +7,11 @@ import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
+
 import { APIReader } from 'src/app/models/APIReader.model';
 import { IDFilter } from 'src/app/models/IDFilter.model';
 import { IDFacility } from 'src/app/models/IDFacility.model';
+import { GroupedCategory } from '../../../models/GroupedCategory.model';
 
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
@@ -72,7 +74,7 @@ export class ScreeningComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['screeningCascade'];
-        
+
         // Reset
         MCTemp.ChartSeries = [];
 
@@ -234,6 +236,8 @@ export class ScreeningComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['findScreeningOvertime'];
+        let GCPeriod: GroupedCategory[] = [];
+        let GCInstance = new GroupedCategory("", []);
 
         // Reset
         MCTemp.ChartSeries = [];
@@ -253,8 +257,15 @@ export class ScreeningComponent implements OnInit {
 
           //Compile Screenings
           MCTemp.ChartSeries[1].push(dataInstance.ScreenedNumber);
+
+          let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.Year, false);
+          let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
+          let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
         });
         //#endregion
+      
+        //Period (Index --> 2)
+        MCTemp.ChartSeries.push(JSON.parse(JSON.stringify(GCPeriod)));
       },
       () => {
         let MCTemp = this.CompositeCharts['findScreeningOvertime'];
@@ -268,7 +279,17 @@ export class ScreeningComponent implements OnInit {
             type: "spline"
           },
           xAxis: {
-            categories: MCTemp.ChartSeries[0],
+            title: { text: "Period (Year, Month, Epi Week)" },
+            tickWidth: 1,
+            labels: {
+              y: 18,
+              groupedOptions: [{
+                y: 10,
+              }, {
+                y: 10
+              }]
+            },
+            categories: MCTemp.ChartSeries[2]
           },
           yAxis: {
             title: {
@@ -277,7 +298,7 @@ export class ScreeningComponent implements OnInit {
           },
           series: [
             {
-              name: "Epiweek",
+              name: "Number Screened",
               data: MCTemp.ChartSeries[1],
               color: "#234FEA",
               type: "spline"

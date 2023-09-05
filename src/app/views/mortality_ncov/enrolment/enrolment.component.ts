@@ -6,6 +6,7 @@ import { ChartParent } from '../../../models/mortality_ncov/ChartParent.model';
 import { APIReader } from 'src/app/models/APIReader.model';
 import { IDFilter } from 'src/app/models/IDFilter.model';
 import { IDFacility } from 'src/app/models/IDFacility.model';
+import { GroupedCategory } from '../../../models/GroupedCategory.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -355,6 +356,8 @@ export class EnrolmentComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['findOverTime'];
+        let GCPeriod: GroupedCategory[] = [];
+        let GCInstance = new GroupedCategory("", []);
 
         //Reset
         MCTemp.ChartSeries = [];
@@ -381,8 +384,16 @@ export class EnrolmentComponent implements OnInit {
 
           //Compile Enrolled
           MCTemp.ChartSeries[2].push(dataInstance.EnrolledNumber);
+
+          //Compile Period
+          let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.Year, false);
+          let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
+          let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
         });
         //#endregion
+
+        //Period (Index --> 3)
+        MCTemp.ChartSeries.push(JSON.parse(JSON.stringify(GCPeriod)));
       },
       () => {
         let MCTemp = this.CompositeCharts['findOverTime'];
@@ -392,12 +403,19 @@ export class EnrolmentComponent implements OnInit {
             text: 'Enrolment over time',
             align: 'left'
           },
-          xAxis: [{
-            categories: MCTemp.ChartSeries[0],
-            title: {
-              text: "Epi Week",
-            }
-          }],
+          xAxis: {
+            title: { text: "Period (Year, Month, Epi Week)" },
+            tickWidth: 1,
+            labels: {
+              y: 18,
+              groupedOptions: [{
+                y: 10,
+              }, {
+                y: 10
+              }]
+            },
+            categories: MCTemp.ChartSeries[3]
+          },
           yAxis: [{
             title: {
               text: "Number Eligible",

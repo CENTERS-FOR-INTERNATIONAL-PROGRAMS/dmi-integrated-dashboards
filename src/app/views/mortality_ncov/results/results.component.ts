@@ -82,10 +82,12 @@ export class ResultsComponent implements OnInit {
 
         //#region Push series data into array at specific indexes
         // COVID-19 Positive (Index --> 0)
-        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].Covid19Positive;
+        MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].Covid19PositiveNumber;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].Covid19PositivePercent;
 
         // COVID-19 Negative (Index --> 1)
-        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].Covid19Negative;
+        MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].Covid19NegativeNumber;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].Covid19NegativePercent;
         //#endregion
       },
       () => {
@@ -108,8 +110,8 @@ export class ResultsComponent implements OnInit {
               name: "Number",
               type: 'pie',
               data: [
-                ["Positive: " + MCTemp.ChartSeries[0][0], MCTemp.ChartSeries[0][0]],
-                ["Negative: " + MCTemp.ChartSeries[1][0], MCTemp.ChartSeries[1][0]]
+                ["Positive: " + MCTemp.ChartSeries[0][0] + " (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
+                ["Negative: " + MCTemp.ChartSeries[1][0] + " (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]]
               ]
             }
           ],

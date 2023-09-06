@@ -1,4 +1,6 @@
 export interface COVID19Properties {
+  Covid19PositivePercent: any;
+  Covid19NegativePercent: any;
   SampleTestedNumber: any;
   Covid19NegativeNumber(Covid19NegativeNumber: any): unknown;
   Covid19PositiveNumber(Covid19PositiveNumber: any): unknown;

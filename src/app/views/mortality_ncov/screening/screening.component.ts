@@ -154,10 +154,10 @@ export class ScreeningComponent implements OnInit {
         // Facilities (Index --> 0)
         MCTemp.ChartSeries.push([]);
 
-        //Enrolled (Index --> 1)
+        //Screened (Index --> 1)
         MCTemp.ChartSeries.push([]);
 
-        //Positive (Index --> 2)
+        //Eligible (Index --> 2)
         MCTemp.ChartSeries.push([]);
         //#endregion
 
@@ -166,11 +166,11 @@ export class ScreeningComponent implements OnInit {
           //Compile Facilities
           MCTemp.ChartSeries[0].push(dataInstance.Facility);
 
-          //Compile Enrollments
-          MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
+          //Compile Screened
+          MCTemp.ChartSeries[1].push(dataInstance.ScreenedNumber);
 
-          //Compile Positives
-          MCTemp.ChartSeries[2].push(dataInstance.Covid19PositiveNumber);
+          //Compile Eligible
+          MCTemp.ChartSeries[2].push(dataInstance.EligibleNumber);
         });
         //#endregion
       },
@@ -197,14 +197,14 @@ export class ScreeningComponent implements OnInit {
           series: [
             {
               showInLegend: true,
-              name: "Enrolled",
+              name: "Screened",
               data: MCTemp.ChartSeries[1],
               type: 'column',
               color: "#234FEA",
             },
             {
               showInLegend: true,
-              name: "Positive",
+              name: "Eligible",
               data: MCTemp.ChartSeries[2],
               type: 'column',
               color: "red",

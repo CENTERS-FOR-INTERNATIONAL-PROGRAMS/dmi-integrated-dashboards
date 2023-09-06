@@ -118,7 +118,10 @@ export class EnrolmentComponent implements OnInit {
           plotOptions: {
             column: {
               pointPadding: 0.2,
-              borderWidth: 0
+              borderWidth: 0,
+              dataLabels: {
+                enabled: true
+              }
             }
           },
           series: [
@@ -165,6 +168,7 @@ export class EnrolmentComponent implements OnInit {
         MCTemp.ChartSeries[0].push("35-64 Yrs");
         MCTemp.ChartSeries[0].push("65-84 Yrs");
         MCTemp.ChartSeries[0].push("85+ Yrs");
+        MCTemp.ChartSeries[0].reverse();
 
         //Positivity - Female (Index --> 1)
         MCTemp.ChartSeries.push([]);
@@ -217,32 +221,67 @@ export class EnrolmentComponent implements OnInit {
           chart: { type: "bar" },
           xAxis: [
             {
+              title: {
+                text: ''
+              },
+              categories: MCTemp.ChartSeries[0]
+            }, {
+              title: {
+                text: ''
+              },
               categories: MCTemp.ChartSeries[0],
-              title: { text: "" }
+              opposite: true,
             }
           ],
           yAxis: [
             {
               title: {
-                text: "Number Enrolled"
-              }
+                text: 'Enrolled Number',
+                align: 'high',
+                textAlign: 'center'
+              },
+              allowDecimals: false,
+              width: '50%',
+              reversed: true
+            }, {
+              title: {
+                text: '',
+              },
+              allowDecimals: false,
+              width: '50%',
+              left: '50%',
+              offset: 0,
             }
           ],
-          plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
+          plotOptions: {
+            series: {
+              stacking: "normal"
+            },
+            bar: {
+              pointWidth: 18,
+              dataLabels: {
+                enabled: true
+              }
+            }
+          },
           tooltip: {
           },
           legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
           series: [
             {
-              name: "Male",
-              data: MCTemp.ChartSeries[2],
-              color: "#234FEA",
+              name: 'Female',
+              data: MCTemp.ChartSeries[1],
+              color: '#FFA500',
+              xAxis: 0,
+              yAxis: 0,
               type: 'bar'
             },
             {
-              name: "Female",
-              data: MCTemp.ChartSeries[1],
-              color: "#FFA500",
+              name: 'Male',
+              data: MCTemp.ChartSeries[2],
+              color: '#234FEA',
+              xAxis: 1,
+              yAxis: 1,
               type: 'bar'
             }
           ],
@@ -366,10 +405,10 @@ export class EnrolmentComponent implements OnInit {
         // EpiWeek (Index --> 0)
         MCTemp.ChartSeries.push([]);
 
-        //Elligible (Index --> 1)
+        //Enrolled (Index --> 1)
         MCTemp.ChartSeries.push([]);
 
-        //Enrolled (Index --> 2)
+        //Tested (Index --> 2)
         MCTemp.ChartSeries.push([]);
         //#endregion
 
@@ -377,13 +416,12 @@ export class EnrolmentComponent implements OnInit {
         MCTemp.ChartData.forEach(dataInstance => {
           //Compile EpiWeek
           MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
-          // MCTemp.ChartSeries[0].push(dataInstance.EpiWeek + " (" + dataInstance.Year + ")");
-
-          //Compile Elligible
-          MCTemp.ChartSeries[1].push(dataInstance.EligibleNumber);
 
           //Compile Enrolled
-          MCTemp.ChartSeries[2].push(dataInstance.EnrolledNumber);
+          MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
+
+          //Compile Tested
+          MCTemp.ChartSeries[2].push(dataInstance.TestedNumber);
 
           //Compile Period
           let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.Year, false);
@@ -418,24 +456,25 @@ export class EnrolmentComponent implements OnInit {
           },
           yAxis: [{
             title: {
-              text: "Number Eligible",
-            }
+              text: "Number Enrolled",
+            },
+            allowDecimals: false
           },
           {
             title: {
-              text: 'Percent Enrolled',
+              text: 'Percent Tested',
             },
             opposite: true,
           }],
           series: [
             {
-              name: "Elligible",
+              name: "Enrolled",
               data: MCTemp.ChartSeries[1],
               color: "#234FEA",
               type: "column"
             },
             {
-              name: "Enrolled",
+              name: "Tested",
               data: MCTemp.ChartSeries[2],
               color: "red",
               yAxis: 1,

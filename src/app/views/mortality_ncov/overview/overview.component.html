@@ -57,9 +57,6 @@
         <mat-select [(value)]="DataFilterInstance.filter_year" placeholder="Select year"
           (selectionChange)="processFilters()">
           <mat-option>None</mat-option>
-          <mat-option value="2020">2020</mat-option>
-          <mat-option value="2021">2021</mat-option>
-          <mat-option value="2022">2022</mat-option>
           <mat-option value="2023">2023</mat-option>
         </mat-select>
       </mat-form-field>
@@ -102,7 +99,7 @@
       </c-card-body>
 
       <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
-        <label style="font-size: 12px;">{{this.covid19SummaryGroup[0][2]}} last month</label>
+        <label style="font-size: 12px;">{{covid19SummaryGroup[0][2]}} last month</label>
       </c-card-footer>
     </c-card>
   </c-col>
@@ -126,7 +123,7 @@
       </c-card-body>
 
       <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
-        <label style="font-size: 12px;">{{this.covid19SummaryGroup[1][2]}} last month</label>
+        <label style="font-size: 12px;">{{covid19SummaryGroup[1][2]}} last month</label>
       </c-card-footer>
     </c-card>
   </c-col>
@@ -150,7 +147,7 @@
       </c-card-body>
 
       <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
-        <label style="font-size: 12px;">{{this.covid19SummaryGroup[2][2]}} last month</label>
+        <label style="font-size: 12px;">{{covid19SummaryGroup[2][2]}} last month</label>
       </c-card-footer>
     </c-card>
   </c-col>
@@ -174,7 +171,7 @@
       </c-card-body>
 
       <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
-        <label style="font-size: 12px;">{{this.covid19SummaryGroup[3][2]}} last month</label>
+        <label style="font-size: 12px;">{{covid19SummaryGroup[3][2]}} last month</label>
       </c-card-footer>
     </c-card>
   </c-col>
@@ -198,7 +195,7 @@
       </c-card-body>
 
       <c-card-footer style="padding: 0 0 5px 5px; border: none; background-color: #fff;">
-        <label style="font-size: 12px;">{{this.covid19SummaryGroup[4][2]}} last month</label>
+        <label style="font-size: 12px;">{{covid19SummaryGroup[4][2]}} last month</label>
       </c-card-footer>
     </c-card>
   </c-col>

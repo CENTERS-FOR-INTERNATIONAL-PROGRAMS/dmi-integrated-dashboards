@@ -122,6 +122,7 @@ export class ScreeningComponent implements OnInit {
           series: [
             {
               data: MCTemp.ChartSeries[0],
+              name: "Number",
               color: "#234FEA",
               showInLegend: false
             }
@@ -294,7 +295,8 @@ export class ScreeningComponent implements OnInit {
           yAxis: {
             title: {
               text: "Number Screened",
-            }
+            },
+            allowDecimals: false
           },
           series: [
             {

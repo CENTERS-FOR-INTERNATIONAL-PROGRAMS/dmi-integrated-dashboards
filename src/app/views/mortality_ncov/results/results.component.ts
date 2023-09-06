@@ -105,7 +105,7 @@ export class ResultsComponent implements OnInit {
           ],
           series: [
             {
-              name: "Data",
+              name: "Number",
               type: 'pie',
               data: [
                 ["Positive: " + MCTemp.ChartSeries[0][0], MCTemp.ChartSeries[0][0]],
@@ -254,7 +254,6 @@ export class ResultsComponent implements OnInit {
         MCTemp.ChartSeries[0].push("35-64 Yrs");
         MCTemp.ChartSeries[0].push("65-84 Yrs");
         MCTemp.ChartSeries[0].push("85+ Yrs");
-
         MCTemp.ChartSeries[0] = MCTemp.ChartSeries[0].reverse();
 
         //Positivity - Female (Index --> 1)
@@ -304,32 +303,69 @@ export class ResultsComponent implements OnInit {
             align: 'left',
           },
           chart: { type: "bar" },
-          xAxis: {
-            categories: MCTemp.ChartSeries[0],
-            title: { text: "" },
-          },
+          xAxis: [
+            {
+              title: {
+                text: ''
+              },
+              categories: MCTemp.ChartSeries[0]
+            }, {
+              title: {
+                text: ''
+              },
+              categories: MCTemp.ChartSeries[0],
+              opposite: true,
+            }
+          ],
           yAxis: [
             {
               title: {
-                text: "Number Positive"
-              }
+                text: 'Positive Number',
+                align: 'high',
+                textAlign: 'center'
+              },
+              allowDecimals: false,
+              width: '50%',
+              reversed: true
+            }, {
+              title: {
+                text: '',
+              },
+              allowDecimals: false,
+              width: '50%',
+              left: '50%',
+              offset: 0,
             }
           ],
-          plotOptions: { series: { stacking: "normal" }, bar: { pointWidth: 18 } },
+          plotOptions: {
+            series: {
+              stacking: "normal"
+            },
+            bar: {
+              pointWidth: 18,
+              dataLabels: {
+                enabled: true
+              }
+            }
+          },
           tooltip: {
           },
           legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
           series: [
             {
-              name: "Male",
-              data: MCTemp.ChartSeries[2],
-              color: "#234FEA",
+              name: 'Female',
+              data: MCTemp.ChartSeries[1],
+              color: '#FFA500',
+              xAxis: 0,
+              yAxis: 0,
               type: 'bar'
             },
             {
-              name: "Female",
-              data: MCTemp.ChartSeries[1],
-              color: "#FFA500",
+              name: 'Male',
+              data: MCTemp.ChartSeries[2],
+              color: '#234FEA',
+              xAxis: 1,
+              yAxis: 1,
               type: 'bar'
             }
           ],
@@ -414,7 +450,8 @@ export class ResultsComponent implements OnInit {
           yAxis: [{
             title: {
               text: "Number Tested",
-            }
+            },
+            allowDecimals: false
           },
           {
             title: {

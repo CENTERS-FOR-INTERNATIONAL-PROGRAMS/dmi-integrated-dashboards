@@ -12,8 +12,8 @@ export class ReviewService {
 
     constructor(private http: HttpClient) { }
 
-    findSummaryByMonth(): Observable<Covid19Summary[]> {
-        return this.http.post<Covid19Summary[]>(`${this.BASE_URL_COVID19_SUMMARYBYMONTH}`, {}).pipe(
+    findSummaryByMonth(DataFilter: {}): Observable<Covid19Summary[]> {
+        return this.http.post<Covid19Summary[]>(`${this.BASE_URL_COVID19_SUMMARYBYMONTH}`, DataFilter).pipe(
             retry(1),
             catchError(this.handleError)
         );

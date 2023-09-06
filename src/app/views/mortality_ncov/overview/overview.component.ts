@@ -591,7 +591,8 @@ export class OverviewComponent implements OnInit {
             min: 0,
             title: {
               text: 'Number Screened'
-            }
+            },
+            allowDecimals: false
           },
           tooltip: {
             valueSuffix: ''
@@ -599,12 +600,17 @@ export class OverviewComponent implements OnInit {
           plotOptions: {
             column: {
               pointPadding: 0.2,
-              borderWidth: 0
+              borderWidth: 0,
+              stacking: 'normal',
+              dataLabels: {
+                enabled: true
+              }
             }
           },
           series: [
             {
               color: "#234FEA",
+              name: "Number",
               data: MCTemp.ChartSeries[0],
               showInLegend: false
             }
@@ -695,7 +701,7 @@ export class OverviewComponent implements OnInit {
             align: 'left',
           },
           chart: {
-            type: 'bar',
+            // type: 'bar',
           },
           accessibility: {
             point: {
@@ -704,18 +710,36 @@ export class OverviewComponent implements OnInit {
           },
           xAxis: [
             {
+              title: {
+                text: ''
+              },
+              categories: MCTemp.ChartSeries[0]
+            }, {
+              title: {
+                text: ''
+              },
               categories: MCTemp.ChartSeries[0],
-              title: { text: '' },
+              opposite: true,
             }
           ],
           yAxis: [
             {
               title: {
-                text: 'Number Positive',
+                text: 'Positive Number',
+                align: 'high',
+                textAlign: 'center'
               },
-              labels: {
-                format: '{value}', //TODO! Format to remove netagive values
+              allowDecimals: false,
+              width: '50%',
+              reversed: true
+            }, {
+              title: {
+                text: '',
               },
+              allowDecimals: false,
+              width: '50%',
+              left: '50%',
+              offset: 0,
             }
           ],
           plotOptions: {
@@ -724,6 +748,9 @@ export class OverviewComponent implements OnInit {
             },
             bar: {
               pointWidth: 18,
+              dataLabels: {
+                enabled: true
+              }
             }
           },
           tooltip: {
@@ -732,14 +759,20 @@ export class OverviewComponent implements OnInit {
           legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
-              name: 'Male',
-              data: MCTemp.ChartSeries[2],
-              color: '#234FEA',
-            },
-            {
               name: 'Female',
               data: MCTemp.ChartSeries[1],
               color: '#FFA500',
+              xAxis: 0,
+              yAxis: 0,
+              type: 'bar'
+            },
+            {
+              name: 'Male',
+              data: MCTemp.ChartSeries[2],
+              color: '#234FEA',
+              xAxis: 1,
+              yAxis: 1,
+              type: 'bar'
             }
           ],
           credits: {
@@ -769,7 +802,7 @@ export class OverviewComponent implements OnInit {
         // Facilities (Index --> 0)
         MCTemp.ChartSeries.push([]);
 
-        //Enrolled (Index --> 1)
+        //Tested (Index --> 1)
         MCTemp.ChartSeries.push([]);
 
         //Positive (Index --> 2)
@@ -781,8 +814,8 @@ export class OverviewComponent implements OnInit {
           //Compile Facilities (Index --> 0)
           MCTemp.ChartSeries[0].push(dataInstance.Facility);
 
-          //Compile Enrollments (Index --> 1)
-          MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
+          //Compile Tested (Index --> 1)
+          MCTemp.ChartSeries[1].push(dataInstance.TestedNumber);
 
           //Compile Positives (Index --> 2)
           MCTemp.ChartSeries[2].push(dataInstance.PositiveNumber);
@@ -794,7 +827,7 @@ export class OverviewComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Enrolled and Tested Positive by Facility',
+            text: 'Tested Positive by Facility',
             align: 'left'
           },
           chart: {
@@ -806,13 +839,13 @@ export class OverviewComponent implements OnInit {
           },
           yAxis: {
             title: {
-              text: "Number Enrolled",
+              text: "Number Tested",
             }
           },
           series: [
             {
               showInLegend: true,
-              name: "Enrolled",
+              name: "Tested",
               data: MCTemp.ChartSeries[1],
               type: 'column',
               color: "#234FEA",
@@ -966,7 +999,6 @@ export class OverviewComponent implements OnInit {
     HC_exporting(Highcharts);
   }
 
-  //#region Load Chart --> Covid-19 Summary by last month
   loadCovid19SummaryData() {
     this.covid19SummaryGroup = [];
 
@@ -984,7 +1016,7 @@ export class OverviewComponent implements OnInit {
       this.covid19SummaryGroup[index].push(0);
     }
 
-    this.reviewService.findSummaryByMonth().subscribe((response) => {
+    this.reviewService.findSummaryByMonth(this.DataFilterInstance).subscribe((response) => {
       this.covid19SummaryByMonth = response;
 
       //#region Attach Summary --> Last Month Data
@@ -1027,7 +1059,5 @@ export class OverviewComponent implements OnInit {
       //#endregion
     });
   }
-
-  //#endregion
 
 }

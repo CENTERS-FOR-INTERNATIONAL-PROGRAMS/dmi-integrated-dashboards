@@ -15,7 +15,6 @@ import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 
-HighchartsGroupedCategories(Highcharts);
 HighchartsMore(Highcharts);
 HighchartsSolidGauge(Highcharts);
 

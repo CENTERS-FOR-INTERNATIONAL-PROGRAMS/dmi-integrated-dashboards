@@ -37,7 +37,7 @@ export class ResultsComponent implements OnInit {
   }
 
   loadFilters() {
-    //#region Acqurie composite facilities
+    //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
         this.CompositeFacilities.push(new IDFacility(dataInstance));
@@ -194,13 +194,6 @@ export class ResultsComponent implements OnInit {
               enabled: false
             }
           },
-          legend: {
-            align: 'left',
-            x: 70,
-            verticalAlign: 'top',
-            y: 70,
-            floating: true
-          },
           tooltip: {
             headerFormat: '<b>{point.x}</b><br/>',
             pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
@@ -340,9 +333,6 @@ export class ResultsComponent implements OnInit {
             }
           ],
           plotOptions: {
-            series: {
-              stacking: "normal"
-            },
             bar: {
               pointWidth: 18,
               dataLabels: {
@@ -458,6 +448,9 @@ export class ResultsComponent implements OnInit {
           {
             title: {
               text: 'Percent Positive',
+            },
+            labels: {
+              format: '{value}%',
             },
             opposite: true,
           }],

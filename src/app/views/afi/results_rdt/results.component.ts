@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AFIChart } from '../../../models/afi/AFIChart.model';
-import { ACParent } from '../../../models/afi/ACParent.model';
+import { Chart } from '../../../models/afi/Chart.model';
+import { ChartParent } from '../../../models/afi/ChartParent.model';
+import { IDFilter } from '../../../models/IDFilter.model';
+import { IDFacility } from '../../../models/IDFacility.model';
+import { APIReader } from '../../../models/APIReader.model';
 
 import * as Highcharts from 'highcharts/highstock';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -13,7 +16,11 @@ import HC_exporting from 'highcharts/modules/exporting';
 
 export class AResultsComponent implements OnInit {
   //#region Prerequisites
-  CompositeCharts: ACParent = {};
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
+
+  CompositeCharts: ChartParent = {};
   highcharts = Highcharts;
   //#endregion
 
@@ -21,11 +28,37 @@ export class AResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCharts();
+    this.loadFilters();
+  }
+
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
+  loadFilters() {
+    //#region Acquire composite facilities
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+      this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
+      });
+    });
+    //#endregion
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
+
+    //#region Reload all charts
+    Object.keys(this.CompositeCharts).forEach(chart_ident => {
+      this.CompositeCharts[chart_ident].ChartFilterData = this.DataFilterInstance;
+      this.CompositeCharts[chart_ident].reloadData();
+    });
+    //#endregion
   }
 
   loadCharts() {
     //#region Load Chart --> Malaria Results 
-    this.CompositeCharts['malariaResults'] = new AFIChart(this.http);
+    this.CompositeCharts['malariaResults'] = new Chart(this.http);
     this.CompositeCharts['malariaResults'].loadData(
       "results_rdt/malariaResults",
       () => {
@@ -94,7 +127,7 @@ export class AResultsComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Leptospirosis Results 
-    this.CompositeCharts['leptospirosisResults'] = new AFIChart(this.http);
+    this.CompositeCharts['leptospirosisResults'] = new Chart(this.http);
     this.CompositeCharts['leptospirosisResults'].loadData(
       "results_rdt/leptospirosisResults",
       () => {
@@ -162,7 +195,7 @@ export class AResultsComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Malaria Positive Results 
-    this.CompositeCharts['malariaPositiveResults'] = new AFIChart(this.http);
+    this.CompositeCharts['malariaPositiveResults'] = new Chart(this.http);
     this.CompositeCharts['malariaPositiveResults'].loadData(
       "results_rdt/malariaPositiveResults",
       () => {
@@ -243,7 +276,7 @@ export class AResultsComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> RDT Positive Results Distribution by Health Facility
-    this.CompositeCharts['RDTResultsByFacility'] = new AFIChart(this.http);
+    this.CompositeCharts['RDTResultsByFacility'] = new Chart(this.http);
     this.CompositeCharts['RDTResultsByFacility'].loadData(
       "results_rdt/RDTResultsByFacility",
       () => {
@@ -321,7 +354,7 @@ export class AResultsComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Percent Malaria RDT Positive Results over time
-    this.CompositeCharts['malariaPositiveResultsOverTime'] = new AFIChart(this.http);
+    this.CompositeCharts['malariaPositiveResultsOverTime'] = new Chart(this.http);
     this.CompositeCharts['malariaPositiveResultsOverTime'].loadData(
       "results_rdt/malariaPositiveResultsOverTime",
       () => {
@@ -419,7 +452,7 @@ export class AResultsComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Percent Leptospirosis RDT Positive Results over time
-    this.CompositeCharts['leptospirosisPositiveResultsOverTime'] = new AFIChart(this.http);
+    this.CompositeCharts['leptospirosisPositiveResultsOverTime'] = new Chart(this.http);
     this.CompositeCharts['leptospirosisPositiveResultsOverTime'].loadData(
       "results_rdt/leptospirosisPositiveResultsOverTime",
       () => {

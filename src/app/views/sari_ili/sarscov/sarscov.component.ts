@@ -47,7 +47,7 @@ export class SARSCOV2Component implements OnInit {
   }
 
   loadFilters() {
-    //#region Acqurie composite facilities
+    //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
         this.CompositeFacilities.push(new IDFacility(dataInstance));
@@ -178,7 +178,9 @@ export class SARSCOV2Component implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
+        //Prerequisites
         let MCTemp = this.CompositeCharts['testedByAgeGroup'];
+        MCTemp.ChartSeries = [];
 
         // Age Group (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -190,10 +192,14 @@ export class SARSCOV2Component implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
-          MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
+          MCTemp.ChartSeries[0].push(dataInstance.AgeGroupCategory);
           MCTemp.ChartSeries[1].push(dataInstance.SARSCOV2TestedNumber);
-          MCTemp.ChartSeries[2].push(dataInstance.SARSCOV2TestedPercentage);
+          MCTemp.ChartSeries[2].push(dataInstance.SARSCOV2TestedPercent);
         });
+
+        MCTemp.ChartSeries[0].reverse();
+        MCTemp.ChartSeries[1].reverse();
+        MCTemp.ChartSeries[2].reverse();
       },
       () => {
         let MCTemp = this.CompositeCharts['testedByAgeGroup'];
@@ -273,7 +279,9 @@ export class SARSCOV2Component implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
+        // Prerequisites
         let MCTemp = this.CompositeCharts['positiveDistributionByAgeGroup'];
+        MCTemp.ChartSeries = [];
 
         // Age Group (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -285,10 +293,14 @@ export class SARSCOV2Component implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
-          MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
+          MCTemp.ChartSeries[0].push(dataInstance.AgeGroupCategory);
           MCTemp.ChartSeries[1].push(dataInstance.SARSCOV2PositiveNumber);
-          MCTemp.ChartSeries[2].push(dataInstance.SARSCOV2PositivePercentage);
+          MCTemp.ChartSeries[2].push(dataInstance.SARSCOV2PositivePercent);
         });
+
+        MCTemp.ChartSeries[0].reverse();
+        MCTemp.ChartSeries[1].reverse();
+        MCTemp.ChartSeries[2].reverse();
       },
       () => {
         let MCTemp = this.CompositeCharts['positiveDistributionByAgeGroup'];
@@ -367,7 +379,9 @@ export class SARSCOV2Component implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
+        // Prerequisites
         let MCTemp = this.CompositeCharts['SARSCOV2PositiveOvertime'];
+        MCTemp.ChartSeries = [];
 
         // Initialize series array
         for (let index = 0; index < 4; index++) {
@@ -379,10 +393,10 @@ export class SARSCOV2Component implements OnInit {
           MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
 
           //Compile Covid Tested Number (Index --> 1)
-          MCTemp.ChartSeries[1].push(dataInstance.CovidTestedNumber);
+          MCTemp.ChartSeries[1].push(dataInstance.SARSCOV2PositiveNumber);
 
           //Compile SARS-COV-2 Positive Percentage (Index --> 2)
-          MCTemp.ChartSeries[2].push(dataInstance.SARSCOV2PositivePercentage);
+          MCTemp.ChartSeries[2].push(dataInstance.SARSCOV2PositivePercent);
         });
       },
       () => {
@@ -414,6 +428,9 @@ export class SARSCOV2Component implements OnInit {
             title: {
               text: "(%) SARS-COV-2 Positive",
               rotation: 270,
+            },
+            labels: {
+              format: '{value}%',
             },
             opposite: true
           }],

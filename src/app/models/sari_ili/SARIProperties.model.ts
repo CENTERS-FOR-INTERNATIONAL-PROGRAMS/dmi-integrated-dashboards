@@ -1,4 +1,8 @@
 export interface SARIProperties {
+    WeekNumber: any;
+    AgeGroupCategory(AgeGroupCategory: any): unknown;
+    SARSCOV2TestedPercent(SARSCOV2TestedPercent: any): unknown;
+    NotDeterminedNumber: any;
     VictoriaPercent: any;
     YamagataPercent: any;
     NotdeterminedPercent: any;
@@ -24,8 +28,8 @@ export interface SARIProperties {
     Covid19PositiveNumber: number;
     Covid19PositivePercent: number;
     EPIWeek: string;
-    Month: number;
-    Year: number;
+    Month: string;
+    Year: string;
 
     Scenario: string;
     Subtype: string;

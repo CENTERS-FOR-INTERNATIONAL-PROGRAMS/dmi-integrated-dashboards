@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { AFIProperties } from '../../../models/afi/AFIProperties.model';
-import { AFIChart } from '../../../models/afi/AFIChart.model';
-import { ACParent } from '../../../models/afi/ACParent.model';
+import { Chart } from '../../../models/afi/Chart.model';
+import { ChartParent } from '../../../models/afi/ChartParent.model';
+import { IDFilter } from '../../../models/IDFilter.model';
+import { IDFacility } from '../../../models/IDFacility.model';
+import { APIReader } from '../../../models/APIReader.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -20,7 +23,11 @@ HighchartsSolidGauge(Highcharts);
 
 export class ACasesComponent implements OnInit {
   //#region Prerequisites
-  CompositeCharts: ACParent = {};
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
+
+  CompositeCharts: ChartParent = {};
   highcharts = Highcharts;
   //#endregion
 
@@ -28,11 +35,38 @@ export class ACasesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCharts();
+    this.loadFilters();
   }
+
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
+  loadFilters() {
+    //#region Acquire composite facilities
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+      this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
+      });
+    });
+    //#endregion
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
+
+    //#region Reload all charts
+    Object.keys(this.CompositeCharts).forEach(chart_ident => {
+      this.CompositeCharts[chart_ident].ChartFilterData = this.DataFilterInstance;
+      this.CompositeCharts[chart_ident].reloadData();
+    });
+    //#endregion
+  }
+
 
   loadCharts() {
     //#region Load Chart --> Syndromes
-    this.CompositeCharts['syndromes'] = new AFIChart(this.http);
+    this.CompositeCharts['syndromes'] = new Chart(this.http);
     this.CompositeCharts['syndromes'].loadData(
       "syndromic_cases/syndromes",
       () => {
@@ -111,7 +145,7 @@ export class ACasesComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Syndromes by Facility
-    this.CompositeCharts['syndromesByFacility'] = new AFIChart(this.http);
+    this.CompositeCharts['syndromesByFacility'] = new Chart(this.http);
     this.CompositeCharts['syndromesByFacility'].loadData(
       "syndromic_cases/syndromesByFacility",
       () => {
@@ -207,7 +241,7 @@ export class ACasesComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Syndromes over time
-    this.CompositeCharts['syndromesOverTime'] = new AFIChart(this.http);
+    this.CompositeCharts['syndromesOverTime'] = new Chart(this.http);
     this.CompositeCharts['syndromesOverTime'].loadData(
       "overview/syndromesOverTime",
       () => {

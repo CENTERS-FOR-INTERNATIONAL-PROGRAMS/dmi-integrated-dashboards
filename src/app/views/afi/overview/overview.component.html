@@ -7,8 +7,80 @@
   </p>
 </c-card>
 
+<!-- Filters -->
 <br />
+<c-row>
+  <c-col [sm]="3">
+    <c-card class="view-border--none">
+      <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
+        <label>Health Facility</label>
+      </c-card-header>
 
+      <mat-form-field>
+        <mat-select placeholder="Select facility" [(value)]="DataFilterInstance.filter_facility"
+          (selectionChange)="processFilters()">
+          <mat-option value="-1">All</mat-option>
+          <mat-option *ngFor="let FacilityInstance of CompositeFacilities"
+            [value]="FacilityInstance.facility_id">{{FacilityInstance.facility_name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="3">
+    <c-card class="view-border--none">
+      <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
+        Date Range
+      </c-card-header>
+
+      <mat-form-field>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Start date" [(ngModel)]="DataFilterInstance._filter_date_range_start">
+          <input matEndDate placeholder="End date" [(ngModel)]="DataFilterInstance._filter_date_range_end"
+            (dateChange)="processFilters()">
+        </mat-date-range-input>
+
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="3">
+    <c-card class="view-border--none">
+      <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
+        Year
+      </c-card-header>
+
+      <mat-form-field>
+        <mat-select [(value)]="DataFilterInstance.filter_year" placeholder="Select year"
+          (selectionChange)="processFilters()">
+          <mat-option>None</mat-option>
+          <mat-option value="2023">2023</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="3">
+    <c-card class="view-border--none">
+      <c-card-header class="view-background--color-none view-border--none">
+        Epi Week
+      </c-card-header>
+
+      <c-card-body>
+        <mat-slider min="1" max="53" showTickMarks discrete [displayWith]="formatLabel" style="width: 90%">
+          <input value="1" matSliderStartThumb [(ngModel)]="DataFilterInstance.filter_epi_week_start"
+            (input)="processFilters()">
+          <input value="53" matSliderEndThumb [(ngModel)]="DataFilterInstance.filter_epi_week_end"
+            (input)="processFilters()">
+        </mat-slider>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<br />
 <c-row>
   <c-col [sm]="3">
     <c-card>
@@ -130,7 +202,6 @@
 </c-row>
 
 <br />
-
 <c-row>
   <c-col [sm]="12">
     <c-card>
@@ -141,7 +212,6 @@
 </c-row>
 
 <br />
-
 <c-row>
   <c-col [sm]="6">
     <c-card>
@@ -159,7 +229,6 @@
 </c-row>
 
 <br />
-
 <c-row>
   <c-col [sm]="8">
     <c-card>
@@ -184,7 +253,6 @@
 </c-row>
 
 <br />
-
 <c-row>
   <c-col [sm]="6">
     <c-card>

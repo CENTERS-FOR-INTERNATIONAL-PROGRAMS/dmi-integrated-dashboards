@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AFIChart } from '../../../models/afi/AFIChart.model';
-import { ACParent } from '../../../models/afi/ACParent.model';
+import { Chart } from '../../../models/afi/Chart.model';
+import { ChartParent } from '../../../models/afi/ChartParent.model';
+import { IDFilter } from '../../../models/IDFilter.model';
+import { IDFacility } from '../../../models/IDFacility.model';
+import { APIReader } from '../../../models/APIReader.model';
 
 import * as Highcharts from 'highcharts/highstock';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -22,20 +25,50 @@ HighchartsMap(Highcharts);
 
 export class AOverviewComponent implements OnInit {
   //#region Prerequisites
-  CompositeCharts: ACParent = {};
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
+
+  CompositeCharts: ChartParent = {};
   highcharts = Highcharts;
   //#endregion
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.loadFilters();
     this.loadCharts();
+  }
+
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
+  loadFilters() {
+    //#region Acquire composite facilities
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+      this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
+      });
+    });
+    //#endregion
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
+
+    //#region Reload all charts
+    Object.keys(this.CompositeCharts).forEach(chart_ident => {
+      this.CompositeCharts[chart_ident].ChartFilterData = this.DataFilterInstance;
+      this.CompositeCharts[chart_ident].reloadData();
+    });
+    //#endregion
   }
 
   loadCharts() {
 
     //#region Load Chart --> Enrolment by gender
-    this.CompositeCharts['enrolledByGender'] = new AFIChart(this.http);
+    this.CompositeCharts['enrolledByGender'] = new Chart(this.http);
     this.CompositeCharts['enrolledByGender'].loadData(
       "overview/enrolledByGender",
       () => {
@@ -103,7 +136,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Enrolment by age and gender
-    this.CompositeCharts['enrolledByAgeGender'] = new AFIChart(this.http);
+    this.CompositeCharts['enrolledByAgeGender'] = new Chart(this.http);
     this.CompositeCharts['enrolledByAgeGender'].loadData(
       "overview/enrolledByAgeGender",
       () => {
@@ -237,7 +270,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Syndromes over time
-    this.CompositeCharts['syndromesOverTime'] = new AFIChart(this.http);
+    this.CompositeCharts['syndromesOverTime'] = new Chart(this.http);
     this.CompositeCharts['syndromesOverTime'].loadData(
       "overview/syndromesOverTime",
       () => {
@@ -345,7 +378,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> RDT Results Malaria
-    this.CompositeCharts['RTDResultsMalaria'] = new AFIChart(this.http);
+    this.CompositeCharts['RTDResultsMalaria'] = new Chart(this.http);
     this.CompositeCharts['RTDResultsMalaria'].loadData(
       "overview/RTDResultsMalaria",
       () => {
@@ -414,7 +447,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> RDT Results Leptospirosis
-    this.CompositeCharts['RTDResultsLeptospirosis'] = new AFIChart(this.http);
+    this.CompositeCharts['RTDResultsLeptospirosis'] = new Chart(this.http);
     this.CompositeCharts['RTDResultsLeptospirosis'].loadData(
       "overview/RTDResultsLeptospirosis",
       () => {
@@ -483,7 +516,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Molecular PCR laboratory results
-    this.CompositeCharts['PCRResults'] = new AFIChart(this.http);
+    this.CompositeCharts['PCRResults'] = new Chart(this.http);
     this.CompositeCharts['PCRResults'].loadData(
       "overview/PCRResults",
       () => {
@@ -587,7 +620,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Priority IDSR immediately reportable Diseases/Microbes
-    this.CompositeCharts['priorityIDSRReportableDiseases'] = new AFIChart(this.http);
+    this.CompositeCharts['priorityIDSRReportableDiseases'] = new Chart(this.http);
     this.CompositeCharts['priorityIDSRReportableDiseases'].loadData(
       "overview/priorityIDSRReportableDiseases",
       () => {
@@ -656,7 +689,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Monthly IDSR reportable Diseases/Microbes
-    this.CompositeCharts['monthlyIDSRReportableDiseases'] = new AFIChart(this.http);
+    this.CompositeCharts['monthlyIDSRReportableDiseases'] = new Chart(this.http);
     this.CompositeCharts['monthlyIDSRReportableDiseases'].loadData(
       "overview/monthlyIDSRReportableDiseases",
       () => {
@@ -737,7 +770,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> SARS-COV-2 Positivity
-    this.CompositeCharts['SARSCOV2Positivity'] = new AFIChart(this.http);
+    this.CompositeCharts['SARSCOV2Positivity'] = new Chart(this.http);
     this.CompositeCharts['SARSCOV2Positivity'].loadData(
       "overview/SARSCOV2Positivity",
       () => {
@@ -798,7 +831,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Screened Cascade
-    this.CompositeCharts['screenedCascade'] = new AFIChart(this.http);
+    this.CompositeCharts['screenedCascade'] = new Chart(this.http);
     this.CompositeCharts['screenedCascade'].loadData(
       "overview/AFICascade",
       () => {
@@ -891,7 +924,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Eligible Cascade
-    this.CompositeCharts['aligibleCascade'] = new AFIChart(this.http);
+    this.CompositeCharts['aligibleCascade'] = new Chart(this.http);
     this.CompositeCharts['aligibleCascade'].loadData(
       "overview/AFICascade",
       () => {
@@ -985,7 +1018,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Enrolment Cascade
-    this.CompositeCharts['enrolledCascade'] = new AFIChart(this.http);
+    this.CompositeCharts['enrolledCascade'] = new Chart(this.http);
     this.CompositeCharts['enrolledCascade'].loadData(
       "overview/AFICascade",
       () => {
@@ -1079,7 +1112,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Sampled Cascade
-    this.CompositeCharts['sampledCascade'] = new AFIChart(this.http);
+    this.CompositeCharts['sampledCascade'] = new Chart(this.http);
     this.CompositeCharts['sampledCascade'].loadData(
       "overview/AFICascade",
       () => {
@@ -1173,7 +1206,7 @@ export class AOverviewComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Geographic distribution of pathogen
-    this.CompositeCharts['geographicDistributionOfPathogen'] = new AFIChart(this.http);
+    this.CompositeCharts['geographicDistributionOfPathogen'] = new Chart(this.http);
     this.CompositeCharts['geographicDistributionOfPathogen'].loadData(
       "overview/geographicDistributionOfPathogen",
       () => {

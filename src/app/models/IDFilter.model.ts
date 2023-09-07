@@ -1,5 +1,7 @@
 export class IDFilter {
   filter_facility: string = '-1';
+  
+  filter_case_definition: string = '-1';
 
   filter_date_range_start: string = '-1';
   _filter_date_range_start: string = '-1';

@@ -38,7 +38,7 @@ export class EnrolmentComponent implements OnInit {
   }
 
   loadFilters() {
-    //#region Acqurie composite facilities
+    //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
         this.CompositeFacilities.push(new IDFacility(dataInstance));
@@ -254,9 +254,6 @@ export class EnrolmentComponent implements OnInit {
             }
           ],
           plotOptions: {
-            series: {
-              stacking: "normal"
-            },
             bar: {
               pointWidth: 18,
               dataLabels: {
@@ -465,6 +462,9 @@ export class EnrolmentComponent implements OnInit {
               text: 'Percent Tested',
             },
             opposite: true,
+            labels: {
+              format: '{value}%',
+            },
           }],
           series: [
             {

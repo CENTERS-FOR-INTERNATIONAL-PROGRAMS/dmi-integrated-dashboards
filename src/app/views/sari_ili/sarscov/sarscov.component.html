@@ -10,7 +10,7 @@
 
 <!-- Filters -->
 <c-row>
-  <c-col [sm]="3">
+  <c-col [sm]="2" style="width: 20%;">
     <c-card class="view-border--none">
       <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
         <label>Health Facility</label>
@@ -27,7 +27,24 @@
     </c-card>
   </c-col>
 
-  <c-col [sm]="3">
+  <c-col [sm]="2" style="width: 20%;">
+    <c-card class="view-border--none">
+      <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
+        <label>Case Definition</label>
+      </c-card-header>
+
+      <mat-form-field>
+        <mat-select placeholder="Select case definition" [(value)]="DataFilterInstance.filter_case_definition"
+          (selectionChange)="processFilters()">
+          <mat-option>All</mat-option>
+          <mat-option value="SARI">SARI</mat-option>
+          <mat-option value="ILI">ILI</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </c-card>
+  </c-col>
+
+  <c-col [sm]="2" style="width: 20%;">
     <c-card class="view-border--none">
       <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
         Date Range
@@ -46,7 +63,7 @@
     </c-card>
   </c-col>
 
-  <c-col [sm]="3">
+  <c-col [sm]="2" style="width: 20%;">
     <c-card class="view-border--none">
       <c-card-header class="view-background--color-none view-border--none view-padding--left-none">
         Year
@@ -65,7 +82,7 @@
     </c-card>
   </c-col>
 
-  <c-col [sm]="3">
+  <c-col [sm]="2" style="width: 20%;">
     <c-card class="view-border--none">
       <c-card-header class="view-background--color-none view-border--none">
         Epi Week

@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AFIChart } from '../../../models/afi/AFIChart.model';
-import { ACParent } from '../../../models/afi/ACParent.model';
+import { Chart } from '../../../models/afi/Chart.model';
+import { ChartParent } from '../../../models/afi/ChartParent.model';
+import { IDFilter } from '../../../models/IDFilter.model';
+import { IDFacility } from '../../../models/IDFacility.model';
+import { APIReader } from '../../../models/APIReader.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -18,7 +21,11 @@ HighchartsSolidGauge(Highcharts);
 
 export class AResultsComponent implements OnInit {
   //#region Prerequisites
-  CompositeCharts: ACParent = {};
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
+
+  CompositeCharts: ChartParent = {};
   highcharts = Highcharts;
   //#endregion
 
@@ -26,11 +33,37 @@ export class AResultsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCharts();
+    this.loadFilters();
+  }
+
+  formatLabel(value: number): string {
+    return `${value}`;
+  }
+
+  loadFilters() {
+    //#region Acquire composite facilities
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+      this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
+      });
+    });
+    //#endregion
+  }
+
+  processFilters() {
+    this.DataFilterInstance.processDates();
+
+    //#region Reload all charts
+    Object.keys(this.CompositeCharts).forEach(chart_ident => {
+      this.CompositeCharts[chart_ident].ChartFilterData = this.DataFilterInstance;
+      this.CompositeCharts[chart_ident].reloadData();
+    });
+    //#endregion
   }
 
   loadCharts() {
     //#region Load Chart --> Overall TAC-PCR Results
-    this.CompositeCharts['overallResults'] = new AFIChart(this.http);
+    this.CompositeCharts['overallResults'] = new Chart(this.http);
     this.CompositeCharts['overallResults'].loadData(
       "results_tac/overallResults",
       () => {
@@ -102,7 +135,7 @@ export class AResultsComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Pathogens Identified
-    this.CompositeCharts['pathogensIdentified'] = new AFIChart(this.http);
+    this.CompositeCharts['pathogensIdentified'] = new Chart(this.http);
     this.CompositeCharts['pathogensIdentified'].loadData(
       "results_tac/pathogensIdentified",
       () => {
@@ -243,7 +276,7 @@ export class AResultsComponent implements OnInit {
     //#endregion
 
     //#region Load Chart --> Syndromes over time
-    this.CompositeCharts['syndromesOvertime'] = new AFIChart(this.http);
+    this.CompositeCharts['syndromesOvertime'] = new Chart(this.http);
     this.CompositeCharts['syndromesOvertime'].loadData(
       "results_tac/syndromesOvertime",
       () => {

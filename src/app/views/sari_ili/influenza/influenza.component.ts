@@ -5,8 +5,10 @@ import { ChartParent } from '../../../models/sari_ili/ChartParent.model';
 import { IDFilter } from '../../../models/IDFilter.model';
 import { APIReader } from '../../../models/APIReader.model';
 import { IDFacility } from '../../../models/IDFacility.model';
+import { GroupedCategory } from '../../../models/GroupedCategory.model';
 
-import * as Highcharts from 'highcharts/highstock';
+import * as Highcharts from 'highcharts';
+import * as Highstock from 'highcharts/highstock';
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsMap from "highcharts/modules/map"
@@ -28,13 +30,14 @@ HighchartsTreeGraph(Highcharts);
 })
 
 export class InfluenzaComponent implements OnInit {
-  //#region Prerequisites
-  highcharts = Highcharts;
-  CompositeCharts: ChartParent = {};
+  //#region Properties
+  protected highcharts = Highcharts;
+  protected highstock = Highstock;
+  protected CompositeCharts: ChartParent = {};
 
-  APIReaderInstance = new APIReader(this.http);
-  DataFilterInstance = new IDFilter();
-  CompositeFacilities: any[] = [];
+  protected APIReaderInstance = new APIReader(this.http);
+  protected DataFilterInstance = new IDFilter();
+  protected CompositeFacilities: any[] = [];
   //#endregion
 
   constructor(private http: HttpClient) { }
@@ -49,7 +52,7 @@ export class InfluenzaComponent implements OnInit {
   }
 
   loadFilters() {
-    //#region Acqurie composite facilities
+    //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
         this.CompositeFacilities.push(new IDFacility(dataInstance));
@@ -419,14 +422,18 @@ export class InfluenzaComponent implements OnInit {
     //#region Load Chart --> Number Enrolled by Age Category (Enrolled by Age Group)
     this.CompositeCharts['enrolledByAgeGroup'] = new Chart(this.http);
     this.CompositeCharts['enrolledByAgeGroup'].loadData(
-      "overview/enrolledByAgeGroup",
+      "influenza/enrolledByAgeGroup",
       () => {
         let MCTemp = this.CompositeCharts['enrolledByAgeGroup'];
 
         MCTemp.LoadChartOptions();
       },
       () => {
+        // Prerequisites
         let MCTemp = this.CompositeCharts['enrolledByAgeGroup'];
+
+        // Reset
+        MCTemp.ChartSeries = [];
 
         // Age Group (Index --> 0)
         MCTemp.ChartSeries.push([]);
@@ -438,9 +445,11 @@ export class InfluenzaComponent implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
-          MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
-          MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
-          MCTemp.ChartSeries[2].push(dataInstance.EnrolledPercentage);
+          if (dataInstance.AgeCategory != null) {
+            MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
+            MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
+            MCTemp.ChartSeries[2].push(dataInstance.EnrolledPercent);
+          }
         });
       },
       () => {
@@ -471,7 +480,7 @@ export class InfluenzaComponent implements OnInit {
                 text: 'Number Enrolled',
               },
               labels: {
-                format: '{value}', //TODO! Format to remove netagive values
+                format: '{value}',
               },
               accessibility: {
                 description: 'Number',
@@ -481,6 +490,9 @@ export class InfluenzaComponent implements OnInit {
             {
               title: {
                 text: 'Percentage Enrolled',
+              },
+              labels: {
+                format: '{value}%',
               },
               opposite: true
             }
@@ -530,6 +542,7 @@ export class InfluenzaComponent implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
+        // Prerequisites
         let MCTemp = this.CompositeCharts['fluPositiveByAgeGroup'];
 
         // Reset
@@ -545,9 +558,11 @@ export class InfluenzaComponent implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
-          MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
-          MCTemp.ChartSeries[1].push(dataInstance.FluPositiveNumber);
-          MCTemp.ChartSeries[2].push(dataInstance.FluPositivePercent);
+          if (dataInstance.AgeCategory != null) {
+            MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
+            MCTemp.ChartSeries[1].push(dataInstance.FluPositiveNumber);
+            MCTemp.ChartSeries[2].push(dataInstance.FluPositivePercent);
+          }
         });
       },
       () => {
@@ -581,6 +596,9 @@ export class InfluenzaComponent implements OnInit {
             {
               title: {
                 text: 'Percentage Positive',
+              },
+              labels: {
+                format: '{value}%',
               },
               opposite: true
             }
@@ -620,7 +638,7 @@ export class InfluenzaComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Number Positive for Influenza by Type and Epiweek
+    //#region Load Chart --> Number Positive for Influenza by Type and Epi Week
     this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'] = new Chart(this.http);
     this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'].loadData(
       "influenza/findInfluenzaPositivityByTypeOvertime",
@@ -629,10 +647,16 @@ export class InfluenzaComponent implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
+        // Prerequisites
         let MCTemp = this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'];
+        let GCPeriod: GroupedCategory[] = [];
+        let GCInstance = new GroupedCategory("", []);
+
+        // Reset
+        MCTemp.ChartSeries = [];
 
         // Initialize series array
-        for (let index = 0; index < 5; index++) {
+        for (let index = 0; index < 6; index++) {
           MCTemp.ChartSeries.push([]);
         }
 
@@ -651,22 +675,42 @@ export class InfluenzaComponent implements OnInit {
 
           //Compile Influenza Negative (Index --> 4)
           MCTemp.ChartSeries[4].push(dataInstance.InfluenzaNegativeNumber);
+
+          // let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.Year, false);
+          // let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
+          // let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
         });
+
+        // Period (index --> 5)
+        MCTemp.ChartSeries[5] = JSON.parse(JSON.stringify(GCPeriod));
       },
       () => {
         let MCTemp = this.CompositeCharts['findInfluenzaPositivityByTypeOvertime'];
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Number Positive for Influenza by Type and Epiweek',
+            text: 'Number Positive for Influenza by Type and Epi Week',
             align: 'left'
           },
           chart: {
             type: "column",
           },
           xAxis: {
+            name: "Period",
+            title: { text: "Period (Year, Month, Epi Week)" },
+            tickWidth: 1,
+            labels: {
+              useHTML: true,
+              format: "{text}",
+              y: 18,
+              // groupedOptions: [{
+              //   y: 10,
+              // }, {
+              //   y: 10
+              // }]
+            },
             categories: MCTemp.ChartSeries[0],
-            title: false,
+            // categories: MCTemp.ChartSeries[5],
             min: 0,
             max: 22,
             scrollbar: {
@@ -681,6 +725,9 @@ export class InfluenzaComponent implements OnInit {
           {
             title: {
               text: "Influenza Positive (%)",
+            },
+            labels: {
+              format: '{value}%',
             },
             opposite: true
           }],
@@ -748,7 +795,11 @@ export class InfluenzaComponent implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
+        // Prerequisites
         let MCTemp = this.CompositeCharts['findInfluenzaStrainsOvertime'];
+
+        // Reset
+        MCTemp.ChartSeries = [];
 
         // Initialize series array
         for (let index = 0; index < 9; index++) {
@@ -757,13 +808,13 @@ export class InfluenzaComponent implements OnInit {
 
         MCTemp.ChartData.forEach(dataInstance => {
           // Epi Week (Index --> 0)
-          MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
+          MCTemp.ChartSeries[0].push(dataInstance.WeekNumber);
 
           // Flu A non-subtypable 2 (Index --> 1)
           MCTemp.ChartSeries[1].push(dataInstance.NonSubTypableNumber);
 
           // Influenza Neg (Index --> 2)
-          MCTemp.ChartSeries[2].push(dataInstance.InfluenzaNeg);
+          MCTemp.ChartSeries[2].push(dataInstance.InfluenzaNegativeNumber);
 
           // A/H1N1 (Index --> 3)
           MCTemp.ChartSeries[3].push(dataInstance.AH1N1Number);
@@ -778,7 +829,7 @@ export class InfluenzaComponent implements OnInit {
           MCTemp.ChartSeries[6].push(dataInstance.YamagataNumber);
 
           // Influenza B Not-determined (Index --> 7)
-          MCTemp.ChartSeries[7].push(dataInstance.NotdeterminedNumber);
+          MCTemp.ChartSeries[7].push(dataInstance.NotDeterminedNumber);
 
           // Influenza Positive (Index --> 8)
           MCTemp.ChartSeries[8].push(0);
@@ -813,7 +864,10 @@ export class InfluenzaComponent implements OnInit {
           },
           {
             title: {
-              text: "Influenza Positive (%)",
+              text: "Influenza Positive Percent",
+            },
+            labels: {
+              format: '{value}%',
             },
             opposite: true,
             inverted: true
@@ -966,4 +1020,5 @@ export class InfluenzaComponent implements OnInit {
     HC_exporting(Highcharts);
 
   }
+
 }

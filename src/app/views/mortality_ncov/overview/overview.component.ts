@@ -55,7 +55,7 @@ export class OverviewComponent implements OnInit {
   }
 
   loadFilters() {
-    //#region Acqurie composite facilities
+    //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
         this.CompositeFacilities.push(new IDFacility(dataInstance));
@@ -622,7 +622,6 @@ export class OverviewComponent implements OnInit {
             column: {
               pointPadding: 0.2,
               borderWidth: 0,
-              stacking: 'normal',
               dataLabels: {
                 enabled: true
               }
@@ -732,12 +731,12 @@ export class OverviewComponent implements OnInit {
           xAxis: [
             {
               title: {
-                text: ''
+                text: 'Age Group'
               },
               categories: MCTemp.ChartSeries[0]
             }, {
               title: {
-                text: ''
+                text: 'Age Group'
               },
               categories: MCTemp.ChartSeries[0],
               opposite: true,
@@ -746,7 +745,7 @@ export class OverviewComponent implements OnInit {
           yAxis: [
             {
               title: {
-                text: 'Positive Number',
+                text: 'Number tested COVID-19 positive',
                 align: 'high',
                 textAlign: 'center'
               },
@@ -764,9 +763,6 @@ export class OverviewComponent implements OnInit {
             }
           ],
           plotOptions: {
-            series: {
-              stacking: 'normal',
-            },
             bar: {
               pointWidth: 18,
               dataLabels: {
@@ -912,11 +908,12 @@ export class OverviewComponent implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
+        // Prerequisites
         let MCTemp = this.CompositeCharts['findOverTime'];
         let GCPeriod: GroupedCategory[] = [];
         let GCInstance = new GroupedCategory("", []);
 
-        //Reset
+        // Reset
         MCTemp.ChartSeries = [];
 
         //#region Init series indexes
@@ -982,6 +979,9 @@ export class OverviewComponent implements OnInit {
               title: {
                 text: 'Percent Positive'
               },
+              labels: {
+                format: '{value}%',
+              },
               opposite: true,
             }
           ],
@@ -1002,6 +1002,11 @@ export class OverviewComponent implements OnInit {
             },
           ],
           plotOptions: {
+            column: {
+              dataLabels: {
+                enabled: true
+              }
+            },
             spline: {
               stacking: 'normal',
               dataLabels: {

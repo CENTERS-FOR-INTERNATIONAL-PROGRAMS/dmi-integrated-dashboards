@@ -41,14 +41,16 @@ export class EnrolmentComponent implements OnInit {
 
   loadFilters() {
     //#region Acquire composite facilities
-    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+    this.APIReaderInstance.loadData("sari_ili/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
-        this.CompositeFacilities.push(new IDFacility(dataInstance));
+        this.CompositeFacilities.push(new IDFacility(
+          dataInstance['FacilityId'],
+          dataInstance['FacilityCode'],
+          dataInstance['FacilityName']));
       });
     });
     //#endregion
   }
-
   processFilters() {
     this.DataFilterInstance.processDates();
 

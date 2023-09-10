@@ -133,18 +133,7 @@
   <c-col [sm]="12">
     <c-card class="mb-4">
       <highcharts-chart id="12313" [Highcharts]="highcharts"
-        [options]="CompositeCharts['SARSCOV2PositiveByEpiWeek'].ChartOptions"
-        style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
-    </c-card>
-  </c-col>
-</c-row>
-
-<br />
-<c-row>
-  <c-col [sm]="12">
-    <c-card class="mb-4">
-      <highcharts-chart id="12313" [Highcharts]="highcharts"
-        [options]="CompositeCharts['SARSCOV2PositiveByYear'].ChartOptions"
+        [options]="CompositeCharts['SARSCOV2PositiveOvertime'].ChartOptions"
         style="height: 400px; display: inline-block; max-width: 100%;"></highcharts-chart>
     </c-card>
   </c-col>

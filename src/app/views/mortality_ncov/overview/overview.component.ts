@@ -11,6 +11,12 @@ import { IDFacility } from '../../../models/IDFacility.model';
 import { GroupedCategory } from '../../../models/GroupedCategory.model';
 
 import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting';
+import HighchartsMore from 'highcharts/highcharts-more';
+import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
+
+HighchartsMore(Highcharts);
+HighchartsSolidGauge(Highcharts);
 
 @Component({
   templateUrl: 'overview.component.html',
@@ -19,12 +25,12 @@ import * as Highcharts from 'highcharts';
 
 export class OverviewComponent implements OnInit {
   //#region Prerequisites
-  protected highcharts = Highcharts;
-  protected CompositeCharts: ChartParent = {};
+  highcharts = Highcharts;
+  CompositeCharts: ChartParent = {};
 
-  protected APIReaderInstance = new APIReader(this.http);
-  protected DataFilterInstance = new IDFilter();
-  protected CompositeFacilities: any[] = [];
+  APIReaderInstance = new APIReader(this.http);
+  DataFilterInstance = new IDFilter();
+  CompositeFacilities: any[] = [];
   //#endregion
 
   //#region Prerequisites --> COVID-19 Summary
@@ -52,14 +58,12 @@ export class OverviewComponent implements OnInit {
     //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
-        this.CompositeFacilities.push(new IDFacility(
-          dataInstance['facility_id'],
-          dataInstance['facility_code'],
-          dataInstance['facility_name']));
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
       });
     });
     //#endregion
   }
+
   processFilters() {
     this.DataFilterInstance.processDates();
 
@@ -760,7 +764,7 @@ export class OverviewComponent implements OnInit {
           ],
           plotOptions: {
             bar: {
-              pointWidth: 35,
+              pointWidth: 18,
               dataLabels: {
                 enabled: true
               }
@@ -951,6 +955,8 @@ export class OverviewComponent implements OnInit {
             title: { text: "Period (Year, Month, Epi Week)" },
             tickWidth: 1,
             labels: {
+              useHTML: true,
+              format: "{text}",
               y: 18,
               groupedOptions: [{
                 y: 10,
@@ -1017,6 +1023,8 @@ export class OverviewComponent implements OnInit {
       }
     );
     //#endregion
+
+    HC_exporting(Highcharts);
   }
 
   loadCovid19SummaryData() {

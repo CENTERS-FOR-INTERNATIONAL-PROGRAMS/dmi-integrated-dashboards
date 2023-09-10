@@ -53,16 +53,9 @@ export class InfluenzaComponent implements OnInit {
 
   loadFilters() {
     //#region Acquire composite facilities
-<<<<<<< HEAD
-    this.APIReaderInstance.loadData("sari_ili/acquireCompositeFacilities", () => {
-=======
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
->>>>>>> main
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
-        this.CompositeFacilities.push(new IDFacility(
-          dataInstance['FacilityId'],
-          dataInstance['FacilityCode'],
-          dataInstance['FacilityName']));
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
       });
     });
     //#endregion
@@ -222,21 +215,16 @@ export class InfluenzaComponent implements OnInit {
         // Neg Flu (Index --> 1)
         //Number (Index --> [2][0])
         MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].NegativeFluNumber;
+
         //Percent (Index --> [2][1])
         MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].NegativeFluPercent;
-
-        // Influenza A B (Index --> 1)
-        //Number (Index --> [3][0])
-        MCTemp.ChartSeries[3][0] = MCTemp.ChartData[0].InfluenzaABPositiveNumber;
-        //Percent (Index --> [2][1])
-        MCTemp.ChartSeries[3][1] = MCTemp.ChartData[0].InfluenzaABPositivePercent;
       },
       () => {
         let MCTemp = this.CompositeCharts['findTypesByDistribution'];
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Figure 6: Influenza Types Distribution',
+            text: 'Influenza Types Distribution',
             align: 'left'
           },
           chart: {
@@ -256,7 +244,6 @@ export class InfluenzaComponent implements OnInit {
                 ["Influenza A (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
                 ["Influenza B (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
                 ["Neg Flu (" + MCTemp.ChartSeries[2][1] + "%)", MCTemp.ChartSeries[2][0]],
-                ["A and B (" + MCTemp.ChartSeries[3][1] + "%)", MCTemp.ChartSeries[3][0]]
               ]
             }
           ],
@@ -318,7 +305,7 @@ export class InfluenzaComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Figure 7: Influenza A Subtype Distribution',
+            text: 'Influenza A Subtype Distribution',
             align: 'left'
           },
           chart: {
@@ -373,7 +360,6 @@ export class InfluenzaComponent implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
-        // Prerequisites
         let MCTemp = this.CompositeCharts['findInfluenzaBLineageDistribution'];
 
         //Victoria (Index --> 0)
@@ -387,15 +373,13 @@ export class InfluenzaComponent implements OnInit {
         //Non-determined (Index --> 2)
         MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].NotdeterminedNumber;
         MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].NotdeterminedPercent;
-
-        // MCTemp.ChartSeries[3][0] = MCTemp.ChartData[0].TotalInfluenzaBLineage;
       },
       () => {
         let MCTemp = this.CompositeCharts['findInfluenzaBLineageDistribution'];
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Figure 8: Influenza B Lineage Distribution',
+            text: 'Influenza B Lineage Distribution',
             align: 'left'
           },
           chart: {
@@ -435,7 +419,7 @@ export class InfluenzaComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Number Enrolled by Age Category
+    //#region Load Chart --> Number Enrolled by Age Category (Enrolled by Age Group)
     this.CompositeCharts['enrolledByAgeGroup'] = new Chart(this.http);
     this.CompositeCharts['enrolledByAgeGroup'].loadData(
       "influenza/enrolledByAgeGroup",
@@ -450,28 +434,21 @@ export class InfluenzaComponent implements OnInit {
 
         // Reset
         MCTemp.ChartSeries = [];
-<<<<<<< HEAD
-=======
 
         // Age Group (Index --> 0)
         MCTemp.ChartSeries.push([]);
->>>>>>> main
 
-        // Series
+        // Enrolled Number (Index --> 1)
+        MCTemp.ChartSeries.push([]);
+
+        // Enrolled Percentage (Index --> 2)
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
-<<<<<<< HEAD
-          if (dataInstance.AgeGroupCategory != null) {
-            MCTemp.ChartSeries[0].push(
-              [dataInstance.AgeGroupCategory + " " + dataInstance.EnrolledNumber + " (" + dataInstance.EnrolledPercent + "%)", dataInstance.EnrolledNumber]
-            );
-=======
           if (dataInstance.AgeCategory != null) {
             MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
             MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
             MCTemp.ChartSeries[2].push(dataInstance.EnrolledPercent);
->>>>>>> main
           }
         });
       },
@@ -480,11 +457,11 @@ export class InfluenzaComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Figure 9: Number Enrolled by Age Category',
+            text: 'Number Enrolled by Age Category',
             align: 'left',
           },
           chart: {
-            type: 'pie',
+            type: 'bar',
           },
           accessibility: {
             point: {
@@ -521,25 +498,30 @@ export class InfluenzaComponent implements OnInit {
             }
           ],
           plotOptions: {
-            pie: {
-              innerSize: "70%",
-              depth: 25,
-              dataLabels: {
-                enabled: true
-              },
+            series: {
+              stacking: 'normal',
             },
+            bar: {
+              pointWidth: 18,
+            }
           },
-          legend: { align: 'left', verticalAlign: 'bottom', y: 0, x: 80 },
           tooltip: {
             format:
               '<b>{series.name}, {point.category}, {y}</b>'
           },
+          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
-              name: "Data",
-              type: 'pie',
-              showInLegend: true,
-              data: MCTemp.ChartSeries[0]
+              name: 'Enrolled Number',
+              data: MCTemp.ChartSeries[1],
+              color: '#234FEA',
+            },
+            {
+              name: 'Enrolled Percentage',
+              data: MCTemp.ChartSeries[2],
+              color: '#FFA500',
+              type: "spline",
+              yAxis: 1
             }
           ],
           credits: {
@@ -550,7 +532,7 @@ export class InfluenzaComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Number Positive for Flu by Age Category
+    //#region Load Chart --> Number Positive for Flu by Age Category (positivity by Age Group)
     this.CompositeCharts['fluPositiveByAgeGroup'] = new Chart(this.http);
     this.CompositeCharts['fluPositiveByAgeGroup'].loadData(
       "influenza/flupositiveByAgeGroup",
@@ -566,21 +548,20 @@ export class InfluenzaComponent implements OnInit {
         // Reset
         MCTemp.ChartSeries = [];
 
-        // Series
+        // Age Group (Index --> 0)
+        MCTemp.ChartSeries.push([]);
+
+        // Enrolled Number (Index --> 1)
+        MCTemp.ChartSeries.push([]);
+
+        // Enrolled Percentage (Index --> 2)
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
-<<<<<<< HEAD
-          if (dataInstance.AgeGroupCategory != null) {
-            MCTemp.ChartSeries[0].push(
-              [dataInstance.AgeGroupCategory + " " + dataInstance.FluPositiveNumber + " (" + dataInstance.FluPositivePercent + "%)", dataInstance.FluPositiveNumber]
-            );
-=======
           if (dataInstance.AgeCategory != null) {
             MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
             MCTemp.ChartSeries[1].push(dataInstance.FluPositiveNumber);
             MCTemp.ChartSeries[2].push(dataInstance.FluPositivePercent);
->>>>>>> main
           }
         });
       },
@@ -589,11 +570,11 @@ export class InfluenzaComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Figure 10: Number Positive for Flu by Age Category',
+            text: 'Number Positive for Flu by Age Category',
             align: 'left',
           },
           chart: {
-            type: 'pie',
+            type: 'bar',
           },
           accessibility: {
             point: {
@@ -609,22 +590,12 @@ export class InfluenzaComponent implements OnInit {
           yAxis: [
             {
               title: {
-                text: 'Number Enrolled',
-              },
-              labels: {
-                format: '{value}',
-              },
-              accessibility: {
-                description: 'Number',
-                rangeDescription: 'Range: 0 to 5%',
+                text: 'Number Positive',
               }
             },
             {
               title: {
-                text: 'Percentage Enrolled',
-              },
-              labels: {
-                format: '{value}%',
+                text: 'Percentage Positive',
               },
               labels: {
                 format: '{value}%',
@@ -633,25 +604,30 @@ export class InfluenzaComponent implements OnInit {
             }
           ],
           plotOptions: {
-            pie: {
-              innerSize: "70%",
-              depth: 25,
-              dataLabels: {
-                enabled: true
-              },
+            series: {
+              stacking: 'normal',
             },
+            bar: {
+              pointWidth: 18,
+            }
           },
-          legend: { align: 'left', verticalAlign: 'bottom', y: 0, x: 80 },
           tooltip: {
             format:
               '<b>{series.name}, {point.category}, {y}</b>'
           },
+          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
-              name: "Data",
-              type: 'pie',
-              showInLegend: true,
-              data: MCTemp.ChartSeries[0]
+              name: 'Positive Number',
+              data: MCTemp.ChartSeries[1],
+              color: '#234FEA',
+            },
+            {
+              name: 'Positive Percentage',
+              data: MCTemp.ChartSeries[2],
+              color: '#FFA500',
+              type: "spline",
+              yAxis: 1
             }
           ],
           credits: {
@@ -694,23 +670,15 @@ export class InfluenzaComponent implements OnInit {
           //Compile Influenza B Positive (Index --> 2)
           MCTemp.ChartSeries[2].push(dataInstance.InfluenzaBPositiveNumber);
 
-          //Compile Influenza Negative (Index --> 3)
-          MCTemp.ChartSeries[3].push(dataInstance.TestedNegativeFluNumber);
+          //Compile Influenza Positive Percentage (Index --> 3)
+          MCTemp.ChartSeries[3].push(dataInstance.InfluenzaPositivePercentage);
 
-<<<<<<< HEAD
-          //Compile Influenza Positive Percentage (Index --> 4)
-          MCTemp.ChartSeries[4].push(dataInstance.InfluenzaPositivePercentage);
-
-          let gc_year_index = GCInstance.attach(GCPeriod, "" + dataInstance.Year, false);
-          let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.EpiWeek, true);
-=======
           //Compile Influenza Negative (Index --> 4)
           MCTemp.ChartSeries[4].push(dataInstance.InfluenzaNegativeNumber);
 
           // let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.Year, false);
           // let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
           // let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
->>>>>>> main
         });
 
         // Period (index --> 5)
@@ -721,11 +689,7 @@ export class InfluenzaComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-<<<<<<< HEAD
-            text: 'Figure 11: Number Positive for Influenza by type, epiweek and year',
-=======
             text: 'Number Positive for Influenza by Type and Epi Week',
->>>>>>> main
             align: 'left'
           },
           chart: {
@@ -733,19 +697,6 @@ export class InfluenzaComponent implements OnInit {
           },
           xAxis: {
             name: "Period",
-<<<<<<< HEAD
-            title: { text: "Period (Year, Epi Week)" },
-            tickWidth: 1,
-            labels: {
-              y: 18,
-              groupedOptions: [{
-                y: 10,
-              }, {
-                y: 10
-              }]
-            },
-            categories: MCTemp.ChartSeries[5],
-=======
             title: { text: "Period (Year, Month, Epi Week)" },
             tickWidth: 1,
             labels: {
@@ -760,7 +711,6 @@ export class InfluenzaComponent implements OnInit {
             },
             categories: MCTemp.ChartSeries[0],
             // categories: MCTemp.ChartSeries[5],
->>>>>>> main
             min: 0,
             max: 22,
             scrollbar: {
@@ -798,18 +748,18 @@ export class InfluenzaComponent implements OnInit {
             },
             {
               showInLegend: true,
-              name: "Influenza Negative",
-              data: MCTemp.ChartSeries[3],
-              type: 'column',
-              color: "#008000",
-            },
-            {
-              showInLegend: true,
               name: "Influenza Positive (%)",
-              data: MCTemp.ChartSeries[4],
+              data: MCTemp.ChartSeries[3],
               type: 'spline',
               yAxis: 1,
               color: "#FF0000",
+            },
+            {
+              showInLegend: true,
+              name: "Influenza Negative",
+              data: MCTemp.ChartSeries[4],
+              type: 'column',
+              color: "#008000",
             }
           ],
           plotOptions: {
@@ -847,17 +797,12 @@ export class InfluenzaComponent implements OnInit {
       () => {
         // Prerequisites
         let MCTemp = this.CompositeCharts['findInfluenzaStrainsOvertime'];
-        let GCPeriod: GroupedCategory[] = [];
-        let GCInstance = new GroupedCategory("", []);
-
-        // Reset
-        MCTemp.ChartSeries = [];
 
         // Reset
         MCTemp.ChartSeries = [];
 
         // Initialize series array
-        for (let index = 0; index < 10; index++) {
+        for (let index = 0; index < 9; index++) {
           MCTemp.ChartSeries.push([]);
         }
 
@@ -887,40 +832,25 @@ export class InfluenzaComponent implements OnInit {
           MCTemp.ChartSeries[7].push(dataInstance.NotDeterminedNumber);
 
           // Influenza Positive (Index --> 8)
-          MCTemp.ChartSeries[8].push(dataInstance.InfluenzaPositiveNumber);
-
-          // Compile period (Index --> 9)
-          let gc_year_index = GCInstance.attach(GCPeriod, "" + dataInstance.Year, false);
-          let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.WeekNumber, true);
+          MCTemp.ChartSeries[8].push(0);
         });
-
-        // Period (index --> 9)
-        MCTemp.ChartSeries[9] = JSON.parse(JSON.stringify(GCPeriod));
       },
       () => {
         let MCTemp = this.CompositeCharts['findInfluenzaStrainsOvertime'];
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Figure 12: Circulating Strains of Influenza Virus over time',
+            text: 'Circulating Strains of Influenza Virus over time',
             align: 'left'
           },
           chart: {
             type: "column",
           },
           xAxis: {
-            name: "Period",
-            title: { text: "Period (Year, Epi Week)" },
-            tickWidth: 1,
-            labels: {
-              y: 18,
-              groupedOptions: [{
-                y: 10,
-              }, {
-                y: 10
-              }]
+            categories: MCTemp.ChartSeries[0],
+            title: {
+              text: "Epi Week"
             },
-            categories: MCTemp.ChartSeries[9],
             min: 0,
             max: 22,
             scrollbar: {

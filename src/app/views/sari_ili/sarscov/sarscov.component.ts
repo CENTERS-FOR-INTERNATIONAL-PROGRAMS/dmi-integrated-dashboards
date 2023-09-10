@@ -49,7 +49,11 @@ export class SARSCOV2Component implements OnInit {
 
   loadFilters() {
     //#region Acquire composite facilities
+<<<<<<< HEAD
     this.APIReaderInstance.loadData("sari_ili/acquireCompositeFacilities", () => {
+=======
+    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+>>>>>>> main
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
         this.CompositeFacilities.push(new IDFacility(
           dataInstance['FacilityId'],
@@ -181,8 +185,13 @@ export class SARSCOV2Component implements OnInit {
         MCTemp.LoadChartOptions();
       },
       () => {
+<<<<<<< HEAD
         // Prerequisites
+=======
+        //Prerequisites
+>>>>>>> main
         let MCTemp = this.CompositeCharts['testedByAgeGroup'];
+        MCTemp.ChartSeries = [];
 
         // Reset
         MCTemp.ChartSeries = [];
@@ -191,6 +200,7 @@ export class SARSCOV2Component implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
+<<<<<<< HEAD
           if (dataInstance.AgeGroupCategory != null) {
             MCTemp.ChartSeries[0].push(
               [
@@ -199,7 +209,16 @@ export class SARSCOV2Component implements OnInit {
               ]
             );
           }
+=======
+          MCTemp.ChartSeries[0].push(dataInstance.AgeGroupCategory);
+          MCTemp.ChartSeries[1].push(dataInstance.SARSCOV2TestedNumber);
+          MCTemp.ChartSeries[2].push(dataInstance.SARSCOV2TestedPercent);
+>>>>>>> main
         });
+
+        MCTemp.ChartSeries[0].reverse();
+        MCTemp.ChartSeries[1].reverse();
+        MCTemp.ChartSeries[2].reverse();
       },
       () => {
         let MCTemp = this.CompositeCharts['testedByAgeGroup'];
@@ -288,6 +307,7 @@ export class SARSCOV2Component implements OnInit {
       () => {
         // Prerequisites
         let MCTemp = this.CompositeCharts['positiveDistributionByAgeGroup'];
+        MCTemp.ChartSeries = [];
 
         // Reset
         MCTemp.ChartSeries = [];
@@ -296,6 +316,7 @@ export class SARSCOV2Component implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
+<<<<<<< HEAD
           if (dataInstance.AgeGroupCategory != null) {
             MCTemp.ChartSeries[0].push(
               [
@@ -304,7 +325,16 @@ export class SARSCOV2Component implements OnInit {
               ]
             );
           }
+=======
+          MCTemp.ChartSeries[0].push(dataInstance.AgeGroupCategory);
+          MCTemp.ChartSeries[1].push(dataInstance.SARSCOV2PositiveNumber);
+          MCTemp.ChartSeries[2].push(dataInstance.SARSCOV2PositivePercent);
+>>>>>>> main
         });
+
+        MCTemp.ChartSeries[0].reverse();
+        MCTemp.ChartSeries[1].reverse();
+        MCTemp.ChartSeries[2].reverse();
       },
       () => {
         let MCTemp = this.CompositeCharts['positiveDistributionByAgeGroup'];
@@ -391,11 +421,15 @@ export class SARSCOV2Component implements OnInit {
       },
       () => {
         // Prerequisites
+<<<<<<< HEAD
         let MCTemp = this.CompositeCharts['SARSCOV2PositiveByEpiWeek'];
         let GCPeriod: GroupedCategory[] = [];
         let GCInstance = new GroupedCategory("", []);
 
         // Reset
+=======
+        let MCTemp = this.CompositeCharts['SARSCOV2PositiveOvertime'];
+>>>>>>> main
         MCTemp.ChartSeries = [];
 
         // Initialize series array
@@ -408,6 +442,7 @@ export class SARSCOV2Component implements OnInit {
           MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
 
           //Compile Covid Tested Number (Index --> 1)
+<<<<<<< HEAD
           MCTemp.ChartSeries[1].push(dataInstance.SARSCOV2TestedNumber);
 
           //Compile SARS-COV-2 Positive Percentage (Index --> 2)
@@ -417,6 +452,12 @@ export class SARSCOV2Component implements OnInit {
           let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.Year, false);
           let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
           let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
+=======
+          MCTemp.ChartSeries[1].push(dataInstance.SARSCOV2PositiveNumber);
+
+          //Compile SARS-COV-2 Positive Percentage (Index --> 2)
+          MCTemp.ChartSeries[2].push(dataInstance.SARSCOV2PositivePercent);
+>>>>>>> main
         });
 
         // Period (index --> 3)
@@ -465,6 +506,7 @@ export class SARSCOV2Component implements OnInit {
             labels: {
               format: '{value}%',
             },
+<<<<<<< HEAD
             opposite: true
           }],
           series: [
@@ -585,6 +627,8 @@ export class SARSCOV2Component implements OnInit {
             labels: {
               format: '{value}%',
             },
+=======
+>>>>>>> main
             opposite: true
           }],
           series: [

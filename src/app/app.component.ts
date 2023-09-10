@@ -7,6 +7,7 @@ import { Title } from '@angular/platform-browser';
 
 import * as Highcharts from 'highcharts';
 import * as Highstock from 'highcharts/highstock';
+<<<<<<< HEAD
 import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
 import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
@@ -20,6 +21,12 @@ HighchartsExporting(Highcharts);
 HighchartsGroupedCategories(Highstock);
 HighchartsMore(Highstock);
 HighchartsExporting(Highstock);
+=======
+import HighchartsGroupedCategories from 'highcharts-grouped-categories';
+
+HighchartsGroupedCategories(Highcharts);
+HighchartsGroupedCategories(Highstock);
+>>>>>>> main
 
 @Component({
   selector: 'app-root',

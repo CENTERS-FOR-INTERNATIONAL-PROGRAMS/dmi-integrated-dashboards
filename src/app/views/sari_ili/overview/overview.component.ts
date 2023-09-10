@@ -9,17 +9,15 @@ import { GroupedCategory } from '../../../models/GroupedCategory.model';
 
 import * as Highcharts from 'highcharts';
 import * as Highstock from 'highcharts/highstock';
+<<<<<<< HEAD
+=======
 import HC_exporting from 'highcharts/modules/exporting';
 import HighchartsMore from 'highcharts/highcharts-more';
+>>>>>>> main
 import HighchartsMap from "highcharts/modules/map"
-import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import HighchartsTreeMap from 'highcharts/modules/treemap';
 import HighchartsTreeGraph from 'highcharts/modules/treegraph';
-import topography from '../../../data/world.geojson.json'
-import topographyData from '../../../data/afi_pathogen_facility.json'
 
-HighchartsMore(Highcharts);
-HighchartsSolidGauge(Highcharts);
 HighchartsMap(Highcharts);
 HighchartsTreeMap(Highcharts);
 HighchartsTreeGraph(Highcharts);
@@ -53,9 +51,16 @@ export class SIOverviewComponent implements OnInit {
 
   loadFilters() {
     //#region Acquire composite facilities
+<<<<<<< HEAD
+    this.APIReaderInstance.loadData("sari_ili/acquireCompositeFacilities", () => {
+=======
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
+>>>>>>> main
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
-        this.CompositeFacilities.push(new IDFacility(dataInstance));
+        this.CompositeFacilities.push(new IDFacility(
+          dataInstance['FacilityId'],
+          dataInstance['FacilityCode'],
+          dataInstance['FacilityName']));
       });
     });
     //#endregion
@@ -198,7 +203,7 @@ export class SIOverviewComponent implements OnInit {
 
         MCTemp.ChartData.forEach(dataInstance => {
           //Compile Epi Week (Index --> 0)
-          MCTemp.ChartSeries[0].push("Week " + dataInstance.EpiWeek + ", " + dataInstance.YEAR);
+          MCTemp.ChartSeries[0].push("Week " + dataInstance.EpiWeek);
 
           //Compile Samples Tested (Index --> 1)
           MCTemp.ChartSeries[1].push(dataInstance.TestedNumber);
@@ -210,9 +215,15 @@ export class SIOverviewComponent implements OnInit {
           MCTemp.ChartSeries[3].push(dataInstance.SARSCOV2PositivePercent);
 
           //Compile grouped category
+<<<<<<< HEAD
+          let gc_year_index = GCInstance.attach(GCPeriod, "" + dataInstance.Year + "", false);
+          let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.EpiWeek, true);
+          // let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
+=======
           let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.YEAR, false);
           let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
           let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
+>>>>>>> main
         });
 
         // Period (index --> 4)
@@ -223,7 +234,7 @@ export class SIOverviewComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Weekly number of hospitalized ILI & SARI patients and percent ILI & SARI specimens testing positive for influenza and SARS-COV-2',
+            text: 'Figure 2 :Weekly number of hospitalized SARI patients, and % ILI & SARI specimens testing positive for influenza & SARS-C0V-2',
             align: 'left'
           },
           chart: {
@@ -231,11 +242,17 @@ export class SIOverviewComponent implements OnInit {
           },
           xAxis: {
             name: "Period",
+<<<<<<< HEAD
+            title: { text: "Period (Year, Epi Week)" },
+            tickWidth: 1,
+            labels: {
+=======
             title: { text: "Period (Year, Month, Epi Week)" },
             tickWidth: 1,
             labels: {
               useHTML: true,
               format: "{text}",
+>>>>>>> main
               y: 18,
               groupedOptions: [{
                 y: 10,
@@ -298,7 +315,6 @@ export class SIOverviewComponent implements OnInit {
               }
             }
           },
-          useHighStocks: true,
           credits: {
             enabled: false,
           }
@@ -321,20 +337,21 @@ export class SIOverviewComponent implements OnInit {
         let MCTemp = this.CompositeCharts['enrolledByAgeGroup'];
         MCTemp.ChartSeries = [];
 
-        // Age Group (Index --> 0)
-        MCTemp.ChartSeries.push([]);
-
-        // Enrolled Number (Index --> 1)
-        MCTemp.ChartSeries.push([]);
-
-        // Enrolled Percentage (Index --> 2)
+        // Series
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
+<<<<<<< HEAD
+          if (dataInstance.AgeGroupCategory != null) {
+            MCTemp.ChartSeries[0].push(
+              [dataInstance.AgeGroupCategory + " " + dataInstance.EnrolledNumber + " (" + dataInstance.EnrolledPercent + "%)", dataInstance.EnrolledNumber]
+            );
+=======
           if (dataInstance.AgeCategory != null) {
             MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
             MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
             MCTemp.ChartSeries[2].push(dataInstance.EnrolledPercent);
+>>>>>>> main
           }
         });
       },
@@ -343,11 +360,11 @@ export class SIOverviewComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Number of ILI/SARI Patients enrolled by Age Category',
+            text: 'Figure 3: Number of ILI/SARI Patients enrolled by Age Category',
             align: 'left',
           },
           chart: {
-            type: 'bar',
+            type: 'pie',
           },
           accessibility: {
             point: {
@@ -384,30 +401,25 @@ export class SIOverviewComponent implements OnInit {
             }
           ],
           plotOptions: {
-            series: {
-              stacking: 'normal',
+            pie: {
+              innerSize: "70%",
+              depth: 25,
+              dataLabels: {
+                enabled: true
+              },
             },
-            bar: {
-              pointWidth: 18,
-            }
           },
+          legend: { align: 'left', verticalAlign: 'bottom', y: 0, x: 80 },
           tooltip: {
             format:
               '<b>{series.name}, {point.category}, {y}</b>'
           },
-          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
-              name: 'Enrolled Number',
-              data: MCTemp.ChartSeries[1],
-              color: '#234FEA',
-            },
-            {
-              name: 'Enrolled Percentage',
-              data: MCTemp.ChartSeries[2],
-              color: '#FFA500',
-              type: "spline",
-              yAxis: 1
+              name: "Data",
+              type: 'pie',
+              showInLegend: true,
+              data: MCTemp.ChartSeries[0]
             }
           ],
           credits: {
@@ -418,10 +430,10 @@ export class SIOverviewComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Influenza Patient Outcome
+    //#region Load Chart --> SARI Patient Outcome
     this.CompositeCharts['findInfluenzaPatientOutcome'] = new Chart(this.http);
     this.CompositeCharts['findInfluenzaPatientOutcome'].loadData(
-      "overview/findInfluenzaPatientOutcome",
+      "overview/SARIPatientOutcome",
       () => {
         let MCTemp = this.CompositeCharts['findInfluenzaPatientOutcome'];
 
@@ -438,23 +450,23 @@ export class SIOverviewComponent implements OnInit {
 
         //Absconded (Index --> 0)
         MCTemp.ChartSeries[0][0] = MCTemp.ChartData[0].AbscondedNumber;
-        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].AbscondedPercentage;
+        MCTemp.ChartSeries[0][1] = MCTemp.ChartData[0].AbscondedPercent;
 
         //Death (Index --> 1)
         MCTemp.ChartSeries[1][0] = MCTemp.ChartData[0].DeathNumber;
-        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].DeathPercentage;
+        MCTemp.ChartSeries[1][1] = MCTemp.ChartData[0].DeathPercent;
 
         //Discharged from hospital alive (Index --> 2)
         MCTemp.ChartSeries[2][0] = MCTemp.ChartData[0].DischargedFromHospitalNumber;
-        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].DischargedFromHospitalPercentage;
+        MCTemp.ChartSeries[2][1] = MCTemp.ChartData[0].DischargedFromHospitalPercent;
 
-        //Reffered to another facility (Index --> 3)
-        MCTemp.ChartSeries[3][0] = MCTemp.ChartData[0].RefferedToAnotherFacilityNumber;
-        MCTemp.ChartSeries[3][1] = MCTemp.ChartData[0].RefferedToAnotherFacilityPercentage;
+        //Referred to another facility (Index --> 3)
+        MCTemp.ChartSeries[3][0] = MCTemp.ChartData[0].ReferredToAnotherFacilityNumber;
+        MCTemp.ChartSeries[3][1] = MCTemp.ChartData[0].ReferredToAnotherFacilityPercent;
 
         //Refused hospital treatment (Index --> 4)
         MCTemp.ChartSeries[4][0] = MCTemp.ChartData[0].RefusedHospitalTreatmentNumber;
-        MCTemp.ChartSeries[4][1] = MCTemp.ChartData[0].RefusedHospitalTreatmentPercentage;
+        MCTemp.ChartSeries[4][1] = MCTemp.ChartData[0].RefusedHospitalTreatmentPercent;
 
         //Total (Index --> 5)
         MCTemp.ChartSeries[5][0] = MCTemp.ChartData[0].TotalOutcome;
@@ -464,7 +476,7 @@ export class SIOverviewComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Patient Outcome',
+            text: 'Figure 4: Patient Outcome',
             align: 'left'
           },
           chart: {
@@ -481,6 +493,7 @@ export class SIOverviewComponent implements OnInit {
             {
               name: "Data",
               type: 'pie',
+              showInLegend: true,
               data: [
                 ["Death (" + MCTemp.ChartSeries[0][1] + "%)", MCTemp.ChartSeries[0][0]],
                 ["Absconded (" + MCTemp.ChartSeries[1][1] + "%)", MCTemp.ChartSeries[1][0]],
@@ -506,9 +519,12 @@ export class SIOverviewComponent implements OnInit {
       }
     );
     //#endregion
+<<<<<<< HEAD
+=======
 
     HC_exporting(Highcharts);
 
+>>>>>>> main
   }
 
 }

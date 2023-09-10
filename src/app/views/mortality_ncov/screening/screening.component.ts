@@ -5,16 +5,11 @@ import { ChartParent } from '../../../models/mortality_ncov/ChartParent.model';
 
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-import HighchartsMore from 'highcharts/highcharts-more';
-import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 
 import { APIReader } from 'src/app/models/APIReader.model';
 import { IDFilter } from 'src/app/models/IDFilter.model';
 import { IDFacility } from 'src/app/models/IDFacility.model';
 import { GroupedCategory } from '../../../models/GroupedCategory.model';
-
-HighchartsMore(Highcharts);
-HighchartsSolidGauge(Highcharts);
 
 @Component({
   templateUrl: 'screening.component.html',
@@ -42,10 +37,13 @@ export class ScreeningComponent implements OnInit {
   }
 
   loadFilters() {
-    //#region Acqurie composite facilities
+    //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
-        this.CompositeFacilities.push(new IDFacility(dataInstance));
+        this.CompositeFacilities.push(new IDFacility(
+          dataInstance['facility_id'],
+          dataInstance['facility_code'],
+          dataInstance['facility_name']));
       });
     });
     //#endregion
@@ -226,7 +224,7 @@ export class ScreeningComponent implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Screening by Overtime
+    //#region Load Chart --> Screening by over time
     this.CompositeCharts['findScreeningOvertime'] = new Chart(this.http);
     this.CompositeCharts['findScreeningOvertime'].loadData(
       "screening/findScreeningOvertime",

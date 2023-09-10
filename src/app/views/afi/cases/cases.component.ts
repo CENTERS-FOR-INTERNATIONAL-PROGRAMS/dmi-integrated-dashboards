@@ -46,12 +46,22 @@ export class ACasesComponent implements OnInit {
     //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
+<<<<<<< HEAD
+        this.CompositeFacilities.push(new IDFacility(
+          dataInstance['facility_id'],
+          dataInstance['facility_code'],
+          dataInstance['facility_name']));
+=======
         this.CompositeFacilities.push(new IDFacility(dataInstance));
+>>>>>>> main
       });
     });
     //#endregion
   }
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
   processFilters() {
     this.DataFilterInstance.processDates();
 

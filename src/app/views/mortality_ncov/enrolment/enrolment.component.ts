@@ -41,10 +41,7 @@ export class EnrolmentComponent implements OnInit {
     //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
-        this.CompositeFacilities.push(new IDFacility(
-          dataInstance['facility_id'],
-          dataInstance['facility_code'],
-          dataInstance['facility_name']));
+        this.CompositeFacilities.push(new IDFacility(dataInstance));
       });
     });
     //#endregion
@@ -258,7 +255,7 @@ export class EnrolmentComponent implements OnInit {
           ],
           plotOptions: {
             bar: {
-              pointWidth: 40,
+              pointWidth: 18,
               dataLabels: {
                 enabled: true
               }

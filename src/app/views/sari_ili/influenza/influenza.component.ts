@@ -53,11 +53,7 @@ export class InfluenzaComponent implements OnInit {
 
   loadFilters() {
     //#region Acquire composite facilities
-<<<<<<< HEAD
     this.APIReaderInstance.loadData("sari_ili/acquireCompositeFacilities", () => {
-=======
-    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
->>>>>>> main
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
         this.CompositeFacilities.push(new IDFacility(
           dataInstance['FacilityId'],
@@ -450,28 +446,15 @@ export class InfluenzaComponent implements OnInit {
 
         // Reset
         MCTemp.ChartSeries = [];
-<<<<<<< HEAD
-=======
-
-        // Age Group (Index --> 0)
-        MCTemp.ChartSeries.push([]);
->>>>>>> main
 
         // Series
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
-<<<<<<< HEAD
           if (dataInstance.AgeGroupCategory != null) {
             MCTemp.ChartSeries[0].push(
               [dataInstance.AgeGroupCategory + " " + dataInstance.EnrolledNumber + " (" + dataInstance.EnrolledPercent + "%)", dataInstance.EnrolledNumber]
             );
-=======
-          if (dataInstance.AgeCategory != null) {
-            MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
-            MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
-            MCTemp.ChartSeries[2].push(dataInstance.EnrolledPercent);
->>>>>>> main
           }
         });
       },
@@ -570,17 +553,10 @@ export class InfluenzaComponent implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
-<<<<<<< HEAD
           if (dataInstance.AgeGroupCategory != null) {
             MCTemp.ChartSeries[0].push(
               [dataInstance.AgeGroupCategory + " " + dataInstance.FluPositiveNumber + " (" + dataInstance.FluPositivePercent + "%)", dataInstance.FluPositiveNumber]
             );
-=======
-          if (dataInstance.AgeCategory != null) {
-            MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
-            MCTemp.ChartSeries[1].push(dataInstance.FluPositiveNumber);
-            MCTemp.ChartSeries[2].push(dataInstance.FluPositivePercent);
->>>>>>> main
           }
         });
       },
@@ -622,9 +598,6 @@ export class InfluenzaComponent implements OnInit {
             {
               title: {
                 text: 'Percentage Enrolled',
-              },
-              labels: {
-                format: '{value}%',
               },
               labels: {
                 format: '{value}%',
@@ -697,20 +670,11 @@ export class InfluenzaComponent implements OnInit {
           //Compile Influenza Negative (Index --> 3)
           MCTemp.ChartSeries[3].push(dataInstance.TestedNegativeFluNumber);
 
-<<<<<<< HEAD
           //Compile Influenza Positive Percentage (Index --> 4)
           MCTemp.ChartSeries[4].push(dataInstance.InfluenzaPositivePercentage);
 
           let gc_year_index = GCInstance.attach(GCPeriod, "" + dataInstance.Year, false);
           let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.EpiWeek, true);
-=======
-          //Compile Influenza Negative (Index --> 4)
-          MCTemp.ChartSeries[4].push(dataInstance.InfluenzaNegativeNumber);
-
-          // let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.Year, false);
-          // let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
-          // let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
->>>>>>> main
         });
 
         // Period (index --> 5)
@@ -721,11 +685,7 @@ export class InfluenzaComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-<<<<<<< HEAD
             text: 'Figure 11: Number Positive for Influenza by type, epiweek and year',
-=======
-            text: 'Number Positive for Influenza by Type and Epi Week',
->>>>>>> main
             align: 'left'
           },
           chart: {
@@ -733,7 +693,6 @@ export class InfluenzaComponent implements OnInit {
           },
           xAxis: {
             name: "Period",
-<<<<<<< HEAD
             title: { text: "Period (Year, Epi Week)" },
             tickWidth: 1,
             labels: {
@@ -745,22 +704,6 @@ export class InfluenzaComponent implements OnInit {
               }]
             },
             categories: MCTemp.ChartSeries[5],
-=======
-            title: { text: "Period (Year, Month, Epi Week)" },
-            tickWidth: 1,
-            labels: {
-              useHTML: true,
-              format: "{text}",
-              y: 18,
-              // groupedOptions: [{
-              //   y: 10,
-              // }, {
-              //   y: 10
-              // }]
-            },
-            categories: MCTemp.ChartSeries[0],
-            // categories: MCTemp.ChartSeries[5],
->>>>>>> main
             min: 0,
             max: 22,
             scrollbar: {

@@ -9,11 +9,6 @@ import { GroupedCategory } from '../../../models/GroupedCategory.model';
 
 import * as Highcharts from 'highcharts';
 import * as Highstock from 'highcharts/highstock';
-<<<<<<< HEAD
-=======
-import HC_exporting from 'highcharts/modules/exporting';
-import HighchartsMore from 'highcharts/highcharts-more';
->>>>>>> main
 import HighchartsMap from "highcharts/modules/map"
 import HighchartsTreeMap from 'highcharts/modules/treemap';
 import HighchartsTreeGraph from 'highcharts/modules/treegraph';
@@ -51,11 +46,7 @@ export class SIOverviewComponent implements OnInit {
 
   loadFilters() {
     //#region Acquire composite facilities
-<<<<<<< HEAD
     this.APIReaderInstance.loadData("sari_ili/acquireCompositeFacilities", () => {
-=======
-    this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
->>>>>>> main
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
         this.CompositeFacilities.push(new IDFacility(
           dataInstance['FacilityId'],
@@ -215,15 +206,9 @@ export class SIOverviewComponent implements OnInit {
           MCTemp.ChartSeries[3].push(dataInstance.SARSCOV2PositivePercent);
 
           //Compile grouped category
-<<<<<<< HEAD
           let gc_year_index = GCInstance.attach(GCPeriod, "" + dataInstance.Year + "", false);
           let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.EpiWeek, true);
           // let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
-=======
-          let gc_year_index = GCInstance.attach(GCPeriod, dataInstance.YEAR, false);
-          let gc_month_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.Month, false);
-          let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories[gc_month_index].categories, dataInstance.EpiWeek, true);
->>>>>>> main
         });
 
         // Period (index --> 4)
@@ -242,17 +227,9 @@ export class SIOverviewComponent implements OnInit {
           },
           xAxis: {
             name: "Period",
-<<<<<<< HEAD
             title: { text: "Period (Year, Epi Week)" },
             tickWidth: 1,
             labels: {
-=======
-            title: { text: "Period (Year, Month, Epi Week)" },
-            tickWidth: 1,
-            labels: {
-              useHTML: true,
-              format: "{text}",
->>>>>>> main
               y: 18,
               groupedOptions: [{
                 y: 10,
@@ -341,17 +318,10 @@ export class SIOverviewComponent implements OnInit {
         MCTemp.ChartSeries.push([]);
 
         MCTemp.ChartData.forEach((dataInstance) => {
-<<<<<<< HEAD
           if (dataInstance.AgeGroupCategory != null) {
             MCTemp.ChartSeries[0].push(
               [dataInstance.AgeGroupCategory + " " + dataInstance.EnrolledNumber + " (" + dataInstance.EnrolledPercent + "%)", dataInstance.EnrolledNumber]
             );
-=======
-          if (dataInstance.AgeCategory != null) {
-            MCTemp.ChartSeries[0].push(dataInstance.AgeCategory);
-            MCTemp.ChartSeries[1].push(dataInstance.EnrolledNumber);
-            MCTemp.ChartSeries[2].push(dataInstance.EnrolledPercent);
->>>>>>> main
           }
         });
       },
@@ -519,12 +489,6 @@ export class SIOverviewComponent implements OnInit {
       }
     );
     //#endregion
-<<<<<<< HEAD
-=======
-
-    HC_exporting(Highcharts);
-
->>>>>>> main
   }
 
 }

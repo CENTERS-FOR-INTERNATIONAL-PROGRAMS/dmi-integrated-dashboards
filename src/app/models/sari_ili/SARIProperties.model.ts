@@ -1,4 +1,13 @@
 export interface SARIProperties {
+    AbscondedPercent: any;
+    DeathPercent: any;
+    DischargedFromHospitalPercent: any;
+    ReferredToAnotherFacilityPercent: any;
+    RefusedHospitalTreatmentPercent: any;
+    InfluenzaPositiveNumber: any;
+    InfluenzaABPositivePercent: any;
+    ReferredToAnotherFacilityNumber: any;
+    ReferredToAnotherFacilityPercentage: any;
     WeekNumber: any;
     AgeGroupCategory(AgeGroupCategory: any): unknown;
     SARSCOV2TestedPercent(SARSCOV2TestedPercent: any): unknown;

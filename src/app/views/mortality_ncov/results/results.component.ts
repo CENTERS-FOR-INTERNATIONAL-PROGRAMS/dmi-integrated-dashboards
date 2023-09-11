@@ -35,17 +35,19 @@ export class ResultsComponent implements OnInit {
   formatLabel(value: number): string {
     return `${value}`;
   }
-
+  
   loadFilters() {
     //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
       this.APIReaderInstance.CompositeData.forEach((dataInstance: any) => {
-        this.CompositeFacilities.push(new IDFacility(dataInstance));
+        this.CompositeFacilities.push(new IDFacility(
+          dataInstance['facility_id'],
+          dataInstance['facility_code'],
+          dataInstance['facility_name']));
       });
     });
     //#endregion
   }
-
   processFilters() {
     this.DataFilterInstance.processDates();
 
@@ -334,7 +336,7 @@ export class ResultsComponent implements OnInit {
           ],
           plotOptions: {
             bar: {
-              pointWidth: 18,
+              pointWidth: 35,
               dataLabels: {
                 enabled: true
               }

@@ -35,7 +35,7 @@ export class ResultsComponent implements OnInit {
   formatLabel(value: number): string {
     return `${value}`;
   }
-
+  
   loadFilters() {
     //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
@@ -48,7 +48,6 @@ export class ResultsComponent implements OnInit {
     });
     //#endregion
   }
-
   processFilters() {
     this.DataFilterInstance.processDates();
 

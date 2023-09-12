@@ -111,7 +111,7 @@ export class AResultsComponent implements OnInit {
           ],
           series: [
             {
-              showInLegend: true,
+              showInLegend: false,
               name: "Data",
               type: 'pie',
               data: [
@@ -125,7 +125,7 @@ export class AResultsComponent implements OnInit {
               innerSize: "70%",
               depth: 25,
               dataLabels: {
-                enabled: false
+                enabled: true
               },
             }
           },
@@ -388,6 +388,12 @@ export class AResultsComponent implements OnInit {
               }
             }
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           plotOptions: {
             series: {
               stacking: 'normal',
@@ -396,7 +402,6 @@ export class AResultsComponent implements OnInit {
               pointWidth: 18,
             }
           },
-          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
               name: 'Plasmodium',

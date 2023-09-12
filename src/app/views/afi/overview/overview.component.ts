@@ -239,6 +239,12 @@ export class AOverviewComponent implements OnInit {
               }
             },
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 50
+          },
           plotOptions: {
             series: {
               stacking: 'normal',
@@ -251,7 +257,6 @@ export class AOverviewComponent implements OnInit {
             format:
               '<b>{series.name}, {point.category}, {y}</b>'
           },
-          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
               name: 'Male',
@@ -332,6 +337,12 @@ export class AOverviewComponent implements OnInit {
             title: {
               text: "Number tested or virus detected",
             }
+          },
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
           },
           series: [
             {
@@ -421,6 +432,12 @@ export class AOverviewComponent implements OnInit {
             "#FF0000",
             "#FFA500"
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -490,6 +507,12 @@ export class AOverviewComponent implements OnInit {
             "#FF0000",
             "#FFA500"
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -663,6 +686,12 @@ export class AOverviewComponent implements OnInit {
             "blue",
             "indigo"
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -742,6 +771,12 @@ export class AOverviewComponent implements OnInit {
             "skyblue",
             "green"
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -805,6 +840,12 @@ export class AOverviewComponent implements OnInit {
             "red",
             "green"
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,

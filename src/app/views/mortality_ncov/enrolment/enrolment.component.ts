@@ -115,6 +115,12 @@ export class EnrolmentComponent implements OnInit {
               text: 'Number Enrolled'
             }
           },
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           tooltip: {
             valueSuffix: ''
           },
@@ -129,12 +135,12 @@ export class EnrolmentComponent implements OnInit {
           },
           series: [
             {
-              name: 'MALE',
+              name: 'Male',
               color: "#234FEA",
               data: MCTemp.ChartSeries[0]
             },
             {
-              name: 'FEMALE',
+              name: 'Female',
               color: "#FFA500",
               data: MCTemp.ChartSeries[1]
             }
@@ -225,21 +231,15 @@ export class EnrolmentComponent implements OnInit {
           xAxis: [
             {
               title: {
-                text: ''
+                text: 'Age Group'
               },
               categories: MCTemp.ChartSeries[0]
-            }, {
-              title: {
-                text: ''
-              },
-              categories: MCTemp.ChartSeries[0],
-              opposite: true,
             }
           ],
           yAxis: [
             {
               title: {
-                text: 'Enrolled Number',
+                text: 'Enroled Number',
                 align: 'high',
                 textAlign: 'center'
               },
@@ -256,6 +256,12 @@ export class EnrolmentComponent implements OnInit {
               offset: 0,
             }
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 50
+          },
           plotOptions: {
             bar: {
               pointWidth: 40,
@@ -266,13 +272,11 @@ export class EnrolmentComponent implements OnInit {
           },
           tooltip: {
           },
-          legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
           series: [
             {
               name: 'Female',
               data: MCTemp.ChartSeries[1],
               color: '#FFA500',
-              xAxis: 0,
               yAxis: 0,
               type: 'bar'
             },
@@ -280,7 +284,6 @@ export class EnrolmentComponent implements OnInit {
               name: 'Male',
               data: MCTemp.ChartSeries[2],
               color: '#234FEA',
-              xAxis: 1,
               yAxis: 1,
               type: 'bar'
             }
@@ -351,6 +354,12 @@ export class EnrolmentComponent implements OnInit {
             title: {
               text: "Number Enrolled",
             }
+          },
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
           },
           series: [
             {
@@ -463,12 +472,19 @@ export class EnrolmentComponent implements OnInit {
           {
             title: {
               text: 'Percent Tested',
+              rotation: 270
             },
             opposite: true,
             labels: {
               format: '{value}%',
             },
           }],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               name: "Enrolled",
@@ -510,4 +526,5 @@ export class EnrolmentComponent implements OnInit {
 
     HC_exporting(Highcharts);
   }
+
 }

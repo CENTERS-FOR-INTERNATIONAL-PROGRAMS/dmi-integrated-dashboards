@@ -718,12 +718,19 @@ export class InfluenzaComponent implements OnInit {
           {
             title: {
               text: "Influenza Positive (%)",
+              rotation: 270
             },
             labels: {
               format: '{value}%',
             },
             opposite: true
           }],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -878,6 +885,7 @@ export class InfluenzaComponent implements OnInit {
           {
             title: {
               text: "Influenza Positive Percent",
+              rotation: 270
             },
             labels: {
               format: '{value}%',
@@ -885,6 +893,12 @@ export class InfluenzaComponent implements OnInit {
             opposite: true,
             inverted: true
           }],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -1003,7 +1017,6 @@ export class InfluenzaComponent implements OnInit {
             center: [37.8, 0.6],
             zoom: 5.5,
           },
-
           series: [{
             name: 'Countries',
             color: '#E0E0E0',

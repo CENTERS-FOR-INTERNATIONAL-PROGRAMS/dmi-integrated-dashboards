@@ -93,7 +93,7 @@ export class ScreeningComponent implements OnInit {
             type: 'column'
           },
           xAxis: {
-            categories: ['Screened', 'Elligible', 'Enrolled'],
+            categories: ['Screened', 'Eligible', 'Enrolled'],
             crosshair: true,
             accessibility: {
               description: 'Categories'
@@ -191,6 +191,12 @@ export class ScreeningComponent implements OnInit {
             title: {
               text: "Number Screened",
             }
+          },
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
           },
           series: [
             {
@@ -296,6 +302,12 @@ export class ScreeningComponent implements OnInit {
             },
             allowDecimals: false
           },
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               name: "Number Screened",
@@ -315,7 +327,7 @@ export class ScreeningComponent implements OnInit {
           },
           tooltip: {
             format:
-              '{series.name}: {x}, Screened: {y}'
+              '{series.name}: {x} ({y})'
           },
           credits: {
             enabled: false,

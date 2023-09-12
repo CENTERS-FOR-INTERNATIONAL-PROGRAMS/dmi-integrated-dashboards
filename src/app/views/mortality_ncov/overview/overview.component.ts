@@ -730,12 +730,6 @@ export class OverviewComponent implements OnInit {
                 text: 'Age Group'
               },
               categories: MCTemp.ChartSeries[0]
-            }, {
-              title: {
-                text: 'Age Group'
-              },
-              categories: MCTemp.ChartSeries[0],
-              opposite: true,
             }
           ],
           yAxis: [
@@ -745,6 +739,8 @@ export class OverviewComponent implements OnInit {
                 align: 'high',
                 textAlign: 'center'
               },
+              min: 0,
+              max: 10,
               allowDecimals: false,
               width: '50%',
               reversed: true
@@ -752,6 +748,8 @@ export class OverviewComponent implements OnInit {
               title: {
                 text: '',
               },
+              min: 0, //TODO! Find largest number
+              max: 10,
               allowDecimals: false,
               width: '50%',
               left: '50%',
@@ -769,13 +767,17 @@ export class OverviewComponent implements OnInit {
           tooltip: {
             format: '<b>{series.name}, {point.category}, {y}</b>'
           },
-          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 50
+          },
           series: [
             {
               name: 'Female',
               data: MCTemp.ChartSeries[1],
               color: '#FFA500',
-              xAxis: 0,
               yAxis: 0,
               type: 'bar'
             },
@@ -783,7 +785,6 @@ export class OverviewComponent implements OnInit {
               name: 'Male',
               data: MCTemp.ChartSeries[2],
               color: '#234FEA',
-              xAxis: 1,
               yAxis: 1,
               type: 'bar'
             }
@@ -840,7 +841,7 @@ export class OverviewComponent implements OnInit {
 
         MCTemp.ChartOptions = {
           title: {
-            text: 'Tested Positive by Facility',
+            text: 'COVID-19 positive by facility',
             align: 'left'
           },
           chart: {
@@ -855,17 +856,23 @@ export class OverviewComponent implements OnInit {
               text: "Number Tested",
             }
           },
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
-              name: "Tested",
+              name: "Sample Tested",
               data: MCTemp.ChartSeries[1],
               type: 'column',
               color: "#234FEA",
             },
             {
               showInLegend: true,
-              name: "Positive",
+              name: "COVID-19 Positive",
               data: MCTemp.ChartSeries[2],
               type: 'column',
               color: "red",
@@ -971,7 +978,8 @@ export class OverviewComponent implements OnInit {
             },
             {
               title: {
-                text: 'Percent Positive'
+                text: 'Percent Positive',
+                rotation: 270
               },
               labels: {
                 format: '{value}%',
@@ -980,6 +988,12 @@ export class OverviewComponent implements OnInit {
             }
           ],
           colors: ['#FF0000', 'green'],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               name: 'Sample Tested',

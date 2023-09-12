@@ -35,7 +35,7 @@ export class ResultsComponent implements OnInit {
   formatLabel(value: number): string {
     return `${value}`;
   }
-  
+
   loadFilters() {
     //#region Acquire composite facilities
     this.APIReaderInstance.loadData("mortality_ncov/acquireCompositeFacilities", () => {
@@ -48,6 +48,7 @@ export class ResultsComponent implements OnInit {
     });
     //#endregion
   }
+
   processFilters() {
     this.DataFilterInstance.processDates();
 
@@ -196,6 +197,12 @@ export class ResultsComponent implements OnInit {
               enabled: false
             }
           },
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           tooltip: {
             headerFormat: '<b>{point.x}</b><br/>',
             pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
@@ -303,15 +310,9 @@ export class ResultsComponent implements OnInit {
           xAxis: [
             {
               title: {
-                text: ''
+                text: 'Age Group'
               },
               categories: MCTemp.ChartSeries[0]
-            }, {
-              title: {
-                text: ''
-              },
-              categories: MCTemp.ChartSeries[0],
-              opposite: true,
             }
           ],
           yAxis: [
@@ -321,6 +322,8 @@ export class ResultsComponent implements OnInit {
                 align: 'high',
                 textAlign: 'center'
               },
+              min: 0, //TODO! Find largest number
+              max: 10,
               allowDecimals: false,
               width: '50%',
               reversed: true
@@ -328,12 +331,20 @@ export class ResultsComponent implements OnInit {
               title: {
                 text: '',
               },
+              min: 0, //TODO! Find largest number
+              max: 10,
               allowDecimals: false,
               width: '50%',
               left: '50%',
               offset: 0,
             }
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 50
+          },
           plotOptions: {
             bar: {
               pointWidth: 35,
@@ -344,13 +355,11 @@ export class ResultsComponent implements OnInit {
           },
           tooltip: {
           },
-          legend: { align: "left", verticalAlign: "top", y: 0, x: 80 },
           series: [
             {
               name: 'Female',
               data: MCTemp.ChartSeries[1],
               color: '#FFA500',
-              xAxis: 0,
               yAxis: 0,
               type: 'bar'
             },
@@ -358,7 +367,6 @@ export class ResultsComponent implements OnInit {
               name: 'Male',
               data: MCTemp.ChartSeries[2],
               color: '#234FEA',
-              xAxis: 1,
               yAxis: 1,
               type: 'bar'
             }
@@ -450,12 +458,19 @@ export class ResultsComponent implements OnInit {
           {
             title: {
               text: 'Percent Positive',
+              rotation: 270
             },
             labels: {
               format: '{value}%',
             },
             opposite: true,
           }],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               name: "Sample Tested",

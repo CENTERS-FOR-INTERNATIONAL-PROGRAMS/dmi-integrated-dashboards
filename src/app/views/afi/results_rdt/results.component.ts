@@ -101,6 +101,12 @@ export class AResultsComponent implements OnInit {
             "#FF0000",
             "#008000"
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -169,6 +175,12 @@ export class AResultsComponent implements OnInit {
             "#FF0000",
             "#008000"
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -248,6 +260,12 @@ export class AResultsComponent implements OnInit {
             "#234FEA",
             "#008000"
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -327,6 +345,12 @@ export class AResultsComponent implements OnInit {
               }
             }
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           plotOptions: {
             series: {
               stacking: 'normal',
@@ -335,7 +359,6 @@ export class AResultsComponent implements OnInit {
               pointWidth: 18,
             }
           },
-          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
               name: 'Leptospirosis',
@@ -422,6 +445,12 @@ export class AResultsComponent implements OnInit {
               }
             }
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 50
+          },
           plotOptions: {
             series: {
               stacking: 'normal',
@@ -430,7 +459,6 @@ export class AResultsComponent implements OnInit {
               pointWidth: 18,
             }
           },
-          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
               name: 'Sample Tested',
@@ -520,6 +548,12 @@ export class AResultsComponent implements OnInit {
               }
             }
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 50
+          },
           plotOptions: {
             series: {
               stacking: 'normal',
@@ -528,7 +562,6 @@ export class AResultsComponent implements OnInit {
               pointWidth: 18,
             }
           },
-          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
               name: 'Sample Tested',
@@ -554,4 +587,5 @@ export class AResultsComponent implements OnInit {
 
     HC_exporting(Highcharts);
   }
+
 }

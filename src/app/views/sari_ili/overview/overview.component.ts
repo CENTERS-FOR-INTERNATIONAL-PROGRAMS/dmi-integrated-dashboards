@@ -252,6 +252,7 @@ export class SIOverviewComponent implements OnInit {
           {
             title: {
               text: "SARS-COV-2 Positive Percent",
+              rotation: 270
             },
             labels: {
               format: '{value}%',
@@ -259,6 +260,12 @@ export class SIOverviewComponent implements OnInit {
             opposite: true,
             inverted: true
           }],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -320,7 +327,7 @@ export class SIOverviewComponent implements OnInit {
         MCTemp.ChartData.forEach((dataInstance) => {
           if (dataInstance.AgeGroupCategory != null) {
             MCTemp.ChartSeries[0].push(
-              [dataInstance.AgeGroupCategory + " " + dataInstance.EnrolledNumber + " (" + dataInstance.EnrolledPercent + "%)", dataInstance.EnrolledNumber]
+              [dataInstance.AgeGroupCategory + ": " + dataInstance.EnrolledNumber + " (" + dataInstance.EnrolledPercent + "%)", dataInstance.EnrolledNumber]
             );
           }
         });
@@ -370,6 +377,12 @@ export class SIOverviewComponent implements OnInit {
               opposite: true
             }
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'bottom',
+            y: 0,
+            x: 0
+          },
           plotOptions: {
             pie: {
               innerSize: "70%",
@@ -379,10 +392,9 @@ export class SIOverviewComponent implements OnInit {
               },
             },
           },
-          legend: { align: 'left', verticalAlign: 'bottom', y: 0, x: 80 },
           tooltip: {
             format:
-              '<b>{series.name}, {point.category}, {y}</b>'
+              '<b>{y}</b>'
           },
           series: [
             {
@@ -473,6 +485,12 @@ export class SIOverviewComponent implements OnInit {
               ]
             }
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'bottom',
+            y: 0,
+            x: 0
+          },
           plotOptions: {
             pie: {
               innerSize: "70%",

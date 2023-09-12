@@ -66,7 +66,6 @@ export class ACasesComponent implements OnInit {
     //#endregion
   }
 
-
   loadCharts() {
     //#region Load Chart --> Syndromes
     this.CompositeCharts['syndromes'] = new Chart(this.http);
@@ -117,6 +116,12 @@ export class ACasesComponent implements OnInit {
           // "#234FEA",
           // "#FFA500"
           // ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -204,6 +209,12 @@ export class ACasesComponent implements OnInit {
               }
             }
           ],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           plotOptions: {
             series: {
               stacking: 'normal',
@@ -212,7 +223,6 @@ export class ACasesComponent implements OnInit {
               pointWidth: 18,
             }
           },
-          legend: { align: 'left', verticalAlign: 'top', y: 0, x: 80 },
           series: [
             {
               name: 'SARI',
@@ -303,6 +313,12 @@ export class ACasesComponent implements OnInit {
             title: {
               text: "Number tested or virus detected",
             }
+          },
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
           },
           series: [
             {

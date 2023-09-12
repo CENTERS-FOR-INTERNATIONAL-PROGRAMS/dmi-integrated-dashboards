@@ -59,6 +59,7 @@ export class SARSCOV2Component implements OnInit {
     });
     //#endregion
   }
+
   processFilters() {
     this.DataFilterInstance.processDates();
 
@@ -383,7 +384,7 @@ export class SARSCOV2Component implements OnInit {
     );
     //#endregion
 
-    //#region Load Chart --> Number of Speciment Tested and % Positive for SARS-COV-2 by Epi Week
+    //#region Load Chart --> Number of Specimen Tested and % Positive for SARS-COV-2 by Epi Week
     this.CompositeCharts['SARSCOV2PositiveByEpiWeek'] = new Chart(this.http);
     this.CompositeCharts['SARSCOV2PositiveByEpiWeek'].loadData(
       "sarscov/SARSCOV2PositiveOvertime",
@@ -469,6 +470,12 @@ export class SARSCOV2Component implements OnInit {
             },
             opposite: true
           }],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,
@@ -589,6 +596,12 @@ export class SARSCOV2Component implements OnInit {
             },
             opposite: true
           }],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
           series: [
             {
               showInLegend: true,

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { AFIProperties } from '../../../models/afi/AFIProperties.model';
 import { Chart } from '../../../models/afi/Chart.model';
 import { ChartParent } from '../../../models/afi/ChartParent.model';
 import { IDFilter } from '../../../models/IDFilter.model';
@@ -8,13 +6,7 @@ import { IDFacility } from '../../../models/IDFacility.model';
 import { APIReader } from '../../../models/APIReader.model';
 
 import * as Highcharts from 'highcharts';
-import HC_exporting from 'highcharts/modules/exporting';
-import HighchartsMore from 'highcharts/highcharts-more';
-import HighchartsSolidGauge from 'highcharts/modules/solid-gauge';
 import { HttpClient } from '@angular/common/http';
-
-HighchartsMore(Highcharts);
-HighchartsSolidGauge(Highcharts);
 
 @Component({
   templateUrl: 'cases.component.html',
@@ -366,7 +358,5 @@ export class ACasesComponent implements OnInit {
       }
     );
     //#endregion
-
-    HC_exporting(Highcharts);
   }
 }

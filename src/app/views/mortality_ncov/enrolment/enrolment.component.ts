@@ -475,6 +475,7 @@ export class EnrolmentComponent implements OnInit {
               rotation: 270
             },
             opposite: true,
+            allowDecimals: false,
             labels: {
               format: '{value}%',
             },

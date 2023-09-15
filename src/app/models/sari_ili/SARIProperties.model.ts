@@ -1,4 +1,6 @@
 export interface SARIProperties {
+    Metric: any;
+    Number: any;
     AbscondedPercent: any;
     DeathPercent: any;
     DischargedFromHospitalPercent: any;

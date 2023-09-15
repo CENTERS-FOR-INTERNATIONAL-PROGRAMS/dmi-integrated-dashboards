@@ -984,6 +984,7 @@ export class OverviewComponent implements OnInit {
               labels: {
                 format: '{value}%',
               },
+              allowDecimals: false,
               opposite: true,
             }
           ],

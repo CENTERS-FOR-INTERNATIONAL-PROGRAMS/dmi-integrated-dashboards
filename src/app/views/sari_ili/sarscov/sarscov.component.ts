@@ -94,7 +94,7 @@ export class SARSCOV2Component implements OnInit {
           },
           title: {
             align: 'center',
-            text: 'ILI & SARI SARS-COV-2 Cascade'
+            text: 'Figure 15: ILI & SARI SARS-COV-2 Cascade'
           },
           series: [
             {

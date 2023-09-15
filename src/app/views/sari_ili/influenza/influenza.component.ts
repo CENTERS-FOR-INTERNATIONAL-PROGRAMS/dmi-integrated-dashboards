@@ -98,7 +98,7 @@ export class InfluenzaComponent implements OnInit {
           },
           title: {
             align: 'center',
-            text: 'SARI Influenza Cascade'
+            text: 'Figure 5: SARI Influenza Cascade'
           },
           series: [
             {
@@ -975,6 +975,137 @@ export class InfluenzaComponent implements OnInit {
     );
     //#endregion
 
+    //#region Load Chart --> Influenza activity by month and year
+    this.CompositeCharts['influenzaActivityByMonthAndYear'] = new Chart(this.http);
+    this.CompositeCharts['influenzaActivityByMonthAndYear'].loadData(
+      "influenza/findInfluenzaPositivityByTypeOvertime",
+      () => {
+        let MCTemp = this.CompositeCharts['influenzaActivityByMonthAndYear'];
+        MCTemp.LoadChartOptions();
+      },
+      () => {
+        // Prerequisites
+        let MCTemp = this.CompositeCharts['influenzaActivityByMonthAndYear'];
+        let GCPeriod: GroupedCategory[] = [];
+        let GCInstance = new GroupedCategory("", []);
+
+        // Reset
+        MCTemp.ChartSeries = [];
+
+        // Initialize series array
+        for (let index = 0; index < 3; index++) {
+          MCTemp.ChartSeries.push([]);
+        }
+
+        MCTemp.ChartData.forEach(dataInstance => {
+          //Compile Epi Week (Index --> 0)
+          MCTemp.ChartSeries[0].push(dataInstance.EpiWeek);
+
+          //Compile Influenza A Positive (Index --> 1)
+          MCTemp.ChartSeries[1].push(dataInstance.InfluenzaPositiveNumber);
+
+          //Compile Influenza Positive Percentage (Index --> 4)
+          MCTemp.ChartSeries[2].push(dataInstance.InfluenzaPositivePercentage);
+
+          let gc_year_index = GCInstance.attach(GCPeriod, "" + dataInstance.Year, false);
+          let gc_epiweek_index = GCInstance.attach(GCPeriod[gc_year_index].categories, dataInstance.EpiWeek, true);
+        });
+
+        // Period (index --> 5)
+        MCTemp.ChartSeries[5] = JSON.parse(JSON.stringify(GCPeriod));
+      },
+      () => {
+        let MCTemp = this.CompositeCharts['influenzaActivityByMonthAndYear'];
+
+        MCTemp.ChartOptions = {
+          title: {
+            text: 'Figure 13: Influenza activity by month and year',
+            align: 'left'
+          },
+          chart: {
+            type: "column",
+          },
+          xAxis: {
+            name: "Period",
+            title: { text: "Period (Year, Epi Week)" },
+            tickWidth: 1,
+            labels: {
+              y: 18,
+              groupedOptions: [{
+                y: 10,
+              }, {
+                y: 10
+              }]
+            },
+            categories: MCTemp.ChartSeries[5],
+            min: 0,
+            max: 22,
+            scrollbar: {
+              enabled: true
+            }
+          },
+          yAxis: [{
+            title: {
+              text: "Influenza Posirtive",
+            }
+          },
+          {
+            title: {
+              text: "(%) Influenza Positive",
+              rotation: 270
+            },
+            labels: {
+              format: '{value}%',
+            },
+            opposite: true
+          }],
+          legend: {
+            align: 'center',
+            verticalAlign: 'top',
+            y: 0,
+            x: 0
+          },
+          series: [
+            {
+              showInLegend: true,
+              name: "Influenza Positive",
+              data: MCTemp.ChartSeries[1],
+              type: 'column',
+              color: "#234FEA",
+            },
+            {
+              showInLegend: true,
+              name: "Percent Influenza Positive",
+              data: MCTemp.ChartSeries[2],
+              type: 'spline',
+              yAxis: 1,
+              color: "#FF0000",
+            }
+          ],
+          plotOptions: {
+            column: {
+              stacking: 'normal',
+              dataLabels: {
+                enabled: false
+              }
+            },
+            spline: {
+              dataLabels: {
+                enabled: true,
+                useHTML: true,
+                format: "{y}%"
+              }
+            }
+          },
+          useHighStocks: true,
+          credits: {
+            enabled: false,
+          }
+        }
+      }
+    );
+    //#endregion
+
     //#region Load Chart --> Geographic distribution by health facility
     this.CompositeCharts['geographicDistributionByFacility'] = new Chart(this.http);
     this.CompositeCharts['geographicDistributionByFacility'].loadData(
@@ -1002,7 +1133,7 @@ export class InfluenzaComponent implements OnInit {
             map: topography
           },
           title: {
-            text: 'Influenza Geographical distribution by health facility'
+            text: 'Figure 14: Influenza Geographical distribution by health facility'
           },
           legend: {
             enabled: false

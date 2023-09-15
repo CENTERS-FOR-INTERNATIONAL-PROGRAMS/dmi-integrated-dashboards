@@ -462,6 +462,7 @@ export class ResultsComponent implements OnInit {
             labels: {
               format: '{value}%',
             },
+            allowDecimals: false,
             opposite: true,
           }],
           legend: {

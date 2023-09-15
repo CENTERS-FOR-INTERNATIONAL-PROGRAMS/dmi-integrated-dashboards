@@ -72,7 +72,7 @@ export class SIOverviewComponent implements OnInit {
     //#region Load Chart --> SARI Influenza Cascade
     this.CompositeCharts['influenzaCascade'] = new Chart(this.http);
     this.CompositeCharts['influenzaCascade'].loadData(
-      "overview/influenzaCascade",
+      "overview/enrollmentCascade",
       () => {
         let MCTemp = this.CompositeCharts['influenzaCascade'];
 
@@ -80,6 +80,42 @@ export class SIOverviewComponent implements OnInit {
       },
       () => {
         let MCTemp = this.CompositeCharts['influenzaCascade'];
+
+        MCTemp.ChartSeries.push([]);
+
+        MCTemp.ChartData.forEach((dataInstance, index) => {
+          if (index == 0) {
+            MCTemp.ChartSeries[0].push(
+              [undefined, dataInstance.Metric, dataInstance.Number]
+            );
+          } else {
+
+            MCTemp.ChartSeries[0].push(
+              [MCTemp.ChartSeries[0][index - 1][1], dataInstance.Metric, dataInstance.Number]
+            );
+          }
+        });
+
+        // console.log("-->>", MCTemp.ChartSeries);
+
+        // [
+        //   [undefined, 'Screened', 7000],
+        //   ['Screened', 'Eligible', 6809],
+        //   ['Screened', 'Not-Eligible', 0],
+        //   ['Eligible', 'Enrolled', 6809],
+        //   ['Eligible', 'Not-Enrolled', 0],
+        //   ['Enrolled', 'Tested', 6446],
+        //   ['Enrolled', 'Not-Tested', 363],
+        //   ['Tested', 'SARC-COV-2 only', 56],
+        //   ['Tested', 'Influenza only', 657],
+        //   ['Tested', 'Influenza and SARS-COV-2', 1461]
+        // ],
+
+        // "Id": 1,
+        // "Ordinal": 1,
+        // "Metric": "Eligible",
+        // "Number": 15992,
+        // "Percent": null
       },
       () => {
         let MCTemp = this.CompositeCharts['influenzaCascade'];
@@ -91,7 +127,7 @@ export class SIOverviewComponent implements OnInit {
           },
           title: {
             align: 'center',
-            text: 'SARI Influenza Cascade'
+            text: 'Figure 1: SARI Influenza Cascade'
           },
           series: [
             {
